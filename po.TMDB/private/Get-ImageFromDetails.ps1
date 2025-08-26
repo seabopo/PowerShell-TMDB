@@ -1,0 +1,57 @@
+Function Get-ImageFromDetails {
+    <#
+    .DESCRIPTION
+        Creates an object based on the properties from a single item returned as part of a collection of items 
+        as the result from a TV Series Image API request.
+
+    .OUTPUTS
+        A single [Image] object with the following properties:
+           - Type: "poster" | "background" | "still" | "image"
+           - AspectRatio: 0.667,
+           - Height: 3000,
+           - Width: 2000,
+           - Language: "en",
+           - Path: "/7bRHBrmSn5QLY1UJ32v4jeSoKzP.jpg",
+           - URL: "https://media.themoviedb.org/t/p/original/7bRHBrmSn5QLY1UJ32v4jeSoKzP.jpg"
+
+    .PARAMETER ImageData
+        REQUIRED. Hashtable. Alias: -d. Data about an image returned from an image api query.
+
+    .EXAMPLE
+        Get-ImageFromDetails  -d @{ ...}
+    
+    .EXAMPLE
+        @{ ...} | Get-ImageFromDetails
+
+    #>
+    [OutputType([Image])]
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory,ValueFromPipeline)]
+        [Alias('d')] [PSCustomObject] $ImageData,
+
+        [Parameter(Mandatory)]
+        [ValidateSet('stills','posters','logos','backdrops')]
+        [Alias('t')] [String] $ImageType
+    )
+
+    process {
+        
+        Write-Msg -FunctionCall -IncludeParameters
+        
+        $image = $([Image]::New(@{
+            Type        = $ImageType.TrimEnd('s')
+            AspectRatio = $ImageData.aspect_ratio
+            Height      = $ImageData.height
+            Width       = $ImageData.width
+            Language    = $ImageData.iso_639_1
+            Path        = $ImageData.file_path
+            URL         = @( if ( [String]::IsNullOrEmpty($ImageData.file_path) ) { $null }
+                             else { $IMG_BASE_URI + $ImageData.file_path } )
+        }))
+
+        Write-Msg -FunctionResult -o $image
+
+        return $image
+    }
+}
