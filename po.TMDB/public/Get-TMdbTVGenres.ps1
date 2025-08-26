@@ -4,7 +4,25 @@ Function Get-TMdbTVGenres {
         Gets the list of available TV Genres.
 
     .OUTPUTS
-        An [Hashtable] containing the ID and Name of each TMDB TV Series/Show Genre.
+        An [Hashtable] containing the ID and Name of each TV Series/Show Genre.
+            @{
+                "16": "Animation",
+                "80": "Crime",
+                "35": "Comedy",
+                "10751": "Family",
+                "10759": "Action & Adventure",
+                "10763": "News",
+                "99": "Documentary",
+                "18": "Drama",
+                "10767": "Talk",
+                "37": "Western",
+                "10762": "Kids",
+                "9648": "Mystery",
+                "10764": "Reality",
+                "10768": "War & Politics",
+                "10766": "Soap",
+                "10765": "Sci-Fi & Fantasy"
+            }
 
     .PARAMETER Language
         OPTIONAL. String. Alias: -l. The desired target language of the query. The value default's to the user's 

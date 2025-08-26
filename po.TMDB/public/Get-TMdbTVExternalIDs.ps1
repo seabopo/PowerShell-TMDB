@@ -4,7 +4,9 @@ Function Get-TMdbTVExternalIDs {
         Creates a collection of object references to external media databases for a TV Show, Season or Episode.
 
     .OUTPUTS
-        A collection of [Item] objects.
+        A collection of [Item] objects. Each Item has the following properties:
+            [String] Name
+            [String] ID
 
     .PARAMETER SeriesID
         REQUIRED. String. Alias: -i, -ShowID. The TV Series/Show ID. Example: 615

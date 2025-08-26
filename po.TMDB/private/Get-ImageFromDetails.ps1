@@ -6,13 +6,13 @@ Function Get-ImageFromDetails {
 
     .OUTPUTS
         A single [Image] object with the following properties:
-           - Type: "poster" | "background" | "still" | "image"
-           - AspectRatio: 0.667,
-           - Height: 3000,
-           - Width: 2000,
-           - Language: "en",
-           - Path: "/7bRHBrmSn5QLY1UJ32v4jeSoKzP.jpg",
-           - URL: "https://media.themoviedb.org/t/p/original/7bRHBrmSn5QLY1UJ32v4jeSoKzP.jpg"
+           - [String]  Type        : "poster" | "background" | "still" | "image"
+           - [Decimal] AspectRatio : 0.667,
+           - [Int]     Height      : 3000
+           - [Int]     Width       : 2000
+           - [String]  Language    : "en"
+           - [String]  Path        : "/7bRHBrmSn5QLY1UJ32v4jeSoKzP.jpg"
+           - [String]  URL         : "https://media.themoviedb.org/t/p/original/7bRHBrmSn5QLY1UJ32v4jeSoKzP.jpg"
 
     .PARAMETER ImageData
         REQUIRED. Hashtable. Alias: -d. Data about an image returned from an image api query.
