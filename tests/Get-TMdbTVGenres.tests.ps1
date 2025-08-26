@@ -48,5 +48,5 @@
     Get-TMdbTVGenres -Language 'es-US'
 
   # Execute a request using a non-existent language.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVGenres :: ** FAILURE EXPECTED ** ' )
-    Get-TMdbTVGenres -Language 'ex-US'
+    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVGenres :: ** NULL GENRE NAMES EXPECTED ** ' )
+    Get-TMdbTVGenres -Language 'xx-XX'
