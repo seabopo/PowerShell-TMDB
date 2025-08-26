@@ -5,9 +5,9 @@ Function Get-TVContentRatingFromDetails {
 
     .OUTPUTS
         A single [ContentRating] object with the following properties:
-           - [String]   $Country     : "US"
-           - [String]   $Rating      : "TV-14"
-           - [String[]] $Descriptors : ["L","V"]
+            - [String]   $Country     : "US"
+            - [String]   $Rating      : "TV-14"
+            - [String[]] $Descriptors : ["L","V"]
 
     .PARAMETER RatingData
         REQUIRED. Hashtable. Alias: -d. Data about a single country's content rating for a series.

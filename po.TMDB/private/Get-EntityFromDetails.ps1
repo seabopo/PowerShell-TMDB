@@ -5,11 +5,11 @@ Function Get-EntityFromDetails {
 
     .OUTPUTS
         A single [Entity] object with the following properties:
-           - [String] Name     : 
-           - [String] ID       : 
-           - [String] Country  : 
-           - [String] LogoPath : 
-           - [String] LogoURL  : 
+            - [String] Name     : 
+            - [String] ID       : 
+            - [String] Country  : 
+            - [String] LogoPath : 
+            - [String] LogoURL  : 
 
     .PARAMETER EntityData
         REQUIRED. Hashtable. Alias: -d. Data about a production company, studio or network.
