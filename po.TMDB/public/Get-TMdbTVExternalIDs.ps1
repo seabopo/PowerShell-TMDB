@@ -5,8 +5,8 @@ Function Get-TMdbTVExternalIDs {
 
     .OUTPUTS
         A collection of [Item] objects. Each Item has the following properties:
-            [String] Name
-            [String] ID
+            - [String] Name
+            - [String] ID
 
     .PARAMETER SeriesID
         REQUIRED. String. Alias: -i, -ShowID. The TV Series/Show ID. Example: 615

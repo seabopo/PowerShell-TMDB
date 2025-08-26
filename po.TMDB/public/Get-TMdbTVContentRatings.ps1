@@ -6,9 +6,9 @@ Function Get-TMdbTVContentRatings {
 
     .OUTPUTS
         A collection of [ContentRating] objects, each with the following properties:
-           - [String]   $Country     : "US"
-           - [String]   $Rating      : "TV-14"
-           - [String[]] $Descriptors : ["L","V"]
+            - [String]   $Country     : "US"
+            - [String]   $Rating      : "TV-14"
+            - [String[]] $Descriptors : ["L","V"]
 
     .PARAMETER SeriesID
         REQUIRED. String. Alias: -i, -ShowID. The TV Series/Show ID. Example: 615
