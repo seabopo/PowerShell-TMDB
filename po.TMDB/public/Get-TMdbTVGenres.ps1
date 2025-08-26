@@ -25,7 +25,7 @@ Function Get-TMdbTVGenres {
             }
 
     .PARAMETER Language
-        OPTIONAL. String. Alias: -l. The desired target language of the query. The value default's to the user's 
+        OPTIONAL. String. Alias: -l. The desired target language of the query. The value defaults to the user's 
         operating system settings. Example: en-US
 
     .EXAMPLE

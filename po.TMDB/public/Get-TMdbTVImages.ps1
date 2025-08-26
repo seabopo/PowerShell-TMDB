@@ -23,7 +23,7 @@ Function Get-TMdbTVImages {
         OPTIONAL. Int. Alias: -e. The Episode Number of the Series/Show. Example: 1
 
     .PARAMETER Language
-        OPTIONAL. String. Alias: -l. The desired target language of the query. The value default's to the user's 
+        OPTIONAL. String. Alias: -l. The desired target language of the query. The value defaults to the user's 
         operating system settings. Example: en-US
 
     .EXAMPLE
