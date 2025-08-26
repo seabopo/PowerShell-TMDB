@@ -1,8 +1,7 @@
 Function Get-ImageFromDetails {
     <#
     .DESCRIPTION
-        Creates an object based on the properties from a single item returned as part of a collection of items 
-        as the result from a TV Series Image API request.
+        Creates an object containing the image properties of a single image.
 
     .OUTPUTS
         A single [Image] object with the following properties:
@@ -15,7 +14,7 @@ Function Get-ImageFromDetails {
            - [String]  URL         : "https://media.themoviedb.org/t/p/original/7bRHBrmSn5QLY1UJ32v4jeSoKzP.jpg"
 
     .PARAMETER ImageData
-        REQUIRED. Hashtable. Alias: -d. Data about an image returned from an image api query.
+        REQUIRED. Hashtable. Alias: -d. Data about a single image related to a TV Series, Season or Show.
 
     .EXAMPLE
         Get-ImageFromDetails  -d @{ ...}
