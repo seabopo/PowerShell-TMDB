@@ -74,7 +74,8 @@ Function Get-TMdbTVSeason {
         parameter.
 
     .PARAMETER Language
-        OPTIONAL. String. Alias: -l. The desired language. Default: The current PowerShell language/culture.
+        OPTIONAL. String. Alias: -l. The desired target language of the query. The value defaults to the user's 
+        operating system settings. Example: en-US
 
     .EXAMPLE
         Get-TMdbTVSeason -ShowID 615 -SeasonNumber 1
