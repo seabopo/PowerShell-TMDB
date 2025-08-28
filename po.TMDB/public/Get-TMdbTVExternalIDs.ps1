@@ -34,16 +34,16 @@ Function Get-TMdbTVExternalIDs {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)] [Alias('i','ShowID')] [String] $SeriesID,
-        [Parameter()]          [Alias('s')]          [Int]    $SeasonNumber,
-        [Parameter()]          [Alias('e')]          [Int]    $EpisodeNumber
+        [Parameter()]          [Alias('s')]          [System.Nullable[int]] $SeasonNumber,
+        [Parameter()]          [Alias('e')]          [System.Nullable[int]] $EpisodeNumber
     )
 
     process {
 
         Write-Msg -FunctionCall -IncludeParameters
 
-        $season  = ( $SeasonNumber  ) ? $( '/season/{0}'  -f $SeasonNumber )  : $null
-        $episode = ( $EpisodeNumber ) ? $( '/episode/{0}' -f $EpisodeNumber ) : $null
+        $season  = ( $null -eq $SeasonNumber  ) ? $null : $( '/season/{0}'  -f $SeasonNumber )
+        $episode = ( $null -eq $EpisodeNumber ) ? $null : $( '/episode/{0}' -f $EpisodeNumber )
 
         $SearchURL = @(
             $( $API_BASE_URI ),
