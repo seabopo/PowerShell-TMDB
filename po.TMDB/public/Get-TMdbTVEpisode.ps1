@@ -42,12 +42,12 @@ Function Get-TMdbTVEpisode {
         include the cast credits in the episode details.
 
     .PARAMETER IncludeEpisodeImages
-        OPTIONAL. Switch. Alias: -ie. TMDB includes a single still image representing the episode in the episode 
+        OPTIONAL. Switch. Alias: -imge. TMDB includes a single still image representing the episode in the episode 
         details. However, episodes may have multiple images available to select from. To include links to all of
         the images include this parameter.
 
     .PARAMETER IncludeEpisodeExternalIDs
-        OPTIONAL. Switch. Alias: -xe. TMDB includes the IDs used by other media databases (IMDB, Freebase, TVDB, 
+        OPTIONAL. Switch. Alias: -xide. TMDB includes the IDs used by other media databases (IMDB, Freebase, TVDB, 
         TVRage and Wikidata) for many of the the entries in it's catalog. Use this switch to include the IDs 
         of those entries (if they exist).
 
@@ -71,7 +71,7 @@ Function Get-TMdbTVEpisode {
         Get-TMdbTVEpisode -ShowID 615 -SeasonNumber 1 -EpisodeNumber 1 -IncludeEpisodeCastCredits
 
     .EXAMPLE
-        Get-TMdbTVEpisode -i 615 -s 1 -e 1 -cce -ie -xe
+        Get-TMdbTVEpisode -i 615 -s 1 -e 1 -cce -imge -xide
 
     #>
     [OutputType([TVEpisode])]
@@ -81,8 +81,8 @@ Function Get-TMdbTVEpisode {
         [Parameter(Mandatory)] [Alias('s')]          [Int]    $SeasonNumber,
         [Parameter(Mandatory)] [Alias('e')]          [Int]    $EpisodeNumber,
         [Parameter()]          [Alias('cce')]        [Switch] $IncludeEpisodeCastCredits,
-        [Parameter()]          [Alias('ie')]         [Switch] $IncludeEpisodeImages,
-        [Parameter()]          [Alias('xe')]         [Switch] $IncludeEpisodeExternalIDs,
+        [Parameter()]          [Alias('imge')]       [Switch] $IncludeEpisodeImages,
+        [Parameter()]          [Alias('xide')]       [Switch] $IncludeEpisodeExternalIDs,
         [Parameter()]          [Alias('l')]          [String] $Language = $((Get-Culture).Name.ToString())
     )
 

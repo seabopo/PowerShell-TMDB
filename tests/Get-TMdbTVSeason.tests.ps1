@@ -41,7 +41,7 @@
 
   # Execute a request with all options.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeason :: ** ALL ** Options' )
-    Get-TMdbTVSeason -i 615 -s 1 -ccs -is -xs -ccse -ie -xe
+    Get-TMdbTVSeason -i 615 -s 1 -ccs -imgs -xids -ccse -imge -xide
 
     exit
   
@@ -59,7 +59,7 @@
 
   # Execute a request and get the episode cast credits applied to episodes.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeason :: ** WITH ** All Options using Season Cast Credits for Episodes' )
-    Get-TMdbTVSeason -i 615 -s 1 -ccs -is -xs -ccse -ie -xe
+    Get-TMdbTVSeason -i 615 -s 1 -ccs -imgs -xids -ccse -imge -xide
 
   # Execute a search for a season that doesn't exist.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeason :: ** FAILURE EXPECTED ** ' )

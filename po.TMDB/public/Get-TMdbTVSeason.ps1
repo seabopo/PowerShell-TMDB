@@ -38,12 +38,12 @@ Function Get-TMdbTVSeason {
         in the season details.
 
     .PARAMETER IncludeSeasonImages
-        OPTIONAL. Switch. Alias: -is. TMDB includes a poster image representing the season in the season 
+        OPTIONAL. Switch. Alias: -imgs. TMDB includes a poster image representing the season in the season 
         details. However, seasons may have multiple images available to select from. To include links to all of
         the images include this parameter.
 
     .PARAMETER IncludeSeasonExternalIDs
-        OPTIONAL. Switch. Alias: -xs. TMDB includes the IDs used by other media databases (IMDB, Freebase, TVDB, 
+        OPTIONAL. Switch. Alias: -xids. TMDB includes the IDs used by other media databases (IMDB, Freebase, TVDB, 
         TVRage and Wikidata) for many of the the entries in it's catalog. Use this switch to include the IDs 
         of those entries (if they exist) in the season data.
 
@@ -56,12 +56,12 @@ Function Get-TMdbTVSeason {
         parameter.
 
     .PARAMETER IncludeEpisodeImages
-        OPTIONAL. Switch. Alias: -ie. TMDB includes a single still image representing the episode in the episode 
+        OPTIONAL. Switch. Alias: -imge. TMDB includes a single still image representing the episode in the episode 
         details. However, episodes may have multiple images available to select from. To include links to all of
         the images include this parameter.
 
     .PARAMETER IncludeEpisodeExternalIDs
-        OPTIONAL. Switch. Alias: -xe. TMDB includes the IDs used by other media databases (IMDB, Freebase, TVDB, 
+        OPTIONAL. Switch. Alias: -xide. TMDB includes the IDs used by other media databases (IMDB, Freebase, TVDB, 
         TVRage and Wikidata) for many of the the entries in it's catalog. Use this switch to include the IDs 
         of those entries (if they exist) in the episode data.
 
@@ -86,7 +86,7 @@ Function Get-TMdbTVSeason {
         Get-TMdbTVSeason -ShowID 615 -SeasonNumber 1 -IncludeEpisodeCastCredits -IncludeEpisodeImages
 
     .EXAMPLE
-        Get-TMdbTVSeason -i 615 -s 1 -ccs -is -xs -ccse -ie -xe
+        Get-TMdbTVSeason -i 615 -s 1 -ccs -imgs -xids -ccse -imge -xide
 
     #>
     [OutputType([TVSeason])]
@@ -95,11 +95,11 @@ Function Get-TMdbTVSeason {
         [Parameter(Mandatory)] [Alias('i','ShowID')] [String] $SeriesID,
         [Parameter(Mandatory)] [Alias('s')]          [Int]    $SeasonNumber,
         [Parameter()]          [Alias('ccs')]        [Switch] $IncludeSeasonCastCredits,
-        [Parameter()]          [Alias('is')]         [Switch] $IncludeSeasonImages,
-        [Parameter()]          [Alias('xs')]         [Switch] $IncludeSeasonExternalIDs,
+        [Parameter()]          [Alias('imgs')]       [Switch] $IncludeSeasonImages,
+        [Parameter()]          [Alias('xids')]       [Switch] $IncludeSeasonExternalIDs,
         [Parameter()]          [Alias('cce')]        [Switch] $IncludeEpisodeCastCredits,
-        [Parameter()]          [Alias('ie')]         [Switch] $IncludeEpisodeImages,
-        [Parameter()]          [Alias('xe')]         [Switch] $IncludeEpisodeExternalIDs,
+        [Parameter()]          [Alias('imge')]       [Switch] $IncludeEpisodeImages,
+        [Parameter()]          [Alias('xide')]       [Switch] $IncludeEpisodeExternalIDs,
         [Parameter()]          [Alias('ccse')]       [Switch] $IncludeSeasonCastCreditsForEpisodes,
         [Parameter()]          [Alias('l')]          [String] $Language = $((Get-Culture).Name.ToString())
     )
