@@ -61,7 +61,6 @@ Function Get-TVSeasonFromDetails {
                                   else { ([datetime]($SeasonData.air_date)).Year } )
             Episodes         = $( if ([String]::IsNullOrEmpty($SeasonData.episodes)) { $null } 
                                   else { $SeasonData.episodes | Get-TVEpisodeFromDetails } )
-
         }))
 
         Write-Msg -FunctionResult -o $season
