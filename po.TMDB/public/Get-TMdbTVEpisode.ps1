@@ -43,8 +43,8 @@ Function Get-TMdbTVEpisode {
 
     .PARAMETER IncludeEpisodeImages
         OPTIONAL. Switch. Alias: -imge. TMDB includes a single still image representing the episode in the episode 
-        details. However, episodes may have multiple images available to select from. To include links to all of
-        the images include this parameter.
+        details. However, episodes may have multiple images available to select from. To include links to all of 
+        the images matching the language specified in the "Language" parameter, include this parameter.
 
     .PARAMETER IncludeEpisodeExternalIDs
         OPTIONAL. Switch. Alias: -xide. TMDB includes the IDs used by other media databases (IMDB, Freebase, TVDB, 
