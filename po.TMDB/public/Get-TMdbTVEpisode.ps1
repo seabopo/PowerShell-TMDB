@@ -38,8 +38,8 @@ Function Get-TMdbTVEpisode {
 
     .PARAMETER IncludeEpisodeCastCredits
         OPTIONAL. Switch. Alias: -cce. The TMDB Episode details include the credits for crew members and guest 
-        stars but do not include the cast credits, which is a separate TMDB query. Use this switch if you want to 
-        include the cast credits in your episode details.
+        stars but do not include the cast credits, which is a separate TMDB query. Use this switch to 
+        include the cast credits in the episode details.
 
     .PARAMETER IncludeEpisodeImages
         OPTIONAL. Switch. Alias: -ie. TMDB includes a single still image representing the episode in the episode 
