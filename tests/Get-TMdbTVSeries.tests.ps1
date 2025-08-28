@@ -39,11 +39,13 @@
   # Initialize the API Key / Bearer Token. api-token.ps1 contains a single line: return '<my api token>'
     $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
 
-    Get-TMdbTVSeries -i 615 -ccc -img -xid -isd -ccs -imgs -xids -cce -imge -xide
-
-  # Execute a request using a valid TMDB TV Show ID. (Fargo = 60622, Futurama = 615, Gilligan = 1921)
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVShow :: Futurama (615) :: All Options' )
-    $myShow = $(Get-TMdbTVShow -i 615 -ccc -img -xid -isd -ccs -imgs -xids -ccse).value # -imge -xide
+  # Execute a request to get All Series and Season Information, including episodes.
+  #     $request = Get-TMdbTVShow -i 615 -ccc -img -xid -isd -ccs -imgs -xids -ccse
+  #     if ( $request.success ) {
+  #         $myShow = $request.value
+  #     }
+    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeries :: Full Series and Season Data (Includes Episodes)' )
+    $myShow = $(Get-TMdbTVShow -i 615 -ccc -img -xid -isd -ccs -imgs -xids -ccse).value
 
     exit
 
@@ -56,13 +58,32 @@
     Get-TMdbTVSeries -SeriesID 615 -IncludeCastAndCrewCredits -IncludeImages -IncludeExternalIDs
 
   # USE THIS :: Execute a request to get the full Series and Season data (with Episodes).
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeason :: Full Series and Season Data (Includes Episodes)' )
-    Get-TMdbTVSeries -i 615 -ccc -img -xid -isd -ccs -imgs -xids -ccse
+    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeries :: Full Series and Season Data (Includes Episodes)' )
+    Get-TMdbTVSeries -SeriesID 615 -IncludeCastAndCrewCredits `
+                                   -IncludeImages `
+                                   -IncludeExternalIDs `
+                                   -IncludeSeasonDetails `
+                                   -IncludeSeasonCastCredits `
+                                   -IncludeSeasonImages `
+                                   -IncludeSeasonExternalIDs `
+                                   -IncludeSeasonCastCreditsForEpisodes `
+                                   -IncludeEpisodeImages `
+                                   -IncludeEpisodeExternalIDs
 
-  # DO NOT USE THIS - IT'S ABUSIVE TO TMDB :: Full Series, Season and Episode-specific credits/external IDs.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeason :: Full Series, Season and all Episode-Specific Data' )
-    Get-TMdbTVSeries -i 615 -ccc -img -xid -isd -ccs -imgs -xids -cce -imge -xide
+  # DO NOT USE THIS - IT COULD BE CONSIDERED ABUSIVE TO TMDB
+  # Get Full Series, Season and Episode-specific credits, images and external IDs.
+    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeries :: Full Series, Season and all Episode-Specific Data' )
+    Get-TMdbTVSeries -SeriesID 615 -IncludeCastAndCrewCredits `
+                                   -IncludeImages `
+                                   -IncludeExternalIDs `
+                                   -IncludeSeasonDetails `
+                                   -IncludeSeasonCastCredits `
+                                   -IncludeSeasonImages `
+                                   -IncludeSeasonExternalIDs `
+                                   -IncludeEpisodeCastCredits `
+                                   -IncludeEpisodeImages `
+                                   -IncludeEpisodeExternalIDs
 
-  # Execute a search for a show that doesn't exist.
+  # Attempt a request for a show that doesn't exist.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeries:: ** FAILURE EXPECTED ** ' )
     Get-TMdbTVSeries -i 19211921
