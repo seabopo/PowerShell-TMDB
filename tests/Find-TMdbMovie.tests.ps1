@@ -34,9 +34,9 @@
   # Initialize the API Key / Bearer Token. api-token.ps1 contains a single line: return '<my api token>'
     $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
 
-  # Execute a request for all available Series options.
+  # Execute a request for all available options.
     Write-Msg -h -ps -bb -m $( ' Find-TMdbMovie' )
-    Find-TMdbMovie -Name 'The Fifth Element'
+    Find-TMdbMovie -Name 'The Fifth Element' -Year '1997'
 
     exit
 
