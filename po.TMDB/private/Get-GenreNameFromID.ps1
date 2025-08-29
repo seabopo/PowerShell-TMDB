@@ -9,32 +9,50 @@ Function Get-GenreNameFromID {
     .PARAMETER ID
         REQUIRED. String. Alias: -i. Genre ID.
 
+    .PARAMETER TV
+        REQUIRED. String. Alias: -t. Get TV Genres.
+
+    .PARAMETER Movie
+        REQUIRED. String. Alias: -m. Get Movie Genres.
+
     .EXAMPLE
-        Get-GenreNameFromID -i "10759"
+        Get-GenreNameFromID -TV -i "10759"
     
     .EXAMPLE
-        "10759" | Get-GenreNameFromID
+        "10759" | Get-GenreNameFromID -m
 
     #>
     [OutputType([String])]
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory,ValueFromPipeline)] [Alias('i')] [String] $ID
+        [Parameter(Mandatory,ValueFromPipeline)]      [Alias('i')] [String] $ID,
+        [Parameter(Mandatory,ParameterSetName = "T")] [Alias('t')] [Switch] $TV,
+        [Parameter(Mandatory,ParameterSetName = "M")] [Alias('m')] [Switch] $Movie
     )
 
     process {
         
         Write-Msg -FunctionCall -IncludeParameters
         
-        if ( [String]::IsNullOrEmpty($Script:TMDB_GENRES) ) {
-            $r = Get-TMdbTVGenres
-            if ( $r.success ) {
-                $Script:TMDB_GENRES = $r.value
+        if ( $TV ) {
+            if ( [String]::IsNullOrEmpty($Script:TMDB_TV_GENRES) ) {
+                $r = Get-TMdbTVGenres
+                if ( $r.success ) {
+                    $Script:TMDB_TV_GENRES = $r.value
+                }
             }
+            $genre = $Script:TMDB_TV_GENRES.ContainsKey($ID) ? $Script:TMDB_TV_GENRES[$ID] : ''
+        }
+        else {
+            if ( [String]::IsNullOrEmpty($Script:TMDB_MOVIE_GENRES) ) {
+                $r = Get-TMdbMovieGenres
+                if ( $r.success ) {
+                    $Script:TMDB_MOVIE_GENRES = $r.value
+                }
+            }
+            $genre = $Script:TMDB_MOVIE_GENRES.ContainsKey($ID) ? $Script:TMDB_MOVIE_GENRES[$ID] : ''
         }
         
-        $genre = $Script:TMDB_GENRES.ContainsKey($ID) ? $Script:TMDB_GENRES[$ID] : ''
-
         Write-Msg -FunctionResult -m $( 'Genre Name: {0}' -f $genre )
 
         return $genre
