@@ -46,10 +46,12 @@ Function Get-TVSeriesFromSearchResults {
             OriginalName = $SeriesData.original_name
             Description  = $SeriesData.overview
             Country      = $SeriesData.origin_country
-            Genres       = $SeriesData.genre_ids | Get-GenreNameFromID
             PosterPath   = $SeriesData.poster_path
             BackdropPath = $SeriesData.backdrop_path
             FirstAirDate = $SeriesData.first_air_date
+            Genres       = $SeriesData.genre_ids | ForEach-Object { 
+                                                       [Item]::New($_,$(Get-GenreNameFromID -TV -ID $_)) 
+                                                   }
             Year         = $( if ([String]::IsNullOrEmpty($SeriesData.first_air_date)) { '' } 
                                 else { ([datetime]($SeriesData.first_air_date)).Year } )
         }))
