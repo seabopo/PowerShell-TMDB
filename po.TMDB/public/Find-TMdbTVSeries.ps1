@@ -49,7 +49,7 @@ Function Find-TMdbTVSeries {
 
     #>
     [Alias('Find-TMdbTVShows')]
-    [OutputType([PSCustomObject])]
+    [OutputType([TVShow[]])]
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
