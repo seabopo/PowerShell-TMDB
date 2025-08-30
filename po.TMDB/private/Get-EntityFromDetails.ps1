@@ -36,7 +36,7 @@ Function Get-EntityFromDetails {
             ID       = $EntityData.id
             Country  = $EntityData.origin_country
             LogoPath = $EntityData.logo_path
-            LogoURL  = @( if ( [String]::IsNullOrEmpty($EntityData.logo_path) ) { $null }
+            LogoURL  = @( if ( Test-IsNothing($EntityData.logo_path) ) { $null }
                           else { $IMG_BASE_URI + $EntityData.logo_path } )
         }))
 

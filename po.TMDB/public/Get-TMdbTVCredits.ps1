@@ -83,19 +83,19 @@ Function Get-TMdbTVCredits {
             
             $c = ($r.value | ConvertFrom-Json)
 
-            if ( -not ([String]::IsNullOrEmpty($c)) ) {
+            if ( Test-IsSomething($c) ) {
 
                 [Hashtable] $credits = @{}
 
-                if ( -not ([String]::IsNullOrEmpty($c.cast)) ) {
+                if ( Test-IsSomething($c.cast) ) {
                     $credits.cast = $c.cast | Get-CreditFromDetails -t 'Cast'
                 }
 
-                if ( -not ([String]::IsNullOrEmpty($c.guest_stars)) ) {
+                if ( Test-IsSomething($c.guest_stars) ) {
                     $credits.guests = $c.guest_stars | Get-CreditFromDetails -t 'Guest'
                 }
 
-                if ( -not ([String]::IsNullOrEmpty($c.crew)) ) {
+                if ( Test-IsSomething($c.crew) ) {
                     $credits.crew = $c.crew | Get-CreditFromDetails -t 'Crew'
                 }
 

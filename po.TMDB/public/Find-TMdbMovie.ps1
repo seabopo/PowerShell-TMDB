@@ -93,7 +93,7 @@ Function Find-TMdbMovie {
                 $( $API_BASE_URI ),
                 $( '/search/movie' ),
                 $( '?query={0}' -f [System.Web.HttpUtility]::UrlEncode($Name) ),
-                $( [String]::IsNullOrEmpty($Year) ? '' : '&year={0}' -f $Year ),
+                $( $(Test-IsNothing($Year)) ? '' : '&year={0}' -f $Year ),
                 $( '&include_adult={0}' -f $IncludeAdultContent ),
                 $( '&language={0}' -f $Language ),
                 $( '&page={0}' -f $page )

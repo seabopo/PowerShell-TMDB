@@ -52,8 +52,8 @@ Function Get-TVSeriesFromSearchResults {
             Genres       = $SeriesData.genre_ids | ForEach-Object { 
                                                        [Item]::New($_,$(Get-GenreNameFromID -TV -ID $_)) 
                                                    }
-            Year         = $( if ([String]::IsNullOrEmpty($SeriesData.first_air_date)) { '' } 
-                                else { ([datetime]($SeriesData.first_air_date)).Year } )
+            Year         = $( if (Test-IsNothing($SeriesData.first_air_date)) { '' } 
+                              else { ([datetime]($SeriesData.first_air_date)).Year } )
         }))
 
         Write-Msg -FunctionResult -o $show

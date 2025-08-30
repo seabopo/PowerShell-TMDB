@@ -79,13 +79,14 @@ Function Get-TMdbTVImages {
         if ( $r.success -and $r.statusCode -eq 200 ) {
             
             $i = ($r.value | ConvertFrom-Json)
-            if ( -not ([String]::IsNullOrEmpty($i)) ) {
+            if ( Test-IsSomething($i) ) {
+                [Image[]] $images = @()
                 $types = @('logos','posters','backdrops','stills')
                 $l = $($Language.Split('-')[0])
                 foreach ( $t in $types ) {
                     if ( $null -ne $($i."$($t)") ) {
-                        $images += $($i."$($t)") | Get-ImageFromDetails -t $t | 
-                                                   Where-Object { $_.Language -in @($l,'',$null) }
+                        $images += $( $($i."$($t)") | Get-ImageFromDetails -t $t | 
+                                                      Where-Object { $_.Language -in @($l,'',$null) } )
                     }
                 }
             }

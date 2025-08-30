@@ -35,7 +35,7 @@ Function Get-GenreNameFromID {
         Write-Msg -FunctionCall -IncludeParameters
         
         if ( $TV ) {
-            if ( [String]::IsNullOrEmpty($Script:TMDB_TV_GENRES) ) {
+            if ( Test-IsNothing($Script:TMDB_TV_GENRES) ) {
                 $r = Get-TMdbTVGenres
                 if ( $r.success ) {
                     $Script:TMDB_TV_GENRES = $r.value
@@ -44,7 +44,7 @@ Function Get-GenreNameFromID {
             $genre = $Script:TMDB_TV_GENRES.ContainsKey($ID) ? $Script:TMDB_TV_GENRES[$ID] : ''
         }
         else {
-            if ( [String]::IsNullOrEmpty($Script:TMDB_MOVIE_GENRES) ) {
+            if ( Test-IsNothing($Script:TMDB_MOVIE_GENRES) ) {
                 $r = Get-TMdbMovieGenres
                 if ( $r.success ) {
                     $Script:TMDB_MOVIE_GENRES = $r.value

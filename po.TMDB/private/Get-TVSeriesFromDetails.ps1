@@ -68,29 +68,32 @@ Function Get-TVSeriesFromDetails {
             Description   = $SeriesData.overview
             TotalSeasons  = $SeriesData.number_of_seasons
             TotalEpisodes = $SeriesData.number_of_episodes
-            LastEpisode   = $( if ( [String]::IsNullOrEmpty($SeriesData.last_episode_to_air) ) { $null }
+            LastEpisode   = $( if ( Test-IsNothing($SeriesData.last_episode_to_air) ) { $null }
                                else { $SeriesData.last_episode_to_air | Get-TVEpisodeFromDetails } )
-            NextEpisode   = $( if ( [String]::IsNullOrEmpty($SeriesData.next_episode_to_air) ) { $null }
+            NextEpisode   = $( if ( Test-IsNothing($SeriesData.next_episode_to_air) ) { $null }
                                else { $SeriesData.next_episode_to_air | Get-TVEpisodeFromDetails } )
             InProduction  = [Bool]$SeriesData.in_production
             Status        = $SeriesData.status
-            Year          = $( if ( [String]::IsNullOrEmpty($SeriesData.first_air_date) ) { '' } 
+            Year          = $( if ( Test-IsNothing($SeriesData.first_air_date) ) { '' } 
                                else { ([datetime]($SeriesData.first_air_date)).Year } )
             FirstAirDate  = $SeriesData.first_air_date
             LastAirDate   = $SeriesData.last_air_date
-            Networks      = $( $SeriesData.networks | Get-EntityFromDetails )
-            Studios       = $( $SeriesData.production_companies | Get-EntityFromDetails )
+            Networks      = @( if ( Test-IsNothing($SeriesData.networks) ) { $null }
+                               else { $SeriesData.networks | Get-EntityFromDetails } )
+            Studios       = @( if ( Test-IsNothing($SeriesData.production_companies) ) { $null }
+                               else { $SeriesData.production_companies | Get-EntityFromDetails } )
             Country       = $SeriesData.origin_country
             Genres        = $SeriesData.genres
-            Creators      = $( $SeriesData.created_by | Get-CreditFromDetails -t 'Creator' )
+            Creators      = @( if ( Test-IsNothing($SeriesData.created_by) ) { $null }
+                               else { $SeriesData.created_by | Get-CreditFromDetails -t 'Creator' } )
             HomePage      = $SeriesData.homepage
             PosterPath    = $SeriesData.poster_path
             BackdropPath  = $SeriesData.backdrop_path
-            PosterURL     = @( if ( [String]::IsNullOrEmpty($SeriesData.poster_path) ) { $null }
+            PosterURL     = @( if ( Test-IsNothing($SeriesData.poster_path) ) { $null }
                                else { $IMG_BASE_URI + $SeriesData.poster_path } )
-            BackdropURL   = @( if ( [String]::IsNullOrEmpty($SeriesData.backdrop_path) ) { $null }
+            BackdropURL   = @( if ( Test-IsNothing($SeriesData.backdrop_path) ) { $null }
                                else { $IMG_BASE_URI + $SeriesData.backdrop_path } )
-            Seasons       = $( if ( [String]::IsNullOrEmpty($SeriesData.seasons) ) { $null }
+            Seasons       = $( if ( Test-IsNothing($SeriesData.seasons) ) { $null }
                                else { $SeriesData.seasons | Get-TVSeasonFromDetails } )
         }))
 
@@ -99,5 +102,3 @@ Function Get-TVSeriesFromDetails {
         return $show
     }
 }
-
-

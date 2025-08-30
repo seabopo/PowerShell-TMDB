@@ -70,35 +70,35 @@ Function Get-TMdbTVExternalIDs {
             
             $e = ($r.value | ConvertFrom-Json)
 
-            if ( -not ([String]::IsNullOrEmpty($e)) ) {
+            if ( Test-IsSomething($e) ) {
 
                 [Item[]] $externalIDs = @()
 
-                if ( -not ([String]::IsNullOrEmpty($e.id)) ) {
+                if ( Test-IsSomething($e.id) ) {
                     $externalIDs += [Item]::new(@{ name = 'tmdb'; id = $e.id })
                 }
 
-                if ( -not ([String]::IsNullOrEmpty($e.imdb_id)) ) {
+                if ( Test-IsSomething($e.imdb_id) ) {
                     $externalIDs += [Item]::new(@{ name = 'imdb'; id = $e.imdb_id })
                 }
 
-                if ( -not ([String]::IsNullOrEmpty($e.freebase_mid)) ) {
+                if ( Test-IsSomething($e.freebase_mid) ) {
                     $externalIDs += [Item]::new(@{ name = 'freebase_mid'; id = $e.freebase_mid })
                 }
 
-                if ( -not ([String]::IsNullOrEmpty($e.freebase_id)) ) {
+                if ( Test-IsSomething($e.freebase_id) ) {
                     $externalIDs += [Item]::new(@{ name = 'freebase'; id = $e.freebase_id })
                 }
 
-                if ( -not ([String]::IsNullOrEmpty($e.tvdb_id)) ) {
+                if ( Test-IsSomething($e.tvdb_id) ) {
                     $externalIDs += [Item]::new(@{ name = 'tvdb'; id = $e.tvdb_id })
                 }
 
-                if ( -not ([String]::IsNullOrEmpty($e.tvrage_id)) ) {
+                if ( Test-IsSomething($e.tvrage_id) ) {
                     $externalIDs += [Item]::new(@{ name = 'tvrage'; id = $e.tvrage_id })
                 }
 
-                if ( -not ([String]::IsNullOrEmpty($e.wikidata_id)) ) {
+                if ( Test-IsSomething($e.wikidata_id) ) {
                     $externalIDs += [Item]::new(@{ name = 'wikidata'; id = $e.wikidata_id })
                 }
 

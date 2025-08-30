@@ -160,7 +160,7 @@ Function Get-TMdbTVSeries {
             
             $s = ($r.value | ConvertFrom-Json)
 
-            if ( -not ([String]::IsNullOrEmpty($s)) ) {
+            if ( Test-IsSomething($s) ) {
                 
                 $show = $( $s | Get-TVSeriesFromDetails )
 

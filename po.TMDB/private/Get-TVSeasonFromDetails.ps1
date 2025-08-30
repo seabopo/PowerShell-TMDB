@@ -55,11 +55,11 @@ Function Get-TVSeasonFromDetails {
             FirstAirDate     = $SeasonData.air_date
             TotalEpisodes    = $SeasonData.episode_count
             PosterPath       = $SeasonData.poster_path
-            PosterURL        = @( if ( [String]::IsNullOrEmpty($SeasonData.poster_path) ) { $null }
+            PosterURL        = @( if ( Test-IsNothing($SeasonData.poster_path) ) { $null }
                                   else { $IMG_BASE_URI + $SeasonData.poster_path } )
-            Year             = $( if ([String]::IsNullOrEmpty($SeasonData.air_date)) { '' } 
+            Year             = $( if (Test-IsNothing($SeasonData.air_date)) { '' } 
                                   else { ([datetime]($SeasonData.air_date)).Year } )
-            Episodes         = $( if ([String]::IsNullOrEmpty($SeasonData.episodes)) { $null } 
+            Episodes         = $( if (Test-IsNothing($SeasonData.episodes)) { $null } 
                                   else { $SeasonData.episodes | Get-TVEpisodeFromDetails } )
         }))
 

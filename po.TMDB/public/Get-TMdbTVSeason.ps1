@@ -133,11 +133,11 @@ Function Get-TMdbTVSeason {
             
             $s = ($r.value | ConvertFrom-Json)
 
-            if ( -not ([String]::IsNullOrEmpty($s)) ) {
+            if ( Test-IsSomething($s) ) {
 
                 $season = $( $s | Get-TVSeasonFromDetails )
 
-                if ( [String]::IsNullOrEmpty($season.ShowID) ) {
+                if ( Test-IsNothing($season.ShowID) ) {
                     $season.ShowID = $SeriesID
                 }
 

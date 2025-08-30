@@ -45,7 +45,7 @@ Function Get-ImageFromDetails {
             Width       = $ImageData.width
             Language    = $ImageData.iso_639_1
             Path        = $ImageData.file_path
-            URL         = @( if ( [String]::IsNullOrEmpty($ImageData.file_path) ) { $null }
+            URL         = @( if ( Test-IsNothing($ImageData.file_path) ) { $null }
                              else { $IMG_BASE_URI + $ImageData.file_path } )
         }))
 

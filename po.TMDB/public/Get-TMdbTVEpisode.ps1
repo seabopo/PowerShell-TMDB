@@ -111,11 +111,11 @@ Function Get-TMdbTVEpisode {
             
             $e = ($r.value | ConvertFrom-Json)
 
-            if ( -not ([String]::IsNullOrEmpty($e)) ) {
+            if ( Test-IsSomething($e) ) {
                 
                 $episode = $( $e | Get-TVEpisodeFromDetails )
 
-                if ( [String]::IsNullOrEmpty($episode.ShowID) ) { $episode.ShowID = $SeriesID }
+                if ( Test-IsNothing($episode.ShowID) ) { $episode.ShowID = $SeriesID }
 
                 if ( $IncludeEpisodeCastCredits ) {
                     $c = Get-TMdbTVCredits -i $SeriesID -s $SeasonNumber -e $EpisodeNumber

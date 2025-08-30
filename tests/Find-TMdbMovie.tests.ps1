@@ -6,10 +6,11 @@
 #
 # Sample Data
 # -----------------------------------------------------------------------------------------------------------------
-# Movie Name                                ID
+# Movie Name                                           ID
 # -----------------------------------------------------------------------------------------------------------------
-# Aladdin (1992)                           812
-# The Fifth Element (1997)                  18
+# Aladdin (1992)                                      812
+# The Fifth Element (1997)                             18
+# Harry Potter and the Philosopher's Stone (2001)     671
 #
 #==================================================================================================================
 
@@ -36,7 +37,7 @@
 
   # Execute a request for all available options.
     Write-Msg -h -ps -bb -m $( ' Find-TMdbMovie' )
-    Find-TMdbMovie -Name 'The Fifth Element' -Year '1997'
+    Find-TMdbMovie -Name 'harry potter' #-Year '1997'
 
     exit
 

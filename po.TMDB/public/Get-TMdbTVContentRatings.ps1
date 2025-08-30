@@ -60,7 +60,7 @@ Function Get-TMdbTVContentRatings {
             
             $v = ($r.value | ConvertFrom-Json)
 
-            if ( -not ([String]::IsNullOrEmpty($v)) ) {
+            if ( Test-IsSomething($v) ) {
                 
                 $ratings = $v.results | Get-TVContentRatingFromDetails
 

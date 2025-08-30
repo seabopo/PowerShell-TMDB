@@ -49,17 +49,20 @@ Function Get-MovieFromSearchResults {
             OriginalTitle    = $MovieData.original_title
             OriginalLanguage = $MovieData.original_language
             Description      = $MovieData.overview
-            Genres           = $MovieData.genre_ids | ForEach-Object { 
-                                                          [Item]::New($_,$(Get-GenreNameFromID -Movie -ID $_))
-                                                      }
+            Genres           = @( if ( Test-IsNothing($MovieData.genre_ids) ) { $null }
+                                  else { $MovieData.genre_ids | 
+                                            ForEach-Object {
+                                                [Item]::New($_,$(Get-GenreNameFromID -Movie -ID $_))
+                                            }
+                                       } )
             ReleaseDate      = $MovieData.release_date
-            Year             = $( if ( [String]::IsNullOrEmpty($MovieData.release_date) ) { '' } 
+            Year             = $( if ( Test-IsNothing($MovieData.release_date) ) { '' } 
                                   else { ([datetime]($MovieData.release_date)).Year } )
             BackdropPath     = $MovieData.backdrop_path
             PosterPath       = $MovieData.poster_path
-            PosterURL        = @( if ( [String]::IsNullOrEmpty($MovieData.poster_path) ) { $null }
+            PosterURL        = @( if ( Test-IsNothing($MovieData.poster_path) ) { $null }
                                   else { $IMG_BASE_URI + $MovieData.poster_path } )
-            BackdropURL      = @( if ( [String]::IsNullOrEmpty($MovieData.backdrop_path) ) { $null }
+            BackdropURL      = @( if ( Test-IsNothing($MovieData.backdrop_path) ) { $null }
                                   else { $IMG_BASE_URI + $MovieData.backdrop_path } )
         }))
 

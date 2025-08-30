@@ -7,7 +7,7 @@ Function Get-CreditFromDetails {
     .OUTPUTS
         A single [Credit] object with the following properties:
             - [String] Type             : The Credit type/category: Cast, Crew, Creator or Guest.
-            - [String] Role             : Their Job (crew) or character (cast and guest stars)
+            - [String] Role             : Their Job (crew) or character (cast and guest stars).
             - [String] Name             : The person's name.
             - [String] OriginalName     : The person's alternate credit name.
             - [String] ID               : The TMDB entry ID of the person.
@@ -17,8 +17,7 @@ Function Get-CreditFromDetails {
             - [String] ProfileImageURL  : The fully-qualified URL to the person's profile image.
 
     .PARAMETER CreditData
-        REQUIRED. Hashtable. Alias: -d. Data about the person, which includes at least one of the following:
-
+        REQUIRED. Hashtable. Alias: -d. Data about the person and their role.
         
     .PARAMETER CreditType
         REQUIRED. String. Alias: -t. The type of credit. One of: Creator, Cast, Crew, Guest.
@@ -54,7 +53,7 @@ Function Get-CreditFromDetails {
             CreditID         = $CreditData.credit_id
             CreditOrder      = $CreditData.order
             ProfileImagePath = $CreditData.profile_path
-            ProfileImageURL  = @( if ( [String]::IsNullOrEmpty($CreditData.profile_path) ) { $null }
+            ProfileImageURL  = @( if ( Test-IsNothing($CreditData.profile_path) ) { $null }
                                   else { $IMG_BASE_URI + $CreditData.profile_path } )
         }))
 

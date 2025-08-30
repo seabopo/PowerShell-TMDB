@@ -60,11 +60,11 @@ Function Get-TVEpisodeFromDetails {
             AirDate        = $EpisodeData.air_date
             Runtime        = $EpisodeData.runtime
             StillPath      = $EpisodeData.still_path
-            StillURL       = @( if ( [String]::IsNullOrEmpty($EpisodeData.still_path) ) { $null }
+            StillURL       = @( if ( Test-IsNothing($EpisodeData.still_path) ) { $null }
                                 else { $IMG_BASE_URI + $EpisodeData.still_path } )
-            Crew           = $( if ( [String]::IsNullOrEmpty($EpisodeData.crew) ) { $null }
+            Crew           = $( if ( Test-IsNothing($EpisodeData.crew) ) { $null }
                                 else { $EpisodeData.crew | Get-CreditFromDetails -t 'Crew' })
-            Guests         = $( if ( [String]::IsNullOrEmpty($EpisodeData.guest_stars) ) { $null }
+            Guests         = $( if ( Test-IsNothing($EpisodeData.guest_stars) ) { $null }
                                 else { $EpisodeData.guest_stars | Get-CreditFromDetails -t 'Guest' })
         }))
 
