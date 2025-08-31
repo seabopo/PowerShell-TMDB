@@ -21,14 +21,13 @@
 # Load the standard test initialization file.
 . $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
 
-# Import the MediaClasses module to load the classes in the local user session. This MUST be done in the primary
-# script/session or the classes won't be seen by all sub-components. Also note that you CANNOT -Force reload 
-# this module. A fresh session must be started to reload classes and enums from a PowerShell module.
-# This module uses the "ScriptsToProcess" Work-Around rather than using the documented "using module" method
-# as "using module" seems to work poorly in VSCode's PowerShell debugger.
+# Import the MediaClasses module to load the classes in the local user session.
   Import-Module 'po.MediaClasses'
 
-Describe 'TMDB External ID Testing' {
+# Override the Default Debug Logging Setting
+  # $env:PS_STATUSMESSAGE_SHOW_VERBOSE_MESSAGES = $false
+
+Describe 'TMDB External ID Tests' {
 
     BeforeDiscovery {
         
@@ -42,35 +41,35 @@ Describe 'TMDB External ID Testing' {
 
         It 'Get IDs for a TV Show Episode' {
             $xIDs = Get-TMdbTVExternalIDs -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
-            $xIDs.success     | Should -Be $true
-            $xIDs.value.count | Should -Be 7
+            $xIDs.success | Should -BeTrue
+            $xIDs.value   | Should -HaveCount 7
             $names = $xIDs.value | Select-Object -ExpandProperty 'name'
-            $names -contains 'tmdb'   | Should -Be $true
-            $names -contains 'imdb'   | Should -Be $true
-            $names -contains 'tvdb'   | Should -Be $true
-            $names -contains 'tvrage' | Should -Be $true
+            $names -contains 'tmdb'   | Should -BeTrue
+            $names -contains 'imdb'   | Should -BeTrue
+            $names -contains 'tvdb'   | Should -BeTrue
+            $names -contains 'tvrage' | Should -BeTrue
         }
 
         It 'Get IDs for a TV Show Season' {
             $xIDs = Get-TMdbTVExternalIDs -SeriesID 615 -SeasonNumber 1
-            $xIDs.success     | Should -Be $true
-            $xIDs.value.count | Should -Be 4
+            $xIDs.success | Should -BeTrue
+            $xIDs.value   | Should -HaveCount 4
             $names = $xIDs.value | Select-Object -ExpandProperty 'name'
-            $names -contains 'tmdb'         | Should -Be $true
-            $names -contains 'freebase_mid' | Should -Be $true
-            $names -contains 'tvdb'         | Should -Be $true
-            $names -contains 'wikidata'     | Should -Be $true
+            $names -contains 'tmdb'         | Should -BeTrue
+            $names -contains 'freebase_mid' | Should -BeTrue
+            $names -contains 'tvdb'         | Should -BeTrue
+            $names -contains 'wikidata'     | Should -BeTrue
         }
 
         It 'Get IDs for a TV Show' {
             $xIDs = Get-TMdbTVExternalIDs -SeriesID 615
-            $xIDs.success     | Should -Be $true
-            $xIDs.value.count | Should -Be 7
+            $xIDs.success | Should -BeTrue
+            $xIDs.value   | Should -HaveCount 7
             $names = $xIDs.value | Select-Object -ExpandProperty 'name'
-            $names -contains 'tmdb'   | Should -Be $true
-            $names -contains 'imdb'   | Should -Be $true
-            $names -contains 'tvdb'   | Should -Be $true
-            $names -contains 'tvrage' | Should -Be $true
+            $names -contains 'tmdb'   | Should -BeTrue
+            $names -contains 'imdb'   | Should -BeTrue
+            $names -contains 'tvdb'   | Should -BeTrue
+            $names -contains 'tvrage' | Should -BeTrue
         }
 
     }

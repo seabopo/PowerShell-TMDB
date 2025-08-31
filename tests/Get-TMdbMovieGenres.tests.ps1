@@ -7,14 +7,16 @@
 # Load the standard test initialization file.
 . $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
 
-# Import the MediaClasses module to load the classes in the local user session. This MUST be done in the primary
-# script/session or the classes won't be seen by all sub-components. Also note that you CANNOT -Force reload 
-# this module. A fresh session must be started to reload classes and enums from a PowerShell module.
-# This module uses the "ScriptsToProcess" Work-Around rather than using the documented "using module" method
-# as "using module" seems to work poorly in VSCode's PowerShell debugger.
+# Load the standard test initialization file.
+. $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
+
+# Import the MediaClasses module to load the classes in the local user session.
   Import-Module 'po.MediaClasses'
 
-Describe 'Azure Infrastructure Testing' {
+# Override the Default Debug Logging Setting
+  # $env:PS_STATUSMESSAGE_SHOW_VERBOSE_MESSAGES = $false
+
+Describe 'TMDB Movie Genre Tests' {
 
     BeforeDiscovery {
         
@@ -28,34 +30,34 @@ Describe 'Azure Infrastructure Testing' {
 
         It 'Given no parameters, it lists all genres of the users local language' {
             $genres = Get-TMdbMovieGenres
-            $genres.success | Should -Be $true
+            $genres.success     | Should -BeTrue
             $genres.value.count | Should -Be 19
         }
 
         It 'Given the "en-US" language, it lists all 19 genres of the english language' {
             $genres = Get-TMdbMovieGenres -Language 'en-US'
-            $genres.success | Should -Be $true
+            $genres.success     | Should -BeTrue
             $genres.value.count | Should -Be 19
             $genreNames = $genres.value.values
-            $genreNames -contains 'Action'          | Should -Be $true
-            $genreNames -contains 'Comedy'          | Should -Be $true
-            $genreNames -contains 'Drama'           | Should -Be $true
-            $genreNames -contains 'Fantasy'         | Should -Be $true
-            $genreNames -contains 'Science Fiction' | Should -Be $true
-            $genreNames -contains 'Thriller'        | Should -Be $true
+            $genreNames -contains 'Action'          | Should -BeTrue
+            $genreNames -contains 'Comedy'          | Should -BeTrue
+            $genreNames -contains 'Drama'           | Should -BeTrue
+            $genreNames -contains 'Fantasy'         | Should -BeTrue
+            $genreNames -contains 'Science Fiction' | Should -BeTrue
+            $genreNames -contains 'Thriller'        | Should -BeTrue
         }
 
         It 'Given the "es-US" language, it lists all 19 genres of the english language' {
             $genres = Get-TMdbMovieGenres -Language 'es-US'
-            $genres.success | Should -Be $true
+            $genres.success     | Should -BeTrue
             $genres.value.count | Should -Be 19
             $genreNames = $genres.value.values
-            $genreNames -contains 'Acción'          | Should -Be $true
-            $genreNames -contains 'Comedia'         | Should -Be $true
-            $genreNames -contains 'Drama'           | Should -Be $true
-            $genreNames -contains 'Fantasía'        | Should -Be $true
-            $genreNames -contains 'Ciencia ficción' | Should -Be $true
-            $genreNames -contains 'Suspense'        | Should -Be $true
+            $genreNames -contains 'Acción'          | Should -BeTrue
+            $genreNames -contains 'Comedia'         | Should -BeTrue
+            $genreNames -contains 'Drama'           | Should -BeTrue
+            $genreNames -contains 'Fantasía'        | Should -BeTrue
+            $genreNames -contains 'Ciencia ficción' | Should -BeTrue
+            $genreNames -contains 'Suspense'        | Should -BeTrue
         }
 
     }

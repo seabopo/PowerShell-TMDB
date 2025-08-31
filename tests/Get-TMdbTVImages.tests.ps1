@@ -21,14 +21,13 @@
 # Load the standard test initialization file.
 . $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
 
-# Import the MediaClasses module to load the classes in the local user session. This MUST be done in the primary
-# script/session or the classes won't be seen by all sub-components. Also note that you CANNOT -Force reload 
-# this module. A fresh session must be started to reload classes and enums from a PowerShell module.
-# This module uses the "ScriptsToProcess" Work-Around rather than using the documented "using module" method
-# as "using module" seems to work poorly in VSCode's PowerShell debugger.
+# Import the MediaClasses module to load the classes in the local user session.
   Import-Module 'po.MediaClasses'
 
-Describe 'TMDB Image Testing' {
+# Override the Default Debug Logging Setting
+  # $env:PS_STATUSMESSAGE_SHOW_VERBOSE_MESSAGES = $false
+
+Describe 'TMDB Image Tests' {
 
     BeforeDiscovery {
         
@@ -42,32 +41,32 @@ Describe 'TMDB Image Testing' {
 
         It 'Get images for a TV Show Episode' {
             $images = Get-TMdbTVImages -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
-            $images.success     | Should -Be $true
-            $images.value.count | Should -Be 2
-            $($images.value | Where-Object { $_.type -eq 'still'    }).Count | Should -Be 2
-            $($images.value | Where-Object { $_.type -eq 'poster'   }).Count | Should -Be 0
-            $($images.value | Where-Object { $_.type -eq 'backdrop' }).Count | Should -Be 0
-            $($images.value | Where-Object { $_.type -eq 'logo'     }).Count | Should -Be 0
+            $images.success | Should -BeTrue
+            $images.value   | Should -HaveCount 2
+            $images.value   | Where-Object { $_.type -eq 'still'    } | Should -HaveCount 2
+            $images.value   | Where-Object { $_.type -eq 'poster'   } | Should -HaveCount 0
+            $images.value   | Where-Object { $_.type -eq 'backdrop' } | Should -HaveCount 0
+            $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 0
         }
 
         It 'Get images for a TV Show Season' {
             $images = Get-TMdbTVImages -SeriesID 615 -SeasonNumber 1
-            $images.success     | Should -Be $true
-            $images.value.count | Should -Be 15
-            $($images.value | Where-Object { $_.type -eq 'still'    }).Count | Should -Be 0
-            $($images.value | Where-Object { $_.type -eq 'poster'   }).Count | Should -Be 15
-            $($images.value | Where-Object { $_.type -eq 'backdrop' }).Count | Should -Be 0
-            $($images.value | Where-Object { $_.type -eq 'logo'     }).Count | Should -Be 0
+            $images.success | Should -BeTrue
+            $images.value   | Should -HaveCount 15
+            $images.value   | Where-Object { $_.type -eq 'still'    } | Should -HaveCount 0
+            $images.value   | Where-Object { $_.type -eq 'poster'   } | Should -HaveCount 15
+            $images.value   | Where-Object { $_.type -eq 'backdrop' } | Should -HaveCount 0
+            $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 0
         }
 
         It 'Get images for a TV Show' {
             $images = Get-TMdbTVImages -SeriesID 615
-            $images.success     | Should -Be $true
-            $images.value.count | Should -Be 145
-            $($images.value | Where-Object { $_.type -eq 'still'    }).Count | Should -Be 0
-            $($images.value | Where-Object { $_.type -eq 'poster'   }).Count | Should -Be 53
-            $($images.value | Where-Object { $_.type -eq 'backdrop' }).Count | Should -Be 81
-            $($images.value | Where-Object { $_.type -eq 'logo'     }).Count | Should -Be 11
+            $images.success | Should -BeTrue
+            $images.value   | Should -HaveCount 145
+            $images.value   | Where-Object { $_.type -eq 'still'    } | Should -HaveCount 0
+            $images.value   | Where-Object { $_.type -eq 'poster'   } | Should -HaveCount 53
+            $images.value   | Where-Object { $_.type -eq 'backdrop' } | Should -HaveCount 81
+            $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 11
         }
 
     }
