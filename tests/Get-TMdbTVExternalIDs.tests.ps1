@@ -18,45 +18,61 @@
 #
 #==================================================================================================================
 
-#==================================================================================================================
-# Initialize Test Environment
-#==================================================================================================================
+# Load the standard test initialization file.
+. $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
 
-  # Load the standard test initialization file.
-  . $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
+# Import the MediaClasses module to load the classes in the local user session. This MUST be done in the primary
+# script/session or the classes won't be seen by all sub-components. Also note that you CANNOT -Force reload 
+# this module. A fresh session must be started to reload classes and enums from a PowerShell module.
+# This module uses the "ScriptsToProcess" Work-Around rather than using the documented "using module" method
+# as "using module" seems to work poorly in VSCode's PowerShell debugger.
+  Import-Module 'po.MediaClasses'
 
-#==================================================================================================================
-# Testing
-#==================================================================================================================
+Describe 'TMDB External ID Testing' {
 
-  # Import the MediaClasses module to load the classes in the local user session. This MUST be done in the primary
-  # script/session or the classes won't be seen by all sub-components. Also note that you CANNOT -Force reload 
-  # this module. A fresh session must be started to reload classes and enums from a PowerShell module.
-  # This module uses the "ScriptsToProcess" Work-Around rather than using the documented "using module" method
-  # as "using module" seems to work poorly in VSCode's PowerShell debugger.
-    Import-Module 'po.MediaClasses'
+    BeforeDiscovery {
+        
+    }
 
-  # Initialize the API Key / Bearer Token. api-token.ps1 contains a single line: return '<my api token>'
-    $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+    BeforeAll {
+        $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+    }
 
-  # Execute a request using a valid TV Show ID and Season Number and Episode Number.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVExternalIDs :: Show, Season and Episode' )
-    Get-TMdbTVExternalIDs -i 615 -s 1 -e 1
+    Describe 'Get-TMdbTVExternalIDs' {
 
-    exit
+        It 'Get IDs for a TV Show Episode' {
+            $xIDs = Get-TMdbTVExternalIDs -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
+            $xIDs.success     | Should -Be $true
+            $xIDs.value.count | Should -Be 7
+            $names = $xIDs.value | Select-Object -ExpandProperty 'name'
+            $names -contains 'tmdb'   | Should -Be $true
+            $names -contains 'imdb'   | Should -Be $true
+            $names -contains 'tvdb'   | Should -Be $true
+            $names -contains 'tvrage' | Should -Be $true
+        }
 
-  # Execute a request using a valid TV Show ID and Season Number and Episode Number.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVExternalIDs :: Show, Season and Episode' )
-    Get-TMdbTVExternalIDs -SeriesID 1972 -SeasonNumber 1 -EpisodeNumber 1
+        It 'Get IDs for a TV Show Season' {
+            $xIDs = Get-TMdbTVExternalIDs -SeriesID 615 -SeasonNumber 1
+            $xIDs.success     | Should -Be $true
+            $xIDs.value.count | Should -Be 4
+            $names = $xIDs.value | Select-Object -ExpandProperty 'name'
+            $names -contains 'tmdb'         | Should -Be $true
+            $names -contains 'freebase_mid' | Should -Be $true
+            $names -contains 'tvdb'         | Should -Be $true
+            $names -contains 'wikidata'     | Should -Be $true
+        }
 
-  # Execute a request using a valid TV Show ID and Season Number.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVExternalIDs :: Series and Season' )
-    Get-TMdbTVExternalIDs -SeriesID 1972 -SeasonNumber 1
+        It 'Get IDs for a TV Show' {
+            $xIDs = Get-TMdbTVExternalIDs -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
+            $xIDs.success     | Should -Be $true
+            $xIDs.value.count | Should -Be 7
+            $names = $xIDs.value | Select-Object -ExpandProperty 'name'
+            $names -contains 'tmdb'   | Should -Be $true
+            $names -contains 'imdb'   | Should -Be $true
+            $names -contains 'tvdb'   | Should -Be $true
+            $names -contains 'tvrage' | Should -Be $true
+        }
 
-  # Execute a request using a valid TV Show ID.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVExternalIDs :: Series' )
-    Get-TMdbTVExternalIDs -ShowID 1972
+    }
 
-  # Execute a request using a valid TV Show ID and Season Number and an INVALID Episode Number.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVExternalIDs :: ** FAILURE EXPECTED ** ' )
-    Get-TMdbTVExternalIDs -i 615 -s 1 -e 1111
+}
