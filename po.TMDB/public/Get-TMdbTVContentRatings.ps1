@@ -19,7 +19,7 @@ Function Get-TMdbTVContentRatings {
 
     .PARAMETER AllRatings
         OPTIONAL. Switch. Alias -a. Return the ratings from all countries for a Series/Show, and not just the 
-        rating matching the culture/language setting of the user's operating system.
+        rating matching the country setting of the user's operating system.
 
     .EXAMPLE
         Get-TMdbTVContentRatings -SeriesID 615 -AllRatings
