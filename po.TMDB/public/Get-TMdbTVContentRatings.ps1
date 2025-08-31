@@ -1,8 +1,8 @@
 Function Get-TMdbTVContentRatings {
     <#
     .DESCRIPTION
-        Gets the content ratings of a TV Show. By default only the content rating matching the language/culture of
-        the users operating system will be returned. Optionally, the ratings for all countries can be returned.
+        Gets the content ratings of a TV Series/Show. By default only the content rating matching the country set 
+        in the users operating system will be returned. Optionally, the ratings for all countries can be returned.
 
     .OUTPUTS
         A collection of [ContentRating] objects, each with the following properties:
