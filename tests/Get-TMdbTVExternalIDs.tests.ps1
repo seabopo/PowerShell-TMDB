@@ -63,7 +63,7 @@ Describe 'TMDB External ID Testing' {
         }
 
         It 'Get IDs for a TV Show' {
-            $xIDs = Get-TMdbTVExternalIDs -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
+            $xIDs = Get-TMdbTVExternalIDs -SeriesID 615
             $xIDs.success     | Should -Be $true
             $xIDs.value.count | Should -Be 7
             $names = $xIDs.value | Select-Object -ExpandProperty 'name'

@@ -18,45 +18,58 @@
 #
 #==================================================================================================================
 
-#==================================================================================================================
-# Initialize Test Environment
-#==================================================================================================================
+# Load the standard test initialization file.
+. $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
 
-  # Load the standard test initialization file.
-  . $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
+# Import the MediaClasses module to load the classes in the local user session. This MUST be done in the primary
+# script/session or the classes won't be seen by all sub-components. Also note that you CANNOT -Force reload 
+# this module. A fresh session must be started to reload classes and enums from a PowerShell module.
+# This module uses the "ScriptsToProcess" Work-Around rather than using the documented "using module" method
+# as "using module" seems to work poorly in VSCode's PowerShell debugger.
+  Import-Module 'po.MediaClasses'
 
-#==================================================================================================================
-# Testing
-#==================================================================================================================
+Describe 'TMDB Image Testing' {
 
-  # Import the MediaClasses module to load the classes in the local user session. This MUST be done in the primary
-  # script/session or the classes won't be seen by all sub-components. Also note that you CANNOT -Force reload 
-  # this module. A fresh session must be started to reload classes and enums from a PowerShell module.
-  # This module uses the "ScriptsToProcess" Work-Around rather than using the documented "using module" method
-  # as "using module" seems to work poorly in VSCode's PowerShell debugger.
-    Import-Module 'po.MediaClasses'
+    BeforeDiscovery {
+        
+    }
 
-  # Initialize the API Key / Bearer Token. api-token.ps1 contains a single line: return '<my api token>'
-    $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+    BeforeAll {
+        $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+    }
 
-  # Execute a request using a valid TMDB TV Show ID and Season Number and Episode Number.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVImages :: Episode' )
-    Get-TMdbTVImages -i 615 -s 1 -e 1
-    
-    exit
+    Describe 'Get-TMdbTVImages' {
 
-  # Execute a request using a valid TV Show ID and Season Number and Episode Number.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVImages :: Episode' )
-    Get-TMdbTVImages -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
+        It 'Get images for a TV Show Episode' {
+            $images = Get-TMdbTVImages -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
+            $images.success     | Should -Be $true
+            $images.value.count | Should -Be 2
+            $($images.value | Where-Object { $_.type -eq 'still'    }).Count | Should -Be 2
+            $($images.value | Where-Object { $_.type -eq 'poster'   }).Count | Should -Be 0
+            $($images.value | Where-Object { $_.type -eq 'backdrop' }).Count | Should -Be 0
+            $($images.value | Where-Object { $_.type -eq 'logo'     }).Count | Should -Be 0
+        }
 
-  # Execute a request using a valid TV Show ID and Season Number.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVImages :: Season' )
-    Get-TMdbTVImages -SeriesID 615 -SeasonNumber 1
+        It 'Get images for a TV Show Season' {
+            $images = Get-TMdbTVImages -SeriesID 615 -SeasonNumber 1
+            $images.success     | Should -Be $true
+            $images.value.count | Should -Be 15
+            $($images.value | Where-Object { $_.type -eq 'still'    }).Count | Should -Be 0
+            $($images.value | Where-Object { $_.type -eq 'poster'   }).Count | Should -Be 15
+            $($images.value | Where-Object { $_.type -eq 'backdrop' }).Count | Should -Be 0
+            $($images.value | Where-Object { $_.type -eq 'logo'     }).Count | Should -Be 0
+        }
 
-  # Execute a request using a valid TV Show ID.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVImages :: Series' )
-    Get-TMdbTVImages -ShowID 615
+        It 'Get images for a TV Show' {
+            $images = Get-TMdbTVImages -SeriesID 615
+            $images.success     | Should -Be $true
+            $images.value.count | Should -Be 145
+            $($images.value | Where-Object { $_.type -eq 'still'    }).Count | Should -Be 0
+            $($images.value | Where-Object { $_.type -eq 'poster'   }).Count | Should -Be 53
+            $($images.value | Where-Object { $_.type -eq 'backdrop' }).Count | Should -Be 81
+            $($images.value | Where-Object { $_.type -eq 'logo'     }).Count | Should -Be 11
+        }
 
-  # Execute a request using a valid TV Show ID and Season Number and an INVALID Episode Number.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVImages :: ** FAILURE EXPECTED ** ' )
-    Get-TMdbTVImages -i 615 -s 1 -e 1111
+    }
+
+}
