@@ -60,6 +60,12 @@ Describe 'TMDB Movie Genre Tests' {
             $genreNames -contains 'Suspense'        | Should -BeTrue
         }
 
+        It 'Test all parameter aliases' {
+            $genres = Get-TMdbMovieGenres -l'en-US'
+            $genres.success     | Should -BeTrue
+            $genres.value.count | Should -Be 19
+        }
+
     }
 
 }

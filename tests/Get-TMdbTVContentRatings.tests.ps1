@@ -41,14 +41,14 @@ Describe 'TMDB TV Content Ratings Tests' {
     Describe 'Get-TMdbTVContentRatings' {
 
         It 'Get the default Content Rating for a TV Show' {
-            $rating = Get-TMdbTVContentRatings -i 615
+            $rating = Get-TMdbTVContentRatings -SeriesID 615
             $rating.success       | Should -BeTrue
             $rating.value         | Should -HaveCount 1
             $rating.value.Country | Should -Be $defaultCountry
         }
 
         It 'Get the US Content Rating for a TV Show' {
-            $rating = Get-TMdbTVContentRatings -i 615 -c 'US'
+            $rating = Get-TMdbTVContentRatings -SeriesID 615 -Country 'US'
             $rating.success       | Should -BeTrue
             $rating.value         | Should -HaveCount 1
             $rating.value.Country | Should -Be 'US'
@@ -56,7 +56,7 @@ Describe 'TMDB TV Content Ratings Tests' {
         }
 
         It 'Get the AU Content Rating for a TV Show' {
-            $rating = Get-TMdbTVContentRatings -i 615 -c 'AU'
+            $rating = Get-TMdbTVContentRatings -SeriesID 615 -Country 'AU'
             $rating.success       | Should -BeTrue
             $rating.value         | Should -HaveCount 1
             $rating.value.Country | Should -Be 'AU'
@@ -64,8 +64,13 @@ Describe 'TMDB TV Content Ratings Tests' {
         }
 
         It 'Get all available Content Ratings for a TV Show' {
-            $xIDs = Get-TMdbTVContentRatings -SeriesID 615 
-            $rating = Get-TMdbTVContentRatings -i 615 -AllRatings
+            $rating = Get-TMdbTVContentRatings -SeriesID 615 -AllRatings
+            $rating.success       | Should -BeTrue
+            $rating.value         | Should -HaveCount 35
+        }
+
+        It 'Test all parameter aliases' {
+            $rating = Get-TMdbTVContentRatings -i 615 -a
             $rating.success       | Should -BeTrue
             $rating.value         | Should -HaveCount 35
         }

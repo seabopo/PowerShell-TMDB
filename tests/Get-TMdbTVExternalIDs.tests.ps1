@@ -72,6 +72,12 @@ Describe 'TMDB External ID Tests' {
             $names -contains 'tvrage' | Should -BeTrue
         }
 
+        It 'Test all parameter aliases' {
+            $xIDs = Get-TMdbTVExternalIDs -i 615 -s 1 -e 1
+            $xIDs.success | Should -BeTrue
+            $xIDs.value   | Should -HaveCount 7
+        }
+
     }
 
 }

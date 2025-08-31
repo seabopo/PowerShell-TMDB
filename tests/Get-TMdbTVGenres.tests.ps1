@@ -57,6 +57,12 @@ Describe 'TMDB TV Genre Tests' {
             $genreNames -contains 'Animación'          | Should -BeTrue
         }
 
+        It 'Test all parameter aliases' {
+            $genres = Get-TMdbTVGenres -l 'en-US'
+            $genres.success     | Should -BeTrue
+            $genres.value.count | Should -Be 16
+        }
+
     }
 
 }

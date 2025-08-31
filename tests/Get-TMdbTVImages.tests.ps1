@@ -69,6 +69,12 @@ Describe 'TMDB Image Tests' {
             $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 11
         }
 
+        It 'Test all parameter aliases' {
+            $images = Get-TMdbTVImages -i 615 -s 1 -e 1 -l 'en-US'
+            $images.success | Should -BeTrue
+            $images.value   | Should -HaveCount 2
+        }
+
     }
 
 }
