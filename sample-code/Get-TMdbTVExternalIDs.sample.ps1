@@ -43,7 +43,7 @@
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVExternalIDs :: Show, Season and Episode' )
     Get-TMdbTVExternalIDs -i 615 -s 1 -e 1
 
-    #exit
+    exit
 
   # Execute a request using a valid TV Show ID and Season Number and Episode Number.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVExternalIDs :: Show, Season and Episode' )
