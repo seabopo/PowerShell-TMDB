@@ -4,7 +4,7 @@
 #==================================================================================================================
 #==================================================================================================================
 
-Describe 'Azure Infrastructure Testing' {
+Describe 'TMDB Genre Testing' {
 
     BeforeDiscovery {
         . $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
