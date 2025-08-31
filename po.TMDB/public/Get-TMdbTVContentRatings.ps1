@@ -6,9 +6,9 @@ Function Get-TMdbTVContentRatings {
 
     .OUTPUTS
         A collection of [ContentRating] objects, each with the following properties:
-            - [String]   $Country     : "US"
-            - [String]   $Rating      : "TV-14"
-            - [String[]] $Descriptors : ["L","V"]
+            - [String]   Country     : "US"
+            - [String]   Rating      : "TV-14"
+            - [String[]] Descriptors : ["L","V"]
 
     .PARAMETER SeriesID
         REQUIRED. String. Alias: -i, -ShowID. The TV Series/Show ID. Example: 615
@@ -50,9 +50,9 @@ Function Get-TMdbTVContentRatings {
         ) -Join ''
 
         Write-Msg -p -ps -m ( 'Querying TMDB for TV Series Ratings ...' )
-        Write-Msg -i -il 1 -m ( 'Series/Show ID: {0}'  -f $SeriesID )
-        Write-Msg -d -il 1 -m ( 'Token: {0}...'        -f $($env:TMDB_API_TOKEN).Substring(0,8) )
-        Write-Msg -d -il 1 -m ( 'Query: {0}'           -f $SearchURL )
+        Write-Msg -i -il 1 -m ( 'Series/Show ID: {0}' -f $SeriesID )
+        Write-Msg -d -il 1 -m ( 'Token: {0}...'       -f $($env:TMDB_API_TOKEN).Substring(0,8) )
+        Write-Msg -d -il 1 -m ( 'Query: {0}'          -f $SearchURL )
         
         $r = Invoke-HttpRequest -u $SearchURL -t $env:TMDB_API_TOKEN -j -d
 

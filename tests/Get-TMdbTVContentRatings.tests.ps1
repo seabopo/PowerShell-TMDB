@@ -18,45 +18,58 @@
 #
 #==================================================================================================================
 
-#==================================================================================================================
-# Initialize Test Environment
-#==================================================================================================================
+# Load the standard test initialization file.
+. $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
 
-  # Load the standard test initialization file.
-  . $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
+# Import the MediaClasses module to load the classes in the local user session.
+  Import-Module 'po.MediaClasses'
 
-#==================================================================================================================
-# Testing
-#==================================================================================================================
+# Override the Default Debug Logging Setting
+  # $env:PS_STATUSMESSAGE_SHOW_VERBOSE_MESSAGES = $true
 
-  # Import the MediaClasses module to load the classes in the local user session. This MUST be done in the primary
-  # script/session or the classes won't be seen by all sub-components. Also note that you CANNOT -Force reload 
-  # this module. A fresh session must be started to reload classes and enums from a PowerShell module.
-  # This module uses the "ScriptsToProcess" Work-Around rather than using the documented "using module" method
-  # as "using module" seems to work poorly in VSCode's PowerShell debugger.
-    Import-Module 'po.MediaClasses'
+Describe 'TMDB TV Content Ratings Tests' {
 
-  # Initialize the API Key / Bearer Token. api-token.ps1 contains a single line: return '<my api token>'
-    $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+    BeforeDiscovery {
+        
+    }
 
-  # Execute a request using a valid TMDB TV Show ID.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVContentRatings :: Series' )
-    Get-TMdbTVContentRatings -i 615
+    BeforeAll {
+        $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+        $defaultCountry = $((Get-Culture).Name.ToString().Split('-')[1])
+    }
 
-    exit
+    Describe 'Get-TMdbTVContentRatings' {
 
-  # Execute a request using the default language value.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVContentRatings :: Series' )
-    Get-TMdbTVContentRatings -ShowID 615
+        It 'Get the default Content Rating for a TV Show' {
+            $rating = Get-TMdbTVContentRatings -i 615
+            $rating.success       | Should -BeTrue
+            $rating.value         | Should -HaveCount 1
+            $rating.value.Country | Should -Be $defaultCountry
+        }
 
-  # Execute a request using a defined value.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVContentRatings :: Series' )
-    Get-TMdbTVContentRatings -SeriesID 615 -Country "GB"
+        It 'Get the US Content Rating for a TV Show' {
+            $rating = Get-TMdbTVContentRatings -i 615 -c 'US'
+            $rating.success       | Should -BeTrue
+            $rating.value         | Should -HaveCount 1
+            $rating.value.Country | Should -Be 'US'
+            $rating.value.Rating  | Should -Be 'TV-14'
+        }
 
-  # Execute a request using all values.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVContentRatings :: Series' )
-    Get-TMdbTVContentRatings -SeriesID 615 -AllRatings
+        It 'Get the AU Content Rating for a TV Show' {
+            $rating = Get-TMdbTVContentRatings -i 615 -c 'AU'
+            $rating.success       | Should -BeTrue
+            $rating.value         | Should -HaveCount 1
+            $rating.value.Country | Should -Be 'AU'
+            $rating.value.Rating  | Should -Be 'M'
+        }
 
-  # Execute a request using an invalid TMDB TV Show ID.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVContentRatings :: ** FAILURE EXPECTED ** ' )
-    Get-TMdbTVContentRatings -i 615615615
+        It 'Get all available Content Ratings for a TV Show' {
+            $xIDs = Get-TMdbTVContentRatings -SeriesID 615 
+            $rating = Get-TMdbTVContentRatings -i 615 -AllRatings
+            $rating.success       | Should -BeTrue
+            $rating.value         | Should -HaveCount 35
+        }
+
+    }
+
+}
