@@ -5,21 +5,21 @@ Function Get-MovieFromSearchResults {
 
     .OUTPUTS
         A single [Movie] object with the following POPULATED properties:
-            - [String] $Source
-            - [String] $ID
-            - [Bool]   $Adult
-            - [String] $Title
-            - [String] $OriginalTitle
-            - [String] $OriginalLanguage
-            - [String] $Description
-            - [String] $LongDescription
-            - [Item[]] $Genres
-            - [String] $ReleaseDate
-            - [String] $Year
-            - [String] $BackdropPath
-            - [String] $PosterPath
-            - [String] $BackdropURL
-            - [String] $PosterURL
+            - [String] Source
+            - [String] ID
+            - [Bool]   Adult
+            - [String] Title
+            - [String] OriginalTitle
+            - [String] OriginalLanguage
+            - [String] Description
+            - [String] LongDescription
+            - [Item[]] Genres
+            - [String] ReleaseDate
+            - [String] Year
+            - [String] BackdropPath
+            - [String] PosterPath
+            - [String] BackdropURL
+            - [String] PosterURL
    
     .PARAMETER MovieData
         REQUIRED. Hashtable. Alias: -d. Movie data.

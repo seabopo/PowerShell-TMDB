@@ -6,21 +6,21 @@ Function Find-TMdbMovie {
 
     .OUTPUTS
         An collection of [Movie] objects with the following POPULATED properties:
-            - [String] $Source
-            - [String] $ID
-            - [Bool]   $Adult
-            - [String] $Title
-            - [String] $OriginalTitle
-            - [String] $OriginalLanguage
-            - [String] $Description
-            - [String] $LongDescription
-            - [Item[]] $Genres
-            - [String] $ReleaseDate
-            - [String] $Year
-            - [String] $BackdropPath
-            - [String] $PosterPath
-            - [String] $BackdropURL
-            - [String] $PosterURL
+            - [String] Source
+            - [String] ID
+            - [Bool]   Adult
+            - [String] Title
+            - [String] OriginalTitle
+            - [String] OriginalLanguage
+            - [String] Description
+            - [String] LongDescription
+            - [Item[]] Genres
+            - [String] ReleaseDate
+            - [String] Year
+            - [String] BackdropPath
+            - [String] PosterPath
+            - [String] BackdropURL
+            - [String] PosterURL
 
     .PARAMETER Name
         REQUIRED. String. Alias: -n. The name of the Movie to search for.
@@ -80,7 +80,7 @@ Function Find-TMdbMovie {
         Write-Msg -i -il 1 -m ( 'MaxResults: {0}' -f $Year )
         Write-Msg -d -il 1 -m ( 'Token: {0}...'   -f $($env:TMDB_API_TOKEN).Substring(0,8) )
         
-        [TVShow[]] $shows      = @()
+        [Movie[]]  $movies     = @()
         [Int]      $page       = 0
         [Int]      $maxPages   = $MaxResults / 20
         [Int]      $totalPages = $null
@@ -118,9 +118,10 @@ Function Find-TMdbMovie {
                     Throw ( $msg )
                 }
 
-                [Movie[]] $movies = ($r.value | ConvertFrom-Json).results | ForEach-Object { 
-                                        $_ | Get-MovieFromSearchResults
-                                    }
+                 ($r.value | ConvertFrom-Json).results | 
+                    ForEach-Object { 
+                        $movies += $( $_ | Get-MovieFromSearchResults )
+                    }
 
             }
             else {
