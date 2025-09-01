@@ -46,8 +46,8 @@
     exit
 
   # Find a Show based on a name.
-    Write-Msg -h -ps -bb -m $( ' Find-TMdbTVSeries :: Name Contains BattleStar Galactica' )
-    Find-TMdbTVSeries -Name 'BattleStar Galactica'
+    Write-Msg -h -ps -bb -m $( ' Find-TMdbTVSeries :: Name Contains Star Trek' )
+    Find-TMdbTVSeries -Name 'Star Trek'
 
   # Find a Show based on the function alias.
     Write-Msg -h -ps -bb -m $( ' Find-TMdbTVShows :: Name Contains Futurama' )
