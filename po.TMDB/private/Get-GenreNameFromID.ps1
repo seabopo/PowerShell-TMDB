@@ -40,7 +40,7 @@ Function Get-GenreNameFromID {
         Write-Msg -FunctionCall -IncludeParameters
         
         if ( $TV ) {
-            if ( Test-IsNothing($Script:TMDB_TV_GENRES) -or $Script:TMDB_GENRE_LANGUAGE -ne $Language ) {
+            if ( $(Test-IsNothing($Script:TMDB_TV_GENRES)) -or $($Script:TMDB_GENRE_LANGUAGE -ne $Language) ) {
                 $r = Get-TMdbTVGenres -l $Language
                 if ( $r.success ) {
                     $Script:TMDB_TV_GENRES = $r.value
@@ -49,7 +49,7 @@ Function Get-GenreNameFromID {
             $genre = $Script:TMDB_TV_GENRES.ContainsKey($ID) ? $Script:TMDB_TV_GENRES[$ID] : ''
         }
         else {
-            if ( Test-IsNothing($Script:TMDB_MOVIE_GENRES) -or $Script:TMDB_GENRE_LANGUAGE -ne $Language  ) {
+            if ( $(Test-IsNothing($Script:TMDB_MOVIE_GENRES)) -or $($Script:TMDB_GENRE_LANGUAGE -ne $Language) ) {
                 $r = Get-TMdbMovieGenres -l $Language
                 if ( $r.success ) {
                     $Script:TMDB_MOVIE_GENRES = $r.value
