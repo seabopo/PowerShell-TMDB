@@ -6,17 +6,17 @@ Function Get-TVSeriesFromSearchResults {
     
     .OUTPUTS
         A single [TVShow] object with the following POPULATED properties:
-            - [String]          Source
-            - [String]          ID
-            - [String]          Name
-            - [String]          OriginalName
-            - [String]          Description
-            - [String[]]        Country
-            - [Item[]]          Genres
-            - [String]          PosterPath
-            - [String]          BackdropPath
-            - [String]          Year
-            - [String]          FirstAirDate
+            - [String]   Source
+            - [String]   ID
+            - [String]   Name
+            - [String]   OriginalName
+            - [String]   Description
+            - [String[]] Country
+            - [Item[]]   Genres
+            - [String]   PosterPath
+            - [String]   BackdropPath
+            - [String]   Year
+            - [String]   FirstAirDate
 
     .PARAMETER SeriesData
         REQUIRED. Hashtable. Alias: -d. Series data.

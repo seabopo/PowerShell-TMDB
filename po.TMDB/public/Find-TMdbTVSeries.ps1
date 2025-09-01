@@ -6,17 +6,17 @@ Function Find-TMdbTVSeries {
 
     .OUTPUTS
         An collection of [TVShow] objects with the following POPULATED properties:
-            - [String]          Source
-            - [String]          ID
-            - [String]          Name
-            - [String]          OriginalName
-            - [String]          Description
-            - [String[]]        Country
-            - [Item[]]          Genres
-            - [String]          PosterPath
-            - [String]          BackdropPath
-            - [String]          Year
-            - [String]          FirstAirDate
+            - [String]   Source
+            - [String]   ID
+            - [String]   Name
+            - [String]   OriginalName
+            - [String]   Description
+            - [String[]] Country
+            - [Item[]]   Genres
+            - [String]   PosterPath
+            - [String]   BackdropPath
+            - [String]   Year
+            - [String]   FirstAirDate
 
     .PARAMETER Name
         REQUIRED. String. Alias: -n. The name of the Series/Show to search for.
@@ -105,7 +105,7 @@ Function Find-TMdbTVSeries {
                 $( '&page={0}' -f $page )
             ) -Join ''
          
-            Write-Msg -d -il 1 -m ( 'Query: {0}'      -f $SearchURL )
+            Write-Msg -d -il 1 -m ( 'Query: {0}' -f $SearchURL )
 
             $r = Invoke-HttpRequest -u $SearchURL -t $env:TMDB_API_TOKEN -j -d
 

@@ -18,49 +18,46 @@
 #
 #==================================================================================================================
 
-#==================================================================================================================
-# Initialize Test Environment
-#==================================================================================================================
+# Load the standard test initialization file.
+. $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
 
-  # Load the standard test initialization file.
-  . $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
+# Import the MediaClasses module to load the classes in the local user session.
+  Import-Module 'po.MediaClasses'
 
-#==================================================================================================================
-# Testing
-#==================================================================================================================
+# Override the Default Debug Logging Setting
+  # $env:PS_STATUSMESSAGE_SHOW_VERBOSE_MESSAGES = $true
 
-  # Import the MediaClasses module to load the classes in the local user session. This MUST be done in the primary
-  # script/session or the classes won't be seen by all sub-components. Also note that you CANNOT -Force reload 
-  # this module. A fresh session must be started to reload classes and enums from a PowerShell module.
-  # This module uses the "ScriptsToProcess" Work-Around rather than using the documented "using module" method
-  # as "using module" seems to work poorly in VSCode's PowerShell debugger.
-    Import-Module 'po.MediaClasses'
+Describe 'TMDB TV Series Search Tests' {
 
-  # Initialize the API Key / Bearer Token. api-token.ps1 contains a single line: return '<my api token>'
-    $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+    BeforeDiscovery {
+        
+    }
 
-  # Execute a request for all available Series options.
-    Write-Msg -h -ps -bb -m $( ' Find-TMdbTVShows :: ** WITH ** All Options' )
-    Find-TMdbTVShows -Name 'BattleStar Galactica' -Year '2004'
+    BeforeAll {
+        $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+    }
 
-    exit
+    Describe 'Find-TMdbTVSeries' {
 
-  # Find a Show based on a name.
-    Write-Msg -h -ps -bb -m $( ' Find-TMdbTVSeries :: Name Contains BattleStar Galactica' )
-    Find-TMdbTVSeries -Name 'BattleStar Galactica'
+        It 'Get the results of a TV Show Search for BattleStar Galactica' {
+            $results = Find-TMdbTVShows -Name 'BattleStar Galactica'
+            $results.success       | Should -BeTrue
+            $results.value         | Should -HaveCount 6
+            $results.value | Where-Object { $_.Name -eq 'Galactica 1980' } | Should -HaveCount 1
+        }
 
-  # Find a Show based on the function alias.
-    Write-Msg -h -ps -bb -m $( ' Find-TMdbTVShows :: Name Contains Futurama' )
-    Find-TMdbTVShows -Name 'Futurama'
+        It 'Get the results of a TV Show Search with a Year for Gilligans Island' {
+            $results = Find-TMdbTVShows -Name "Gilligan's Island" -Year '1964'
+            $results.success       | Should -BeTrue
+            $results.value         | Should -HaveCount 1
+        }
 
-  # Execute a search that will provide a multiple results.
-    Write-Msg -h -ps -bb -m $( ' Find-TMdbTVSeries :: Name Contains Gilligan' )
-    Find-TMdbTVSeries -Name "Gilligan"
+        It 'Test all parameter aliases' {
+            $ratings = Find-TMdbTVShows -n 'Futurama'
+            $ratings.success       | Should -BeTrue
+            $ratings.value         | Should -HaveCount 1
+        }
 
-  # Execute a search that will provide multiple pages of results.
-    Write-Msg -h -ps -bb -m $( ' Find-TMdbTVSeries :: Name Contains Miami' )
-    Find-TMdbTVSeries -Name 'Miami'
+    }
 
-  # Execute a search that will exceed the maximum defined results (Default = 100).
-    Write-Msg -h -ps -bb -m $( ' Find-TMdbTVSeries :: ** FAILURE EXPECTED ** ' )
-    Find-TMdbTVSeries -Name 'Miami' -MaxResults 20 | Out-Null
+}
