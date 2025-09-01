@@ -39,23 +39,23 @@ Describe 'TMDB TV Series Search Tests' {
 
     Describe 'Find-TMdbTVSeries' {
 
-        It 'Get the results of a TV Show Search for BattleStar Galactica' {
-            $results = Find-TMdbTVShows -Name 'BattleStar Galactica'
-            $results.success       | Should -BeTrue
-            $results.value         | Should -HaveCount 6
-            $results.value | Where-Object { $_.Name -eq 'Galactica 1980' } | Should -HaveCount 1
+        It 'Get the results of a TV Show Search for Star Trek' {
+            $results = Find-TMdbTVShows -Name 'Star Trek'
+            $results.success | Should -BeTrue
+            $results.value   | Should -HaveCount 27
+            $results.value   | Where-Object { $_.Name -eq 'Star Trek: Deep Space Nine' } | Should -HaveCount 1
         }
 
         It 'Get the results of a TV Show Search with a Year for Gilligans Island' {
             $results = Find-TMdbTVShows -Name "Gilligan's Island" -Year '1964'
-            $results.success       | Should -BeTrue
-            $results.value         | Should -HaveCount 1
+            $results.success | Should -BeTrue
+            $results.value   | Should -HaveCount 1
         }
 
         It 'Test all parameter aliases' {
             $ratings = Find-TMdbTVShows -n 'Futurama'
-            $ratings.success       | Should -BeTrue
-            $ratings.value         | Should -HaveCount 1
+            $ratings.success | Should -BeTrue
+            $ratings.value   | Should -HaveCount 1
         }
 
     }

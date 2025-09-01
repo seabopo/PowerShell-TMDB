@@ -124,9 +124,10 @@ Function Find-TMdbTVSeries {
                     Throw ( $msg )
                 }
 
-                [TVShow[]] $shows = ($r.value | ConvertFrom-Json).results | ForEach-Object { 
-                                        $_ | Get-TVSeriesFromSearchResults
-                                    }
+                ($r.value | ConvertFrom-Json).results | 
+                    ForEach-Object { 
+                        $shows+= $($_ | Get-TVSeriesFromSearchResults)
+                    }
 
             }
             else {
