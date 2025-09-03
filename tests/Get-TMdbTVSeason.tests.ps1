@@ -18,49 +18,124 @@
 #
 #==================================================================================================================
 
-#==================================================================================================================
-# Initialize Test Environment
-#==================================================================================================================
 
-  # Load the standard test initialization file.
-  . $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
+# Load the standard test initialization file.
+. $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
 
-#==================================================================================================================
-# Testing
-#==================================================================================================================
+# Import the MediaClasses module to load the classes in the local user session.
+  Import-Module 'po.MediaClasses'
 
-  # Import the MediaClasses module to load the classes in the local user session. This MUST be done in the primary
-  # script/session or the classes won't be seen by all sub-components. Also note that you CANNOT -Force reload 
-  # this module. A fresh session must be started to reload classes and enums from a PowerShell module.
-  # This module uses the "ScriptsToProcess" Work-Around rather than using the documented "using module" method
-  # as "using module" seems to work poorly in VSCode's PowerShell debugger.
-    Import-Module 'po.MediaClasses'
+# Override the Default Debug Logging Setting
+  # $env:PS_STATUSMESSAGE_SHOW_VERBOSE_MESSAGES = $false
 
-  # Initialize the API Key / Bearer Token. api-token.ps1 contains a single line: return '<my api token>'
-    $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+Describe 'TMDB TV Season Tests' {
 
-  # Execute a request with all options.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeason :: ** ALL ** Options' )
-    Get-TMdbTVSeason -i 615 -s 1 -ccs -imgs -xids -ccse -imge -xide
+    BeforeDiscovery {
+        
+    }
 
-    exit
-  
-  # Execute a request using a valid TMDB TV Show ID and Season Number.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeason :: ** NO ** Cast Credits' )
-    Get-TMdbTVSeason -ShowID 615 -SeasonNumber 1
+    BeforeAll {
+        $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+    }
 
-  # Execute a request and get the season cast credits.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeason :: ** WITH ** Season Cast Credits, Images and External IDs' )
-    Get-TMdbTVSeason -SeriesID 615 -SeasonNumber 1 -IncludeSeasonCastCredits -IncludeSeasonImages -IncludeSeasonExternalIDs
+    Describe 'Get-TMdbTVSeason' {
 
-  # Execute a request and get the season cast credits applied to episodes.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeason :: ** WITH ** Episode Cast Credits, Images and External IDs' )
-    Get-TMdbTVSeason -SeriesID 615 -SeasonNumber 1 -IncludeEpisodeCastCredits -IncludeEpisodeImages -IncludeEpisodeExternalIDs
+        It 'Get Details for a TV Show Season with Season-Level Details' {
+            $season = Get-TMdbTVSeason -SeriesID 615 -SeasonNumber 1 -IncludeSeasonCastCreditsForEpisodes `
+                                       -IncludeSeasonCastCredits -IncludeSeasonImages -IncludeSeasonExternalIDs
+            $episode = $season.value.episodes | Where-Object { $_.title -eq 'Space Pilot 3000' }
+            $season.success            | Should -BeTrue
+            $season.value.Source       | Should -Be 'TMDB'
+            $season.value.ID           | Should -Be '1868'
+            $season.value.ShowID       | Should -Be '615'
+            $season.value.Name         | Should -Be 'Season 1'
+            $season.value.Number       | Should -Be 1
+            $season.value.FirstAirDate | Should -Be '1999-03-28'
+            $season.value.Year         | Should -Be '1999'
+            $season.value.Episodes     | Should -HaveCount 9
+            $season.value.ExternalIDs  | Should -HaveCount 4
+            $season.value.Images       | Should -HaveCount 15
+            $season.value.cast         | Should -HaveCount 10
+            $season.value.crew         | Should -HaveCount 21
+            $season.value.cast         | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
+            $season.value.crew         | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
+            $season.value.episodes     | Select-Object -ExpandProperty 'title' | Should -Contain 'I, Roommate'
+            $episode.Title             | Should -Be 'Space Pilot 3000'
+            $episode.ProductionCode    | Should -Be '1ACV01'
+            $episode.ExternalIDs       | Should -BeNullOrEmpty
+            $episode.Images            | Should -BeNullOrEmpty
+            $episode.cast              | Should -HaveCount 10
+            $episode.crew              | Should -HaveCount 4
+            $episode.guests            | Should -HaveCount 3
+            $episode.cast              | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
+            $episode.crew              | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
+            $episode.guests            | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+        }
 
-  # Execute a request and get the episode cast credits applied to episodes.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeason :: ** WITH ** All Options using Season Cast Credits for Episodes' )
-    Get-TMdbTVSeason -i 615 -s 1 -ccs -imgs -xids -ccse -imge -xide
+        It 'Get Details for a TV Show Season with Episode-Level Details' {
+            $season = Get-TMdbTVSeason -SeriesID 615 -SeasonNumber 1 `
+                                       -IncludeSeasonCastCredits -IncludeSeasonImages -IncludeSeasonExternalIDs `
+                                       -IncludeEpisodeCastCredits -IncludeEpisodeImages -IncludeEpisodeExternalIDs
+            $episode = $season.value.episodes | Where-Object { $_.title -eq 'Space Pilot 3000' }
+            $season.success            | Should -BeTrue
+            $season.value.Source       | Should -Be 'TMDB'
+            $season.value.ID           | Should -Be '1868'
+            $season.value.ShowID       | Should -Be '615'
+            $season.value.Name         | Should -Be 'Season 1'
+            $season.value.Number       | Should -Be 1
+            $season.value.FirstAirDate | Should -Be '1999-03-28'
+            $season.value.Year         | Should -Be '1999'
+            $season.value.Episodes     | Should -HaveCount 9
+            $season.value.ExternalIDs  | Should -HaveCount 4
+            $season.value.Images       | Should -HaveCount 15
+            $season.value.cast         | Should -HaveCount 10
+            $season.value.crew         | Should -HaveCount 21
+            $season.value.cast         | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
+            $season.value.crew         | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
+            $season.value.episodes     | Select-Object -ExpandProperty 'title' | Should -Contain 'I, Roommate'
+            $episode.Title             | Should -Be 'Space Pilot 3000'
+            $episode.ProductionCode    | Should -Be '1ACV01'
+            $episode.ExternalIDs       | Should -HaveCount 7
+            $episode.Images            | Should -HaveCount 2
+            $episode.cast              | Should -HaveCount 10
+            $episode.crew              | Should -HaveCount 4
+            $episode.guests            | Should -HaveCount 3
+            $episode.cast              | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
+            $episode.crew              | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
+            $episode.guests            | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+        }
 
-  # Execute a search for a season that doesn't exist.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeason :: ** FAILURE EXPECTED ** ' )
-    Get-TMdbTVSeason -SeriesID 615 -SeasonNumber 999
+        It 'Test all parameter aliases' {
+            $season = Get-TMdbTVSeason -i 615 -s 1 -ccs -xids -imgs -cce -xide -imge
+            $episode = $season.value.episodes | Where-Object { $_.title -eq 'Space Pilot 3000' }
+            $season.success            | Should -BeTrue
+            $season.value.Source       | Should -Be 'TMDB'
+            $season.value.ID           | Should -Be '1868'
+            $season.value.ShowID       | Should -Be '615'
+            $season.value.Name         | Should -Be 'Season 1'
+            $season.value.Number       | Should -Be 1
+            $season.value.FirstAirDate | Should -Be '1999-03-28'
+            $season.value.Year         | Should -Be '1999'
+            $season.value.Episodes     | Should -HaveCount 9
+            $season.value.ExternalIDs  | Should -HaveCount 4
+            $season.value.Images       | Should -HaveCount 15
+            $season.value.cast         | Should -HaveCount 10
+            $season.value.crew         | Should -HaveCount 21
+            $season.value.cast         | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
+            $season.value.crew         | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
+            $season.value.episodes     | Select-Object -ExpandProperty 'title' | Should -Contain 'I, Roommate'
+            $episode.Title             | Should -Be 'Space Pilot 3000'
+            $episode.ProductionCode    | Should -Be '1ACV01'
+            $episode.ExternalIDs       | Should -HaveCount 7
+            $episode.Images            | Should -HaveCount 2
+            $episode.cast              | Should -HaveCount 10
+            $episode.crew              | Should -HaveCount 4
+            $episode.guests            | Should -HaveCount 3
+            $episode.cast              | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
+            $episode.crew              | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
+            $episode.guests            | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+        }
+
+    }
+
+}

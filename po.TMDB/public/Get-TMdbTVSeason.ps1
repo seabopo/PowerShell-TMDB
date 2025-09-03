@@ -66,7 +66,7 @@ Function Get-TMdbTVSeason {
         of those entries (if they exist) in the episode data.
 
     .PARAMETER IncludeSeasonCastCreditsForEpisodes
-        OPTIONAL. Switch. Alias: -escc. The TMDB Season details include the episode data. The episode data includes
+        OPTIONAL. Switch. Alias: -ccse. The TMDB Season details include the episode data. The episode data includes
         crew and guest star credits, but does not include cast credits, which is a separate TMDB query. Use this 
         switch if you want to apply the TV Series/Show season cast credits to each episode in that Season. 
         
@@ -142,7 +142,7 @@ Function Get-TMdbTVSeason {
                 }
 
                 if ( $IncludeSeasonCastCredits -or $IncludeSeasonCastCreditsForEpisodes ) {
-                    $c = Get-TMdbTVCredits -i $SeriesID -s $SeasonNumber
+                    $c = Get-TMdbTVCredits -i $SeriesID -s $SeasonNumber -l $Language
                     if ( $c.success ) {
                         if ( $IncludeSeasonCastCredits ) {
                             $season.Cast = $c.value.cast
@@ -159,7 +159,7 @@ Function Get-TMdbTVSeason {
                 }
 
                 if ( $IncludeSeasonImages ) {
-                    $i = Get-TMdbTVImages -i $SeriesID -s $SeasonNumber
+                    $i = Get-TMdbTVImages -i $SeriesID -s $SeasonNumber -l $Language
                     if ( $i.success ) {
                         $season.Images = $i.value
                     }
@@ -174,7 +174,7 @@ Function Get-TMdbTVSeason {
 
                 if ( $IncludeEpisodeCastCredits ) {
                     $season.Episodes | ForEach-Object {
-                        $c = Get-TMdbTVCredits -i $_.ShowID -s $_.Season -e $_.Number
+                        $c = Get-TMdbTVCredits -i $_.ShowID -s $_.Season -e $_.Number  -l $Language
                         if ( $c.success ) {
                             $_.Cast = $c.value.cast
                         }
@@ -183,7 +183,7 @@ Function Get-TMdbTVSeason {
 
                 if ( $IncludeEpisodeImages ) {
                     $season.Episodes | ForEach-Object {
-                        $i = Get-TMdbTVImages -i $_.ShowID -s $_.Season -e $_.Number
+                        $i = Get-TMdbTVImages -i $_.ShowID -s $_.Season -e $_.Number -l $Language
                         if ( $i.success ) {
                             $_.Images = $i.value
                         }
