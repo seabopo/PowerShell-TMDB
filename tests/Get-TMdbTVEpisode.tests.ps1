@@ -18,53 +18,74 @@
 #
 #==================================================================================================================
 
-#==================================================================================================================
-# Initialize Test Environment
-#==================================================================================================================
+# Load the standard test initialization file.
+. $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
 
-  # Load the standard test initialization file.
-  . $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
+# Import the MediaClasses module to load the classes in the local user session.
+  Import-Module 'po.MediaClasses'
 
-#==================================================================================================================
-# Testing
-#==================================================================================================================
+# Override the Default Debug Logging Setting
+  # $env:PS_STATUSMESSAGE_SHOW_VERBOSE_MESSAGES = $false
 
-  # Import the MediaClasses module to load the classes in the local user session. This MUST be done in the primary
-  # script/session or the classes won't be seen by all sub-components. Also note that you CANNOT -Force reload 
-  # this module. A fresh session must be started to reload classes and enums from a PowerShell module.
-  # This module uses the "ScriptsToProcess" Work-Around rather than using the documented "using module" method
-  # as "using module" seems to work poorly in VSCode's PowerShell debugger.
-    Import-Module 'po.MediaClasses'
+Describe 'TMDB TV Episode Tests' {
 
-  # Initialize the API Key / Bearer Token. api-token.ps1 contains a single line: return '<my api token>'
-    $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+    BeforeDiscovery {
+        
+    }
 
-  # Execute a request for all available Episode options.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVEpisode :: ** WITH ** All Options' )
-    Get-TMdbTVEpisode -i 615 -s 1 -e 1 -cce -xide -imge
+    BeforeAll {
+        $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+    }
 
-    exit
+    Describe 'Get-TMdbTVEpisode' {
 
-  # Execute a request for only the basic Episode Details.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVEpisode :: Basic Details' )
-    Get-TMdbTVEpisode -ShowID 615 -SeasonNumber 1 -EpisodeNumber 1
+        It 'Get Details for a TV Show Episode' {
+            $episode = Get-TMdbTVEpisode -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1 `
+                                         -IncludeEpisodeCastCredits -IncludeEpisodeExternalIDs -IncludeEpisodeImages
+            $episode.success              | Should -BeTrue
+            $episode.value.Source         | Should -Be 'TMDB'
+            $episode.value.ID             | Should -Be '35006'
+            $episode.value.ShowID         | Should -Be '615'
+            $episode.value.Season         | Should -Be 1
+            $episode.value.Number         | Should -Be 1
+            $episode.value.Type           | Should -Be 'standard'
+            $episode.value.Title          | Should -Be 'Space Pilot 3000'
+            $episode.value.ProductionCode | Should -Be '1ACV01'
+            $episode.value.AirDate        | Should -Be '1999-03-28'
+            $episode.value.Runtime        | Should -Be 22
+            $episode.value.ExternalIDs    | Should -HaveCount 7
+            $episode.value.Images         | Should -HaveCount 2
+            $episode.value.cast           | Should -HaveCount 10
+            $episode.value.crew           | Should -HaveCount 4
+            $episode.value.guests         | Should -HaveCount 3
+            $episode.value.cast           | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
+            $episode.value.crew           | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
+            $episode.value.guests         | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+        }
 
-  # Execute a request for Cast Credits.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVEpisode :: ** WITH ** Cast Credits' )
-    Get-TMdbTVEpisode -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1 -IncludeEpisodeCastCredits
+        It 'Test all parameter aliases' {
+            $episode = Get-TMdbTVEpisode -i 615 -s 1 -e 1 -cce -xide -imge
+            $episode.success              | Should -BeTrue
+            $episode.value.Source         | Should -Be 'TMDB'
+            $episode.value.ID             | Should -Be '35006'
+            $episode.value.ShowID         | Should -Be '615'
+            $episode.value.Season         | Should -Be 1
+            $episode.value.Number         | Should -Be 1
+            $episode.value.Type           | Should -Be 'standard'
+            $episode.value.Title          | Should -Be 'Space Pilot 3000'
+            $episode.value.ProductionCode | Should -Be '1ACV01'
+            $episode.value.AirDate        | Should -Be '1999-03-28'
+            $episode.value.Runtime        | Should -Be 22
+            $episode.value.ExternalIDs    | Should -HaveCount 7
+            $episode.value.Images         | Should -HaveCount 2
+            $episode.value.cast           | Should -HaveCount 10
+            $episode.value.crew           | Should -HaveCount 4
+            $episode.value.guests         | Should -HaveCount 3
+            $episode.value.cast           | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
+            $episode.value.crew           | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
+            $episode.value.guests         | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+        }
 
-  # Execute a request for External IDs.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVEpisode :: ** WITH ** External IDs' )
-    Get-TMdbTVEpisode -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1 -IncludeEpisodeExternalIDs
+    }
 
-  # Execute a request for Images.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVEpisode :: ** WITH ** Images' )
-    Get-TMdbTVEpisode -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1 -IncludeEpisodeImages
-
-  # Execute a request for all Episode details.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVEpisode :: ** WITH ** All Options' )
-    Get-TMdbTVEpisode -i 615 -s 1 -e 1 -cce -xide -imge
-
-  # Execute an INVALID request.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVEpisode :: ** FAILURE EXPECTED ** ' )
-    Get-TMdbTVEpisode -i 615 -s 1 -e 9999
+}

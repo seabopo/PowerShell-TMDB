@@ -118,14 +118,14 @@ Function Get-TMdbTVEpisode {
                 if ( Test-IsNothing($episode.ShowID) ) { $episode.ShowID = $SeriesID }
 
                 if ( $IncludeEpisodeCastCredits ) {
-                    $c = Get-TMdbTVCredits -i $SeriesID -s $SeasonNumber -e $EpisodeNumber
+                    $c = Get-TMdbTVCredits -i $SeriesID -s $SeasonNumber -e $EpisodeNumber -l $Language
                     if ( $c.success ) {
                         $episode.Cast = $c.value.cast
                     }
                 }
 
                 if ( $IncludeEpisodeImages ) {
-                    $i = Get-TMdbTVImages -i $SeriesID -s $SeasonNumber -e $EpisodeNumber
+                    $i = Get-TMdbTVImages -i $SeriesID -s $SeasonNumber -e $EpisodeNumber -l $Language
                     if ( $i.success ) {
                         $episode.Images = $i.value
                     }
