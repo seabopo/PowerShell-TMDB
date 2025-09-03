@@ -5,7 +5,7 @@ Function Find-TMdbMovie {
         of each result.
 
     .OUTPUTS
-        An collection of [Movie] objects with the following POPULATED properties:
+        A collection of [Movie] objects with the following POPULATED properties:
             - [String] Source
             - [String] ID
             - [Bool]   Adult
@@ -77,7 +77,7 @@ Function Find-TMdbMovie {
         Write-Msg -p -ps -m ( 'Querying TMDB for Movie Names ...' )
         Write-Msg -i -il 1 -m ( 'Movie Name: {0}' -f $Name )
         Write-Msg -i -il 1 -m ( 'Year: {0}'       -f $Year )
-        Write-Msg -i -il 1 -m ( 'MaxResults: {0}' -f $Year )
+        Write-Msg -i -il 1 -m ( 'MaxResults: {0}' -f $MaxResults )
         Write-Msg -d -il 1 -m ( 'Token: {0}...'   -f $($env:TMDB_API_TOKEN).Substring(0,8) )
         
         [Movie[]]  $movies     = @()

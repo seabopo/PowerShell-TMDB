@@ -5,7 +5,7 @@ Function Find-TMdbTVSeries {
         overview for each result.
 
     .OUTPUTS
-        An collection of [TVShow] objects with the following POPULATED properties:
+        A collection of [TVShow] objects with the following POPULATED properties:
             - [String]   Source
             - [String]   ID
             - [String]   Name
@@ -83,7 +83,7 @@ Function Find-TMdbTVSeries {
         Write-Msg -p -ps -m ( 'Querying TMDB for Series/Show Names ...' )
         Write-Msg -i -il 1 -m ( 'Series/Show Name: {0}' -f $Name )
         Write-Msg -i -il 1 -m ( 'Year: {0}'             -f $Year )
-        Write-Msg -i -il 1 -m ( 'MaxResults: {0}'       -f $Year )
+        Write-Msg -i -il 1 -m ( 'MaxResults: {0}'       -f $MaxResults )
         Write-Msg -d -il 1 -m ( 'Token: {0}...'         -f $($env:TMDB_API_TOKEN).Substring(0,8) )
         
         [TVShow[]] $shows      = @()
