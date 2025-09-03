@@ -67,15 +67,15 @@ Function Get-TMdbTVCredits {
         ) -Join ''
 
         Write-Msg -p -ps -m ( 'Querying TMDB for TV Credits ...' )
-        Write-Msg -i -il 1 -m ( 'Series/Show ID: {0}'  -f $SeriesID )
+        Write-Msg -i -il 1 -m ( 'Series/Show ID: {0}'      -f $SeriesID )
         if ( $SeasonNumber ) {
             Write-Msg -i -il 1 -m ( 'Season Number: {0}'   -f $SeasonNumber )
         }
         if ( $EpisodeNumber ) {
             Write-Msg -i -il 1 -m ( 'Episode Number: {0}'  -f $EpisodeNumber )
         }
-        Write-Msg -d -il 1 -m ( 'Token: {0}...'        -f $($env:TMDB_API_TOKEN).Substring(0,8) )
-        Write-Msg -d -il 1 -m ( 'Query: {0}'           -f $SearchURL )
+        Write-Msg -d -il 1 -m ( 'Token: {0}...'            -f $($env:TMDB_API_TOKEN).Substring(0,8) )
+        Write-Msg -d -il 1 -m ( 'Query: {0}'               -f $SearchURL )
         
         $r = Invoke-HttpRequest -u $SearchURL -t $env:TMDB_API_TOKEN -j -d
 

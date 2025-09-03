@@ -22,45 +22,71 @@
 #
 #==================================================================================================================
 
-#==================================================================================================================
-# Initialize Test Environment
-#==================================================================================================================
+# Load the standard test initialization file.
+. $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
 
-  # Load the standard test initialization file.
-  . $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
+# Import the MediaClasses module to load the classes in the local user session.
+  Import-Module 'po.MediaClasses'
 
-#==================================================================================================================
-# Testing
-#==================================================================================================================
+# Override the Default Debug Logging Setting
+  # $env:PS_STATUSMESSAGE_SHOW_VERBOSE_MESSAGES = $false
 
-  # Import the MediaClasses module to load the classes in the local user session. This MUST be done in the primary
-  # script/session or the classes won't be seen by all sub-components. Also note that you CANNOT -Force reload 
-  # this module. A fresh session must be started to reload classes and enums from a PowerShell module.
-  # This module uses the "ScriptsToProcess" Work-Around rather than using the documented "using module" method
-  # as "using module" seems to work poorly in VSCode's PowerShell debugger.
-    Import-Module 'po.MediaClasses'
+Describe 'TMDB Credits Tests' {
 
-  # Initialize the API Key / Bearer Token. api-token.ps1 contains a single line: return '<my api token>'
-    $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+    BeforeDiscovery {
+        
+    }
 
-  # Execute a request using a valid TMDB TV Show ID and Season Number and Episode Number.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVCredits :: Series, Season and Episode' )
-    Get-TMdbTVCredits -i 615 -s 1 -e 1
+    BeforeAll {
+        $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+    }
 
-    #exit
+    Describe 'Get-TMdbTVCredits' {
 
-  # Execute a request using a valid TMDB TV Show ID and Season Number and Episode Number.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVCredits :: Series, Season and Episode' )
-    Get-TMdbTVCredits -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
+        It 'Get Credits for a TV Show Episode' {
+            $credits = Get-TMdbTVCredits -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
+            $credits.success      | Should -BeTrue
+            $credits.value        | Should -HaveCount 1
+            $credits.value.cast   | Should -HaveCount 10
+            $credits.value.crew   | Should -HaveCount 4
+            $credits.value.guests | Should -HaveCount 3
+            $credits.value.cast   | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
+            $credits.value.crew   | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
+            $credits.value.guests | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+        }
 
-  # Execute a request using a valid TMDB TV Show ID and Season Number.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVCredits :: Series and Season' )
-    Get-TMdbTVCredits -SeriesID 615 -SeasonNumber 1
+        It 'Get Credits for a TV Show Episode' {
+            $credits = Get-TMdbTVCredits -SeriesID 615 -SeasonNumber 1
+            $credits.success      | Should -BeTrue
+            $credits.value        | Should -HaveCount 1
+            $credits.value.cast   | Should -HaveCount 10
+            $credits.value.crew   | Should -HaveCount 21
+            $credits.value.cast   | Select-Object -ExpandProperty 'name' | Should -Contain 'Katey Sagal'
+            $credits.value.crew   | Select-Object -ExpandProperty 'name' | Should -Contain 'David X. Cohen'
+        }
 
-  # Execute a request using a valid TMDB TV Show ID.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVCredits :: Series' )
-    Get-TMdbTVCredits -SeriesID 615
+        It 'Get Credits for a TV Show Episode' {
+            $credits = Get-TMdbTVCredits -SeriesID 615
+            $credits.success      | Should -BeTrue
+            $credits.value        | Should -HaveCount 1
+            $credits.value.cast   | Should -HaveCount 9
+            $credits.value.crew   | Should -HaveCount 4
+            $credits.value.cast   | Select-Object -ExpandProperty 'name' | Should -Contain 'John DiMaggio'
+            $credits.value.crew   | Select-Object -ExpandProperty 'name' | Should -Contain 'Ken Keeler'
+        }
 
-  # Execute a request using a valid TMDB TV Show ID and Season Number and an INVALID Episode Number.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVCredits :: ** FAILURE EXPECTED ** ' )
-    Get-TMdbTVEpisode -i 615 -s 1 -e 1111
+        It 'Test all parameter aliases' {
+            $credits = Get-TMdbTVCredits -i 615 -s 1 -e 1
+            $credits.success | Should -BeTrue
+            $credits.value        | Should -HaveCount 1
+            $credits.value.cast   | Should -HaveCount 10
+            $credits.value.crew   | Should -HaveCount 4
+            $credits.value.guests | Should -HaveCount 3
+            $credits.value.cast   | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
+            $credits.value.crew   | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
+            $credits.value.guests | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+        }
+
+    }
+
+}
