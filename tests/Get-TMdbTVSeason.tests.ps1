@@ -18,7 +18,6 @@
 #
 #==================================================================================================================
 
-
 # Load the standard test initialization file.
 . $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
 
@@ -41,99 +40,117 @@ Describe 'TMDB TV Season Tests' {
     Describe 'Get-TMdbTVSeason' {
 
         It 'Get Details for a TV Show Season with Season-Level Details' {
-            $season = Get-TMdbTVSeason -SeriesID 615 -SeasonNumber 1 -IncludeSeasonCastCreditsForEpisodes `
+
+            $result = Get-TMdbTVSeason -SeriesID 615 -SeasonNumber 1 -IncludeSeasonCastCreditsForEpisodes `
                                        -IncludeSeasonCastCredits -IncludeSeasonImages -IncludeSeasonExternalIDs
-            $episode = $season.value.episodes | Where-Object { $_.title -eq 'Space Pilot 3000' }
-            $season.success            | Should -BeTrue
-            $season.value.Source       | Should -Be 'TMDB'
-            $season.value.ID           | Should -Be '1868'
-            $season.value.ShowID       | Should -Be '615'
-            $season.value.Name         | Should -Be 'Season 1'
-            $season.value.Number       | Should -Be 1
-            $season.value.FirstAirDate | Should -Be '1999-03-28'
-            $season.value.Year         | Should -Be '1999'
-            $season.value.Episodes     | Should -HaveCount 9
-            $season.value.ExternalIDs  | Should -HaveCount 4
-            $season.value.Images       | Should -HaveCount 15
-            $season.value.cast         | Should -HaveCount 10
-            $season.value.crew         | Should -HaveCount 21
-            $season.value.cast         | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
-            $season.value.crew         | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
-            $season.value.episodes     | Select-Object -ExpandProperty 'title' | Should -Contain 'I, Roommate'
-            $episode.Title             | Should -Be 'Space Pilot 3000'
-            $episode.ProductionCode    | Should -Be '1ACV01'
-            $episode.ExternalIDs       | Should -BeNullOrEmpty
-            $episode.Images            | Should -BeNullOrEmpty
-            $episode.cast              | Should -HaveCount 10
-            $episode.crew              | Should -HaveCount 4
-            $episode.guests            | Should -HaveCount 3
-            $episode.cast              | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
-            $episode.crew              | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
-            $episode.guests            | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+            $result.success | Should -BeTrue
+
+            $season  = $result.value
+            $episode = $season.episodes | Where-Object { $_.title -eq 'Space Pilot 3000' }
+
+            $season.Source          | Should -Be 'TMDB'
+            $season.ID              | Should -Be '1868'
+            $season.ShowID          | Should -Be '615'
+            $season.Name            | Should -Be 'Season 1'
+            $season.Number          | Should -Be 1
+            $season.FirstAirDate    | Should -Be '1999-03-28'
+            $season.Year            | Should -Be '1999'
+            $season.Episodes        | Should -HaveCount 9
+            $season.ExternalIDs     | Should -HaveCount 4
+            $season.Images          | Should -HaveCount 15
+            $season.cast            | Should -HaveCount 10
+            $season.crew            | Should -HaveCount 21
+            $season.cast            | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
+            $season.crew            | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
+            $season.episodes        | Select-Object -ExpandProperty 'title' | Should -Contain 'I, Roommate'
+            
+            $episode.Title          | Should -Be 'Space Pilot 3000'
+            $episode.ProductionCode | Should -Be '1ACV01'
+            $episode.ExternalIDs    | Should -BeNullOrEmpty
+            $episode.Images         | Should -BeNullOrEmpty
+            $episode.cast           | Should -HaveCount 10
+            $episode.crew           | Should -HaveCount 4
+            $episode.guests         | Should -HaveCount 3
+            $episode.cast           | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
+            $episode.crew           | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
+            $episode.guests         | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+
         }
 
         It 'Get Details for a TV Show Season with Episode-Level Details' {
-            $season = Get-TMdbTVSeason -SeriesID 615 -SeasonNumber 1 `
+
+            $result = Get-TMdbTVSeason -SeriesID 615 -SeasonNumber 1 `
                                        -IncludeSeasonCastCredits -IncludeSeasonImages -IncludeSeasonExternalIDs `
                                        -IncludeEpisodeCastCredits -IncludeEpisodeImages -IncludeEpisodeExternalIDs
-            $episode = $season.value.episodes | Where-Object { $_.title -eq 'Space Pilot 3000' }
-            $season.success            | Should -BeTrue
-            $season.value.Source       | Should -Be 'TMDB'
-            $season.value.ID           | Should -Be '1868'
-            $season.value.ShowID       | Should -Be '615'
-            $season.value.Name         | Should -Be 'Season 1'
-            $season.value.Number       | Should -Be 1
-            $season.value.FirstAirDate | Should -Be '1999-03-28'
-            $season.value.Year         | Should -Be '1999'
-            $season.value.Episodes     | Should -HaveCount 9
-            $season.value.ExternalIDs  | Should -HaveCount 4
-            $season.value.Images       | Should -HaveCount 15
-            $season.value.cast         | Should -HaveCount 10
-            $season.value.crew         | Should -HaveCount 21
-            $season.value.cast         | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
-            $season.value.crew         | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
-            $season.value.episodes     | Select-Object -ExpandProperty 'title' | Should -Contain 'I, Roommate'
-            $episode.Title             | Should -Be 'Space Pilot 3000'
-            $episode.ProductionCode    | Should -Be '1ACV01'
-            $episode.ExternalIDs       | Should -HaveCount 7
-            $episode.Images            | Should -HaveCount 2
-            $episode.cast              | Should -HaveCount 10
-            $episode.crew              | Should -HaveCount 4
-            $episode.guests            | Should -HaveCount 3
-            $episode.cast              | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
-            $episode.crew              | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
-            $episode.guests            | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+            $result.success | Should -BeTrue
+
+            $season  = $result.value
+            $episode = $season.episodes | Where-Object { $_.title -eq 'Space Pilot 3000' }
+
+            $season.Source          | Should -Be 'TMDB'
+            $season.ID              | Should -Be '1868'
+            $season.ShowID          | Should -Be '615'
+            $season.Name            | Should -Be 'Season 1'
+            $season.Number          | Should -Be 1
+            $season.FirstAirDate    | Should -Be '1999-03-28'
+            $season.Year            | Should -Be '1999'
+            $season.Episodes        | Should -HaveCount 9
+            $season.ExternalIDs     | Should -HaveCount 4
+            $season.Images          | Should -HaveCount 15
+            $season.cast            | Should -HaveCount 10
+            $season.crew            | Should -HaveCount 21
+            $season.cast            | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
+            $season.crew            | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
+            $season.episodes        | Select-Object -ExpandProperty 'title' | Should -Contain 'I, Roommate'
+
+            $episode.Title          | Should -Be 'Space Pilot 3000'
+            $episode.ProductionCode | Should -Be '1ACV01'
+            $episode.ExternalIDs    | Should -HaveCount 7
+            $episode.Images         | Should -HaveCount 2
+            $episode.cast           | Should -HaveCount 10
+            $episode.crew           | Should -HaveCount 4
+            $episode.guests         | Should -HaveCount 3
+            $episode.cast           | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
+            $episode.crew           | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
+            $episode.guests         | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+
         }
 
         It 'Test all parameter aliases' {
-            $season = Get-TMdbTVSeason -i 615 -s 1 -ccs -xids -imgs -cce -xide -imge
-            $episode = $season.value.episodes | Where-Object { $_.title -eq 'Space Pilot 3000' }
-            $season.success            | Should -BeTrue
-            $season.value.Source       | Should -Be 'TMDB'
-            $season.value.ID           | Should -Be '1868'
-            $season.value.ShowID       | Should -Be '615'
-            $season.value.Name         | Should -Be 'Season 1'
-            $season.value.Number       | Should -Be 1
-            $season.value.FirstAirDate | Should -Be '1999-03-28'
-            $season.value.Year         | Should -Be '1999'
-            $season.value.Episodes     | Should -HaveCount 9
-            $season.value.ExternalIDs  | Should -HaveCount 4
-            $season.value.Images       | Should -HaveCount 15
-            $season.value.cast         | Should -HaveCount 10
-            $season.value.crew         | Should -HaveCount 21
-            $season.value.cast         | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
-            $season.value.crew         | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
-            $season.value.episodes     | Select-Object -ExpandProperty 'title' | Should -Contain 'I, Roommate'
-            $episode.Title             | Should -Be 'Space Pilot 3000'
-            $episode.ProductionCode    | Should -Be '1ACV01'
-            $episode.ExternalIDs       | Should -HaveCount 7
-            $episode.Images            | Should -HaveCount 2
-            $episode.cast              | Should -HaveCount 10
-            $episode.crew              | Should -HaveCount 4
-            $episode.guests            | Should -HaveCount 3
-            $episode.cast              | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
-            $episode.crew              | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
-            $episode.guests            | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+
+            $result = Get-TMdbTVSeason -i 615 -s 1 -ccs -xids -imgs -cce -xide -imge
+            $result.success | Should -BeTrue
+
+            $season  = $result.value
+            $episode = $season.episodes | Where-Object { $_.title -eq 'Space Pilot 3000' }
+
+            $season.Source          | Should -Be 'TMDB'
+            $season.ID              | Should -Be '1868'
+            $season.ShowID          | Should -Be '615'
+            $season.Name            | Should -Be 'Season 1'
+            $season.Number          | Should -Be 1
+            $season.FirstAirDate    | Should -Be '1999-03-28'
+            $season.Year            | Should -Be '1999'
+            $season.Episodes        | Should -HaveCount 9
+            $season.ExternalIDs     | Should -HaveCount 4
+            $season.Images          | Should -HaveCount 15
+            $season.cast            | Should -HaveCount 10
+            $season.crew            | Should -HaveCount 21
+            $season.cast            | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
+            $season.crew            | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
+            $season.episodes        | Select-Object -ExpandProperty 'title' | Should -Contain 'I, Roommate'
+
+            $episode.Title          | Should -Be 'Space Pilot 3000'
+            $episode.ProductionCode | Should -Be '1ACV01'
+            $episode.ExternalIDs    | Should -HaveCount 7
+            $episode.Images         | Should -HaveCount 2
+            $episode.cast           | Should -HaveCount 10
+            $episode.crew           | Should -HaveCount 4
+            $episode.guests         | Should -HaveCount 3
+            $episode.cast           | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
+            $episode.crew           | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
+            $episode.guests         | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+
         }
 
     }
