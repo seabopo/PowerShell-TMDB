@@ -18,72 +18,239 @@
 #
 #==================================================================================================================
 
-#==================================================================================================================
-# Initialize Test Environment
-#==================================================================================================================
+# Load the standard test initialization file.
+. $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
 
-  # Load the standard test initialization file.
-  . $(Join-Path -Path $PSScriptRoot -ChildPath '_init-test-environment.ps1')
+# Import the MediaClasses module to load the classes in the local user session.
+  Import-Module 'po.MediaClasses'
 
-#==================================================================================================================
-# Testing
-#==================================================================================================================
+# Override the Default Debug Logging Setting
+  # $env:PS_STATUSMESSAGE_SHOW_VERBOSE_MESSAGES = $false
 
-  # Import the MediaClasses module to load the classes in the local user session. This MUST be done in the primary
-  # script/session or the classes won't be seen by all sub-components. Also note that you CANNOT -Force reload 
-  # this module. A fresh session must be started to reload classes and enums from a PowerShell module.
-  # This module uses the "ScriptsToProcess" Work-Around rather than using the documented "using module" method
-  # as "using module" seems to work poorly in VSCode's PowerShell debugger.
-    Import-Module 'po.MediaClasses'
+Describe 'TMDB TV Series Tests' {
 
-  # Initialize the API Key / Bearer Token. api-token.ps1 contains a single line: return '<my api token>'
-    $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+    BeforeDiscovery {
+        
+    }
 
-  # Execute a request to get All Series and Season Information, including episodes.
-  #     $request = Get-TMdbTVShow -i 615 -ccc -img -xid -isd -ccs -imgs -xids -ccse
-  #     if ( $request.success ) {
-  #         $myShow = $request.value
-  #     }
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeries :: Full Series and Season Data (Includes Episodes)' )
-    $myShow = $(Get-TMdbTVShow -i 501 -ccc -img -xid -isd -ccs -imgs -xids -ccse).value
+    BeforeAll {
+        $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
+    }
 
-    exit
+    Describe 'Get-TMdbTVSeries' {
 
-  # Execute a request to get the basic Series data.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeries :: Basic Series Data Only' )
-    Get-TMdbTVSeries -SeriesID 615
+        It 'Get Details for a TV Series with only Series-Level Details' {
+            
+            $result = Get-TMdbTVSeries -SeriesID 615 -IncludeCastAndCrewCredits -IncludeImages -IncludeExternalIDs `
+                                       -Language 'en-US'
+            $result.success | Should -BeTrue
 
-  # Execute a request to get the full Series data.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeries :: Full Series Data, Limited Season Data, No Episode Data' )
-    Get-TMdbTVSeries -SeriesID 615 -IncludeCastAndCrewCredits -IncludeImages -IncludeExternalIDs
+            $series = $result.value
+            
+            $series.Source           | Should -Be 'TMDB'
+            $series.ID               | Should -Be '615'
+            $series.Rating           | Should -Be 'TV-14'
+            $series.Ratings          | Should -HaveCount 1
+            $series.Genres           | Should -HaveCount 3
+            $series.FirstAirDate     | Should -Be '1999-03-28'
+            $series.Year             | Should -Be '1999'
+            $series.Creators         | Should -HaveCount 1
+            $series.Creators[0].name | Should -Be 'Matt Groening'
+            $series.Cast             | Should -HaveCount 9
+            $series.Crew             | Should -HaveCount 4
+            $series.Cast             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
+            $series.Crew             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
+            $series.Country          | Should -HaveCount 1
+            $series.Country[0]       | Should -Be 'US'
+            $series.Studios          | Should -HaveCount 3
+            $series.Studios          | Select-Object -ExpandProperty 'name' | Should -Contain 'The Curiosity Company'
+            $series.Networks         | Should -HaveCount 3
+            $series.Networks         | Select-Object -ExpandProperty 'name' | Should -Contain 'Hulu'
+            $series.Seasons.count    | Should -BeGreaterOrEqual 11
+            $series.ExternalIDs      | Should -HaveCount 7
+            $series.Images.count     | Should -BeGreaterOrEqual 140
 
-  # USE THIS :: Execute a request to get the full Series and Season data (with Episodes).
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeries :: Full Series and Season Data (Includes Episodes)' )
-    Get-TMdbTVSeries -SeriesID 615 -IncludeCastAndCrewCredits `
-                                   -IncludeImages `
-                                   -IncludeExternalIDs `
-                                   -IncludeSeasonDetails `
-                                   -IncludeSeasonCastCredits `
-                                   -IncludeSeasonImages `
-                                   -IncludeSeasonExternalIDs `
-                                   -IncludeSeasonCastCreditsForEpisodes `
-                                   -IncludeEpisodeImages `
-                                   -IncludeEpisodeExternalIDs
+        }
 
-  # DO NOT USE THIS - IT COULD BE CONSIDERED ABUSIVE TO TMDB
-  # Get Full Series, Season and Episode-specific credits, images and external IDs.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeries :: Full Series, Season and all Episode-Specific Data' )
-    Get-TMdbTVSeries -SeriesID 615 -IncludeCastAndCrewCredits `
-                                   -IncludeImages `
-                                   -IncludeExternalIDs `
-                                   -IncludeSeasonDetails `
-                                   -IncludeSeasonCastCredits `
-                                   -IncludeSeasonImages `
-                                   -IncludeSeasonExternalIDs `
-                                   -IncludeEpisodeCastCredits `
-                                   -IncludeEpisodeImages `
-                                   -IncludeEpisodeExternalIDs
+        It 'Get Details for a TV Show with Season-Level Details' {
+            
+            $result = Get-TMdbTVSeries -SeriesID 615 -IncludeCastAndCrewCredits -IncludeImages -IncludeExternalIDs `
+                                       -IncludeSeasonDetails -IncludeSeasonCastCredits -IncludeSeasonImages `
+                                       -IncludeSeasonExternalIDs -IncludeSeasonCastCreditsForEpisodes `
+                                       -Language 'en-US'
+            $result.success | Should -BeTrue
+            
+            $series  = $result.value
+            $season  = $series.seasons  | Where-Object { $_.number -eq 1 }
+            $episode = $season.episodes | Where-Object { $_.title -eq 'Space Pilot 3000' }
+            
+            $series.Source           | Should -Be 'TMDB'
+            $series.ID               | Should -Be '615'
+            $series.Rating           | Should -Be 'TV-14'
+            $series.Ratings          | Should -HaveCount 1
+            $series.Genres           | Should -HaveCount 3
+            $series.FirstAirDate     | Should -Be '1999-03-28'
+            $series.Year             | Should -Be '1999'
+            $series.Creators         | Should -HaveCount 1
+            $series.Creators[0].name | Should -Be 'Matt Groening'
+            $series.Cast             | Should -HaveCount 9
+            $series.Crew             | Should -HaveCount 4
+            $series.Cast             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
+            $series.Crew             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
+            $series.Country          | Should -HaveCount 1
+            $series.Country[0]       | Should -Be 'US'
+            $series.Studios          | Should -HaveCount 3
+            $series.Studios          | Select-Object -ExpandProperty 'name' | Should -Contain 'The Curiosity Company'
+            $series.Networks         | Should -HaveCount 3
+            $series.Networks         | Select-Object -ExpandProperty 'name' | Should -Contain 'Hulu'
+            $series.Seasons.count    | Should -BeGreaterOrEqual 11
+            $series.ExternalIDs      | Should -HaveCount 7
+            $series.Images.count     | Should -BeGreaterOrEqual 140
+            
+            $season.Source           | Should -Be 'TMDB'
+            $season.ID               | Should -Be '1868'
+            $season.ShowID           | Should -Be '615'
+            $season.Name             | Should -Be 'Season 1'
+            $season.Number           | Should -Be 1
+            $season.FirstAirDate     | Should -Be '1999-03-28'
+            $season.Year             | Should -Be '1999'
+            $season.Episodes         | Should -HaveCount 9
+            $season.ExternalIDs      | Should -HaveCount 4
+            $season.Images           | Should -HaveCount 15
+            $season.cast             | Should -HaveCount 10
+            $season.crew             | Should -HaveCount 21
+            $season.cast             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
+            $season.crew             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
+            $season.episodes         | Select-Object -ExpandProperty 'title' | Should -Contain 'I, Roommate'
+            
+            $episode.Title           | Should -Be 'Space Pilot 3000'
+            $episode.ProductionCode  | Should -Be '1ACV01'
+            $episode.ExternalIDs     | Should -BeNullOrEmpty
+            $episode.Images          | Should -BeNullOrEmpty
+            $episode.cast            | Should -HaveCount 10
+            $episode.crew            | Should -HaveCount 4
+            $episode.guests          | Should -HaveCount 3
+            $episode.cast            | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
+            $episode.crew            | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
+            $episode.guests          | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
 
-  # Attempt a request for a show that doesn't exist.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeries:: ** FAILURE EXPECTED ** ' )
-    Get-TMdbTVSeries -i 19211921
+        }
+
+        It 'Get Details for a TV Show Season with Episode-Level Details' {
+
+            $result = Get-TMdbTVSeries -SeriesID 615 -IncludeCastAndCrewCredits -IncludeImages -IncludeExternalIDs `
+                                       -IncludeSeasonDetails -IncludeEpisodeCastCredits -IncludeEpisodeImages `
+                                       -IncludeEpisodeExternalIDs -Language 'en-US'
+            $result.success | Should -BeTrue
+            
+            $series  = $result.value
+            $season  = $series.seasons  | Where-Object { $_.number -eq 1 }
+            $episode = $season.episodes | Where-Object { $_.title -eq 'Space Pilot 3000' }
+            
+            $series.Source           | Should -Be 'TMDB'
+            $series.ID               | Should -Be '615'
+            $series.Rating           | Should -Be 'TV-14'
+            $series.Ratings          | Should -HaveCount 1
+            $series.Genres           | Should -HaveCount 3
+            $series.FirstAirDate     | Should -Be '1999-03-28'
+            $series.Year             | Should -Be '1999'
+            $series.Creators         | Should -HaveCount 1
+            $series.Creators[0].name | Should -Be 'Matt Groening'
+            $series.Cast             | Should -HaveCount 9
+            $series.Crew             | Should -HaveCount 4
+            $series.Cast             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
+            $series.Crew             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
+            $series.Country          | Should -HaveCount 1
+            $series.Country[0]       | Should -Be 'US'
+            $series.Studios          | Should -HaveCount 3
+            $series.Studios          | Select-Object -ExpandProperty 'name' | Should -Contain 'The Curiosity Company'
+            $series.Networks         | Should -HaveCount 3
+            $series.Networks         | Select-Object -ExpandProperty 'name' | Should -Contain 'Hulu'
+            $series.Seasons.count    | Should -BeGreaterOrEqual 11
+            $series.ExternalIDs      | Should -HaveCount 7
+            $series.Images.count     | Should -BeGreaterOrEqual 140
+            
+            $season.Source           | Should -Be 'TMDB'
+            $season.ID               | Should -Be '1868'
+            $season.ShowID           | Should -Be '615'
+            $season.Name             | Should -Be 'Season 1'
+            $season.Number           | Should -Be 1
+            $season.FirstAirDate     | Should -Be '1999-03-28'
+            $season.Year             | Should -Be '1999'
+            $season.Episodes         | Should -HaveCount 9
+            $season.episodes         | Select-Object -ExpandProperty 'title' | Should -Contain 'I, Roommate'
+             
+            $episode.Title           | Should -Be 'Space Pilot 3000'
+            $episode.ProductionCode  | Should -Be '1ACV01'
+            $episode.ExternalIDs     | Should -HaveCount 7
+            $episode.Images          | Should -HaveCount 2
+            $episode.cast            | Should -HaveCount 10
+            $episode.crew            | Should -HaveCount 4
+            $episode.guests          | Should -HaveCount 3
+            $episode.cast            | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
+            $episode.crew            | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
+            $episode.guests          | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+
+        }
+
+        It 'Test all parameter aliases' {
+            $result = Get-TMdbTVShow -i 615 -ccc -img -xid -isd -ccs -imgs -xids -ccse
+            $result.success | Should -BeTrue
+            
+            $series  = $result.value
+            $season  = $series.seasons  | Where-Object { $_.number -eq 1 }
+            $episode = $season.episodes | Where-Object { $_.title -eq 'Space Pilot 3000' }
+
+            $series.Source           | Should -Be 'TMDB'
+            $series.ID               | Should -Be '615'
+            $series.Rating           | Should -Be 'TV-14'
+            $series.Ratings          | Should -HaveCount 1
+            $series.Genres           | Should -HaveCount 3
+            $series.FirstAirDate     | Should -Be '1999-03-28'
+            $series.Year             | Should -Be '1999'
+            $series.Creators         | Should -HaveCount 1
+            $series.Creators[0].name | Should -Be 'Matt Groening'
+            $series.Cast             | Should -HaveCount 9
+            $series.Crew             | Should -HaveCount 4
+            $series.Cast             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
+            $series.Crew             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
+            $series.Country          | Should -HaveCount 1
+            $series.Country[0]       | Should -Be 'US'
+            $series.Studios          | Should -HaveCount 3
+            $series.Studios          | Select-Object -ExpandProperty 'name' | Should -Contain 'The Curiosity Company'
+            $series.Networks         | Should -HaveCount 3
+            $series.Networks         | Select-Object -ExpandProperty 'name' | Should -Contain 'Hulu'
+            $series.Seasons.count    | Should -BeGreaterOrEqual 11
+            $series.ExternalIDs      | Should -HaveCount 7
+            $series.Images.count     | Should -BeGreaterOrEqual 140
+
+            $season.Source           | Should -Be 'TMDB'
+            $season.ID               | Should -Be '1868'
+            $season.ShowID           | Should -Be '615'
+            $season.Name             | Should -Be 'Season 1'
+            $season.Number           | Should -Be 1
+            $season.FirstAirDate     | Should -Be '1999-03-28'
+            $season.Year             | Should -Be '1999'
+            $season.Episodes         | Should -HaveCount 9
+            $season.ExternalIDs      | Should -HaveCount 4
+            $season.Images           | Should -HaveCount 15
+            $season.cast             | Should -HaveCount 10
+            $season.crew             | Should -HaveCount 21
+            $season.cast             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
+            $season.crew             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
+            $season.episodes         | Select-Object -ExpandProperty 'title' | Should -Contain 'I, Roommate'
+ 
+            $episode.Title           | Should -Be 'Space Pilot 3000'
+            $episode.ProductionCode  | Should -Be '1ACV01'
+            $episode.cast            | Should -HaveCount 10
+            $episode.crew            | Should -HaveCount 4
+            $episode.guests          | Should -HaveCount 3
+            $episode.cast            | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
+            $episode.crew            | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
+            $episode.guests          | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+
+        }
+
+    }
+
+}

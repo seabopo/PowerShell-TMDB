@@ -166,21 +166,14 @@ Function Get-TMdbTVSeries {
 
                 $show.Seasons | ForEach-Object { $_.ShowID = $SeriesID}
 
-                $r = Get-TMdbTVContentRatings -i $SeriesID
+                $r = Get-TMdbTVContentRatings -i $SeriesID -c $($($Language.Split('-')[1]))
                 if ( $r.success ) {
-                    $country = $($Language.Split('-')[1])
-                    $show.Rating  = $($r.value | Where-Object { $_.Country -eq $country } | 
-                                                 Select-Object -First 1 -ExpandProperty 'rating')
-                    if ( $IncludeAllRatings ) {
-                        $show.Ratings = $r.value
-                    }
-                    else {
-                        $show.Ratings = $r.value | Where-Object { $_.Country -eq $country }
-                    }
+                    $show.Ratings = $r.value
+                    $show.Rating  = $($r.value | Select-Object -First 1 -ExpandProperty 'rating')
                 }
 
                 if ( $IncludeCastAndCrewCredits ) {
-                    $c = Get-TMdbTVCredits -i $SeriesID
+                    $c = Get-TMdbTVCredits -i $SeriesID -l $Language
                     if ( $c.success ) {
                         $show.Cast = $c.value.cast
                         $show.Crew = $c.value.crew
@@ -188,7 +181,7 @@ Function Get-TMdbTVSeries {
                 }
 
                 if ( $IncludeImages ) {
-                    $i = Get-TMdbTVImages -i $SeriesID
+                    $i = Get-TMdbTVImages -i $SeriesID -l $Language
                     if ( $i.success ) {
                         $show.Images = $i.value
                     }
