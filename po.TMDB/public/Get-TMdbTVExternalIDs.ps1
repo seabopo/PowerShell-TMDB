@@ -9,7 +9,7 @@ Function Get-TMdbTVExternalIDs {
             - [String] ID
 
     .PARAMETER SeriesID
-        REQUIRED. String. Alias: -i, -ShowID. The TV Series/Show ID. Example: 615
+        REQUIRED. String. Alias: -t, -ShowID. The TV Series/Show ID. Example: 615
 
     .PARAMETER SeasonNumber
         OPTIONAL. Int. Alias: -s. The Season Number of the Series/Show. Example: 1
@@ -27,13 +27,13 @@ Function Get-TMdbTVExternalIDs {
         Get-TMdbTVExternalIDs -ShowID 615
 
     .EXAMPLE
-        Get-TMdbTVExternalIDs -i 615 -s 1 -e 1
+        Get-TMdbTVExternalIDs -t 615 -s 1 -e 1
 
     #>
     [OutputType([Item[]])]
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)] [Alias('i','ShowID')] [String] $SeriesID,
+        [Parameter(Mandatory)] [Alias('t','ShowID')] [String] $SeriesID,
         [Parameter()]          [Alias('s')]          [System.Nullable[int]] $SeasonNumber,
         [Parameter()]          [Alias('e')]          [System.Nullable[int]] $EpisodeNumber
     )

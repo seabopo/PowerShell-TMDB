@@ -118,7 +118,7 @@ Describe 'TMDB TV Season Tests' {
 
         It 'Test all parameter aliases' {
 
-            $result = Get-TMdbTVSeason -i 615 -s 1 -ccs -xids -imgs -cce -xide -imge
+            $result = Get-TMdbTVSeason -t 615 -s 1 -ccs -xids -imgs -cce -xide -imge
             $result.success | Should -BeTrue
 
             $season  = $result.value

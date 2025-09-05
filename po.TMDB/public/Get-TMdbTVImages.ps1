@@ -14,7 +14,7 @@ Function Get-TMdbTVImages {
             - [String]  URL         : "https://media.themoviedb.org/t/p/original/7bRHBrmSn5QLY1UJ32v4jeSoKzP.jpg"
 
     .PARAMETER SeriesID
-        REQUIRED. String. Alias: -i, -ShowID. The TV Series/Show ID. Example: 615
+        REQUIRED. String. Alias: -t, -ShowID. The TV Series/Show ID. Example: 615
 
     .PARAMETER SeasonNumber
         OPTIONAL. Int. Alias: -s. The Season Number of the Series/Show. Example: 1
@@ -36,13 +36,13 @@ Function Get-TMdbTVImages {
         Get-TMdbTVImages -ShowID 615
 
     .EXAMPLE
-        Get-TMdbTVImages -i 615 -s 1 -e 1
+        Get-TMdbTVImages -t 615 -s 1 -e 1
 
     #>
     [OutputType([Image[]])]
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)] [Alias('i','ShowID')] [String] $SeriesID,
+        [Parameter(Mandatory)] [Alias('t','ShowID')] [String] $SeriesID,
         [Parameter()]          [Alias('s')]          [System.Nullable[int]] $SeasonNumber,
         [Parameter()]          [Alias('e')]          [System.Nullable[int]] $EpisodeNumber,
         [Parameter()]          [Alias('l')]          [String] $Language = $((Get-Culture).Name.ToString())
@@ -64,15 +64,15 @@ Function Get-TMdbTVImages {
         ) -Join ''
 
         Write-Msg -p -ps -m ( 'Querying TMDB for TV Images ...' )
-        Write-Msg -i -il 1 -m ( 'Series/Show ID: {0}'  -f $SeriesID )
+        Write-Msg -i -il 1 -m ( 'Series/Show ID: {0}'      -f $SeriesID )
         if ( $SeasonNumber ) {
             Write-Msg -i -il 1 -m ( 'Season Number: {0}'   -f $SeasonNumber )
         }
         if ( $EpisodeNumber ) {
             Write-Msg -i -il 1 -m ( 'Episode Number: {0}'  -f $EpisodeNumber )
         }
-        Write-Msg -d -il 1 -m ( 'Token: {0}...'        -f $($env:TMDB_API_TOKEN).Substring(0,8) )
-        Write-Msg -d -il 1 -m ( 'Query: {0}'           -f $SearchURL )
+        Write-Msg -d -il 1 -m ( 'Token: {0}...'            -f $($env:TMDB_API_TOKEN).Substring(0,8) )
+        Write-Msg -d -il 1 -m ( 'Query: {0}'               -f $SearchURL )
         
         $r = Invoke-HttpRequest -u $SearchURL -t $env:TMDB_API_TOKEN -j -d
 

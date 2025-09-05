@@ -41,7 +41,7 @@
 
   # Execute a request using a valid TV Show ID and Season Number and Episode Number.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVExternalIDs :: Show, Season and Episode' )
-    Get-TMdbTVExternalIDs -i 615 -s 1 -e 1
+    Get-TMdbTVExternalIDs -t 615 -s 1 -e 1
 
     exit
 
@@ -59,4 +59,4 @@
 
   # Execute a request using a valid TV Show ID and Season Number and an INVALID Episode Number.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVExternalIDs :: ** FAILURE EXPECTED ** ' )
-    Get-TMdbTVExternalIDs -i 615 -s 1 -e 1111
+    Get-TMdbTVExternalIDs -t 615 -s 1 -e 1111

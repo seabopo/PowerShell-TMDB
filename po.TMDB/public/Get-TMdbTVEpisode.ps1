@@ -28,7 +28,7 @@ Function Get-TMdbTVEpisode {
             - [Image[]]  Images
 
     .PARAMETER SeriesID
-        REQUIRED. String. Alias: -i, -ShowID. The TV Series/Show ID. Example: 615
+        REQUIRED. String. Alias: -t, -ShowID. The TV Series/Show ID. Example: 615
 
     .PARAMETER SeasonNumber
         REQUIRED. Int. Alias: -s. The Season Number of the Series/Show. Example: 1
@@ -71,13 +71,13 @@ Function Get-TMdbTVEpisode {
         Get-TMdbTVEpisode -ShowID 615 -SeasonNumber 1 -EpisodeNumber 1 -IncludeEpisodeCastCredits
 
     .EXAMPLE
-        Get-TMdbTVEpisode -i 615 -s 1 -e 1 -cce -imge -xide
+        Get-TMdbTVEpisode -t 615 -s 1 -e 1 -cce -imge -xide
 
     #>
     [OutputType([TVEpisode])]
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)] [Alias('i','ShowID')] [String] $SeriesID,
+        [Parameter(Mandatory)] [Alias('t','ShowID')] [String] $SeriesID,
         [Parameter(Mandatory)] [Alias('s')]          [Int]    $SeasonNumber,
         [Parameter(Mandatory)] [Alias('e')]          [Int]    $EpisodeNumber,
         [Parameter()]          [Alias('cce')]        [Switch] $IncludeEpisodeCastCredits,
@@ -118,21 +118,21 @@ Function Get-TMdbTVEpisode {
                 if ( Test-IsNothing($episode.ShowID) ) { $episode.ShowID = $SeriesID }
 
                 if ( $IncludeEpisodeCastCredits ) {
-                    $c = Get-TMdbTVCredits -i $SeriesID -s $SeasonNumber -e $EpisodeNumber -l $Language
+                    $c = Get-TMdbTVCredits -t $SeriesID -s $SeasonNumber -e $EpisodeNumber -l $Language
                     if ( $c.success ) {
                         $episode.Cast = $c.value.cast
                     }
                 }
 
                 if ( $IncludeEpisodeImages ) {
-                    $i = Get-TMdbTVImages -i $SeriesID -s $SeasonNumber -e $EpisodeNumber -l $Language
+                    $i = Get-TMdbTVImages -t $SeriesID -s $SeasonNumber -e $EpisodeNumber -l $Language
                     if ( $i.success ) {
                         $episode.Images = $i.value
                     }
                 }
 
                 if ( $IncludeEpisodeExternalIDs ) {
-                    $x = Get-TMdbTVExternalIDs -i $SeriesID -s $SeasonNumber -e $EpisodeNumber
+                    $x = Get-TMdbTVExternalIDs -t $SeriesID -s $SeasonNumber -e $EpisodeNumber
                     if ( $x.success ) {
                         $episode.ExternalIDs = $x.value
                     }

@@ -41,7 +41,7 @@
 
   # Execute a request for all available Episode options.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVEpisode :: ** WITH ** All Options' )
-    Get-TMdbTVEpisode -i 615 -s 1 -e 1 -cce -xide -imge
+    Get-TMdbTVEpisode -t 615 -s 1 -e 1 -cce -xide -imge
 
     exit
 
@@ -63,8 +63,8 @@
 
   # Execute a request for all Episode details.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVEpisode :: ** WITH ** All Options' )
-    Get-TMdbTVEpisode -i 615 -s 1 -e 1 -cce -xide -imge
+    Get-TMdbTVEpisode -t 615 -s 1 -e 1 -cce -xide -imge
 
   # Execute an INVALID request.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVEpisode :: ** FAILURE EXPECTED ** ' )
-    Get-TMdbTVEpisode -i 615 -s 1 -e 9999
+    Get-TMdbTVEpisode -t 615 -s 1 -e 9999

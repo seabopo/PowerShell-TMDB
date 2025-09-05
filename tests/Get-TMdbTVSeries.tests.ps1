@@ -194,7 +194,7 @@ Describe 'TMDB TV Series Tests' {
         }
 
         It 'Test all parameter aliases' {
-            $result = Get-TMdbTVShow -i 615 -ccc -img -xid -isd -ccs -imgs -xids -ccse
+            $result = Get-TMdbTVShow -t 615 -ccc -img -xid -isd -ccs -imgs -xids -ccse
             $result.success | Should -BeTrue
             
             $series  = $result.value

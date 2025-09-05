@@ -27,7 +27,7 @@ Function Get-TMdbTVSeason {
             - [Image[]]     Images
 
     .PARAMETER SeriesID
-        REQUIRED. String. Alias: -i, -ShowID. The TV Series/Show ID. Example: 615
+        REQUIRED. String. Alias: -t, -ShowID. The TV Series/Show ID. Example: 615
 
     .PARAMETER SeasonNumber
         REQUIRED. Int. Alias: -s. The Season Number of the Series/Show. Example: 1
@@ -87,13 +87,13 @@ Function Get-TMdbTVSeason {
         Get-TMdbTVSeason -ShowID 615 -SeasonNumber 1 -IncludeEpisodeCastCredits -IncludeEpisodeImages
 
     .EXAMPLE
-        Get-TMdbTVSeason -i 615 -s 1 -ccs -imgs -xids -ccse -imge -xide
+        Get-TMdbTVSeason -t 615 -s 1 -ccs -imgs -xids -ccse -imge -xide
 
     #>
     [OutputType([TVSeason])]
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)] [Alias('i','ShowID')] [String] $SeriesID,
+        [Parameter(Mandatory)] [Alias('t','ShowID')] [String] $SeriesID,
         [Parameter(Mandatory)] [Alias('s')]          [Int]    $SeasonNumber,
         [Parameter()]          [Alias('ccs')]        [Switch] $IncludeSeasonCastCredits,
         [Parameter()]          [Alias('imgs')]       [Switch] $IncludeSeasonImages,
@@ -142,7 +142,7 @@ Function Get-TMdbTVSeason {
                 }
 
                 if ( $IncludeSeasonCastCredits -or $IncludeSeasonCastCreditsForEpisodes ) {
-                    $c = Get-TMdbTVCredits -i $SeriesID -s $SeasonNumber -l $Language
+                    $c = Get-TMdbTVCredits -t $SeriesID -s $SeasonNumber -l $Language
                     if ( $c.success ) {
                         if ( $IncludeSeasonCastCredits ) {
                             $season.Cast = $c.value.cast
@@ -159,14 +159,14 @@ Function Get-TMdbTVSeason {
                 }
 
                 if ( $IncludeSeasonImages ) {
-                    $i = Get-TMdbTVImages -i $SeriesID -s $SeasonNumber -l $Language
+                    $i = Get-TMdbTVImages -t $SeriesID -s $SeasonNumber -l $Language
                     if ( $i.success ) {
                         $season.Images = $i.value
                     }
                 }
 
                if ( $IncludeSeasonExternalIDs ) {
-                    $x = Get-TMdbTVExternalIDs -i $SeriesID -s $SeasonNumber
+                    $x = Get-TMdbTVExternalIDs -t $SeriesID -s $SeasonNumber
                     if ( $x.success ) {
                         $season.ExternalIDs = $x.value
                     }
@@ -174,7 +174,7 @@ Function Get-TMdbTVSeason {
 
                 if ( $IncludeEpisodeCastCredits ) {
                     $season.Episodes | ForEach-Object {
-                        $c = Get-TMdbTVCredits -i $_.ShowID -s $_.Season -e $_.Number  -l $Language
+                        $c = Get-TMdbTVCredits -t $_.ShowID -s $_.Season -e $_.Number  -l $Language
                         if ( $c.success ) {
                             $_.Cast = $c.value.cast
                         }
@@ -183,7 +183,7 @@ Function Get-TMdbTVSeason {
 
                 if ( $IncludeEpisodeImages ) {
                     $season.Episodes | ForEach-Object {
-                        $i = Get-TMdbTVImages -i $_.ShowID -s $_.Season -e $_.Number -l $Language
+                        $i = Get-TMdbTVImages -t $_.ShowID -s $_.Season -e $_.Number -l $Language
                         if ( $i.success ) {
                             $_.Images = $i.value
                         }
@@ -192,7 +192,7 @@ Function Get-TMdbTVSeason {
 
                 if ( $IncludeEpisodeExternalIDs ) {
                     $season.Episodes | ForEach-Object {
-                        $x = Get-TMdbTVExternalIDs -i $_.ShowID -s $_.Season -e $_.Number
+                        $x = Get-TMdbTVExternalIDs -t $_.ShowID -s $_.Season -e $_.Number
                         if ( $x.success ) {
                             $_.ExternalIDs = $x.value
                         }

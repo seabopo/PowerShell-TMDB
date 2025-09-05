@@ -40,7 +40,7 @@ Function Get-TMdbTVSeries {
             - [Image[]]         Images
 
     .PARAMETER SeriesID
-        REQUIRED. String. Alias: -i, -ShowID. The TMDB TV Series/Show ID. Example: 615
+        REQUIRED. String. Alias: -t, -ShowID. The TMDB TV Series/Show ID. Example: 615
 
     .PARAMETER IncludeCastAndCrewCredits
         OPTIONAL. Switch. Alias: -ccc. The TMDB Series/Show details do not include the cast or crew credits, which
@@ -114,14 +114,14 @@ Function Get-TMdbTVSeries {
         Get-TMdbTVShow -ShowID 615 -IncludeCredits
 
     .EXAMPLE
-        Get-TMdbTVSeries -i 615 -c
+        Get-TMdbTVSeries -t 615 -c
 
     #>
     [Alias('Get-TMdbTVShow')]
     [OutputType([TVShow])]
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)] [Alias('i','ShowID')] [String] $SeriesID,
+        [Parameter(Mandatory)] [Alias('t','ShowID')] [String] $SeriesID,
 
         [Parameter()]          [Alias('ccc')]        [Switch] $IncludeCastAndCrewCredits,
         [Parameter()]          [Alias('img')]        [Switch] $IncludeImages,
@@ -173,7 +173,7 @@ Function Get-TMdbTVSeries {
                 }
 
                 if ( $IncludeCastAndCrewCredits ) {
-                    $c = Get-TMdbTVCredits -i $SeriesID -l $Language
+                    $c = Get-TMdbTVCredits -t $SeriesID -l $Language
                     if ( $c.success ) {
                         $show.Cast = $c.value.cast
                         $show.Crew = $c.value.crew
@@ -181,14 +181,14 @@ Function Get-TMdbTVSeries {
                 }
 
                 if ( $IncludeImages ) {
-                    $i = Get-TMdbTVImages -i $SeriesID -l $Language
+                    $i = Get-TMdbTVImages -t $SeriesID -l $Language
                     if ( $i.success ) {
                         $show.Images = $i.value
                     }
                 }
 
                 if ( $IncludeExternalIDs ) {
-                    $x = Get-TMdbTVExternalIDs -i $SeriesID
+                    $x = Get-TMdbTVExternalIDs -t $SeriesID
                     if ( $x.success ) {
                         $show.ExternalIDs = $x.value
                     }

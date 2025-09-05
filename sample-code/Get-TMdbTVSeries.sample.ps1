@@ -45,7 +45,7 @@
   #         $myShow = $request.value
   #     }
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeries :: Full Series and Season Data (Includes Episodes)' )
-    $myShow = $(Get-TMdbTVShow -i 501 -ccc -img -xid -isd -ccs -imgs -xids -ccse).value
+    $myShow = $(Get-TMdbTVShow -t 501 -ccc -img -xid -isd -ccs -imgs -xids -ccse).value
 
     exit
 
@@ -86,4 +86,4 @@
 
   # Attempt a request for a show that doesn't exist.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVSeries:: ** FAILURE EXPECTED ** ' )
-    Get-TMdbTVSeries -i 19211921
+    Get-TMdbTVSeries -t 19211921

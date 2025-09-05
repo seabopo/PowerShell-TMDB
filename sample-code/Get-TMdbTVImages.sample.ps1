@@ -41,9 +41,9 @@
 
   # Execute a request using a valid TMDB TV Show ID and Season Number and Episode Number.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVImages :: Episode' )
-    Get-TMdbTVImages -i 615 -s 1 -e 1
+    Get-TMdbTVImages -t 615 -s 1 -e 1
     
-    exit
+    # exit
 
   # Execute a request using a valid TV Show ID and Season Number and Episode Number.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVImages :: Episode' )
@@ -59,4 +59,4 @@
 
   # Execute a request using a valid TV Show ID and Season Number and an INVALID Episode Number.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVImages :: ** FAILURE EXPECTED ** ' )
-    Get-TMdbTVImages -i 615 -s 1 -e 1111
+    Get-TMdbTVImages -t 615 -s 1 -e 1111

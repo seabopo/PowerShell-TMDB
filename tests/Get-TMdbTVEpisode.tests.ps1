@@ -70,7 +70,7 @@ Describe 'TMDB TV Episode Tests' {
 
         It 'Test all parameter aliases' {
 
-            $result = Get-TMdbTVEpisode -i 615 -s 1 -e 1 -cce -xide -imge
+            $result = Get-TMdbTVEpisode -t 615 -s 1 -e 1 -cce -xide -imge
             $result.success | Should -BeTrue
 
             $episode = $result.value
