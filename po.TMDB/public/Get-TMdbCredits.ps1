@@ -1,7 +1,7 @@
-Function Get-TMdbTVCredits {
+Function Get-TMdbCredits {
     <#
     .DESCRIPTION
-        Gets the credits of a TV Show, TV Season or TV Episode.
+        Gets the credits of a Movie, TV Show, TV Season or TV Episode.
 
     .OUTPUTS
         A collection of [Credit] objects with the following properties:
@@ -14,6 +14,9 @@ Function Get-TMdbTVCredits {
             - [Int]    CreditOrder      : The order in which the person's credit appears in the Movie or TV Show.
             - [String] ProfileImagePath : The persons profile image name.
             - [String] ProfileImageURL  : The fully-qualified URL to the person's profile image.
+
+    .PARAMETER MovieID
+        REQUIRED. String. Alias: -m. The Movie ID. Example: 18
 
     .PARAMETER SeriesID
         REQUIRED. String. Alias: -t, -ShowID. The TV Series/Show ID. Example: 615
@@ -29,53 +32,78 @@ Function Get-TMdbTVCredits {
         operating system settings. Example: en-US
 
     .EXAMPLE
-        Get-TMdbTVCredits -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
+        Get-TMdbCredits -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
 
     .EXAMPLE
-        Get-TMdbTVCredits -SeriesID 615 -SeasonNumber 1
+        Get-TMdbCredits -SeriesID 615 -SeasonNumber 1
 
     .EXAMPLE
-        Get-TMdbTVCredits -ShowID 615
+        Get-TMdbCredits -ShowID 615
 
     .EXAMPLE
-        Get-TMdbTVCredits -t 615 -s 1 -e 1
+        Get-TMdbCredits -MovieID 615
+
+    .EXAMPLE
+        Get-TMdbCredits -t 615 -s 1 -e 1
+
+    .EXAMPLE
+        Get-TMdbCredits -m 18
 
     #>
     [OutputType([Credit[]])]
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)] [Alias('t','ShowID')] [String] $SeriesID,
-        [Parameter()]          [Alias('s')]          [System.Nullable[int]] $SeasonNumber,
-        [Parameter()]          [Alias('e')]          [System.Nullable[int]] $EpisodeNumber,
-        [Parameter()]          [Alias('l')]          [String] $Language = $((Get-Culture).Name.ToString())
+        [Parameter(ParameterSetName = "M", Mandatory)] 
+        [Alias('m')]          [String] $MovieID,
+
+        [Parameter(ParameterSetName = "T", Mandatory)] 
+        [Alias('t','ShowID')] [String] $SeriesID,
+
+        [Parameter(ParameterSetName = "T")]
+        [Alias('s')]          [System.Nullable[int]] $SeasonNumber,
+        
+        [Parameter(ParameterSetName = "T")]
+        [Alias('e')]          [System.Nullable[int]] $EpisodeNumber,
+        
+        [Parameter()]
+        [Alias('l')]          [String] $Language = $((Get-Culture).Name.ToString())
     )
 
     process {
 
         Write-Msg -FunctionCall -IncludeParameters
 
-        $season  = ( $null -eq $SeasonNumber  ) ? $null : $( '/season/{0}'  -f $SeasonNumber )
-        $episode = ( $null -eq $EpisodeNumber ) ? $null : $( '/episode/{0}' -f $EpisodeNumber )
+        if ( Test-IsSomething($MovieID) ) {
+            $label  = 'Movie'
+            $itemID = $MovieID
+            $query  = $('/movie/{0}' -f $MovieID)
+        }
+        else {
+            $label   = 'Series/Show'
+            $itemID  = $SeriesID
+            $show    = $('/tv/{0}' -f $SeriesID)
+            $season  = ( $null -eq $SeasonNumber  ) ? $null : $( '/season/{0}'  -f $SeasonNumber )
+            $episode = ( $null -eq $EpisodeNumber ) ? $null : $( '/episode/{0}' -f $EpisodeNumber )
+            $query   = @( $show, $season, $episode ) -Join ''
+        }
 
         $SearchURL = @(
             $( $API_BASE_URI ),
-            $( '/tv/{0}' -f $SeriesID ),
-            $( $season ),
-            $( $episode ),
+            $( $query ),
             $( '/credits' ),
             $( '?language={0}' -f $Language )
         ) -Join ''
 
-        Write-Msg -p -ps -m ( 'Querying TMDB for TV Credits ...' )
-        Write-Msg -i -il 1 -m ( 'Series/Show ID: {0}'      -f $SeriesID )
+        Write-Msg -p -ps -m ( 'Querying TMDB for Credits ...' )
+        Write-Msg -i -il 1 -m ( '{0} ID: {1}'             -f $label, $itemID )
         if ( $SeasonNumber ) {
-            Write-Msg -i -il 1 -m ( 'Season Number: {0}'   -f $SeasonNumber )
+            Write-Msg -i -il 1 -m ( 'Season Number: {0}'  -f $SeasonNumber )
         }
         if ( $EpisodeNumber ) {
-            Write-Msg -i -il 1 -m ( 'Episode Number: {0}'  -f $EpisodeNumber )
+            Write-Msg -i -il 1 -m ( 'Episode Number: {0}' -f $EpisodeNumber )
         }
-        Write-Msg -d -il 1 -m ( 'Token: {0}...'            -f $($env:TMDB_API_TOKEN).Substring(0,8) )
-        Write-Msg -d -il 1 -m ( 'Query: {0}'               -f $SearchURL )
+        Write-Msg -d -il 1 -m ( 'Token: {0}...'           -f $($env:TMDB_API_TOKEN).Substring(0,8) )
+        Write-Msg -d -il 1 -m ( 'Query: {0}'              -f $SearchURL )
         
         $r = Invoke-HttpRequest -u $SearchURL -t $env:TMDB_API_TOKEN -j -d
 

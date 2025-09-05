@@ -1,6 +1,6 @@
 #==================================================================================================================
 #==================================================================================================================
-# Test: Get-TMdbTVCredits
+# Test: Get-TMdbCredits
 #==================================================================================================================
 #==================================================================================================================
 #
@@ -37,10 +37,10 @@ Describe 'TMDB Credits Tests' {
         $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
     }
 
-    Describe 'Get-TMdbTVCredits' {
+    Describe 'Get-TMdbCredits - TV Series' {
 
-        It 'Get Credits for a TV Show Episode' {
-            $credits = Get-TMdbTVCredits -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
+        It 'Get Credits for a TV Series/Show Episode' {
+            $credits = Get-TMdbCredits -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
             $credits.success      | Should -BeTrue
             $credits.value        | Should -HaveCount 1
             $credits.value.cast   | Should -HaveCount 10
@@ -51,8 +51,8 @@ Describe 'TMDB Credits Tests' {
             $credits.value.guests | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
         }
 
-        It 'Get Credits for a TV Show Episode' {
-            $credits = Get-TMdbTVCredits -SeriesID 615 -SeasonNumber 1
+        It 'Get Credits for a TV Series/Show Season' {
+            $credits = Get-TMdbCredits -SeriesID 615 -SeasonNumber 1
             $credits.success      | Should -BeTrue
             $credits.value        | Should -HaveCount 1
             $credits.value.cast   | Should -HaveCount 10
@@ -61,8 +61,8 @@ Describe 'TMDB Credits Tests' {
             $credits.value.crew   | Select-Object -ExpandProperty 'name' | Should -Contain 'David X. Cohen'
         }
 
-        It 'Get Credits for a TV Show Episode' {
-            $credits = Get-TMdbTVCredits -SeriesID 615
+        It 'Get Credits for a TV Series/Show' {
+            $credits = Get-TMdbCredits -SeriesID 615
             $credits.success      | Should -BeTrue
             $credits.value        | Should -HaveCount 1
             $credits.value.cast   | Should -HaveCount 9
@@ -72,8 +72,8 @@ Describe 'TMDB Credits Tests' {
         }
 
         It 'Test all parameter aliases' {
-            $credits = Get-TMdbTVCredits -t 615 -s 1 -e 1
-            $credits.success | Should -BeTrue
+            $credits = Get-TMdbCredits -t 615 -s 1 -e 1
+            $credits.success      | Should -BeTrue
             $credits.value        | Should -HaveCount 1
             $credits.value.cast   | Should -HaveCount 10
             $credits.value.crew   | Should -HaveCount 4
@@ -81,6 +81,30 @@ Describe 'TMDB Credits Tests' {
             $credits.value.cast   | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
             $credits.value.crew   | Select-Object -ExpandProperty 'name' | Should -Contain 'Matt Groening'
             $credits.value.guests | Select-Object -ExpandProperty 'name' | Should -Contain 'Leonard Nimoy'
+        }
+
+    }
+
+    Describe 'Get-TMdbCredits - Movies' {
+
+        It 'Get Credits for a Movie' {
+            $credits = Get-TMdbCredits -MovieID 18
+            $credits.success      | Should -BeTrue
+            $credits.value        | Should -HaveCount 1
+            $credits.value.cast   | Should -HaveCount 120
+            $credits.value.crew   | Should -HaveCount 349
+            $credits.value.cast   | Select-Object -ExpandProperty 'name' | Should -Contain 'Bruce Willis'
+            $credits.value.crew   | Select-Object -ExpandProperty 'name' | Should -Contain 'Luc Besson'
+        }
+
+        It 'Test all parameter aliases' {
+            $credits = Get-TMdbCredits -m 18
+            $credits.success      | Should -BeTrue
+            $credits.value        | Should -HaveCount 1
+            $credits.value.cast   | Should -HaveCount 120
+            $credits.value.crew   | Should -HaveCount 349
+            $credits.value.cast   | Select-Object -ExpandProperty 'name' | Should -Contain 'Bruce Willis'
+            $credits.value.crew   | Select-Object -ExpandProperty 'name' | Should -Contain 'Luc Besson'
         }
 
     }
