@@ -15,7 +15,7 @@ Function Get-TMdbContentRatings {
         REQUIRED. String. Alias: -m. The Movie ID. Example: 18
 
     .PARAMETER SeriesID
-        REQUIRED. String. Alias: -tv, -ShowID. The TV Series/Show ID. Example: 615
+        REQUIRED. String. Alias: -t, -ShowID. The TV Series/Show ID. Example: 615
 
     .PARAMETER Country
         OPTIONAL. String. Alias: -l. The desired target country of the query. The value defaults to the 
@@ -35,7 +35,7 @@ Function Get-TMdbContentRatings {
         Get-TMdbContentRatings -MovieID 18 -Country 'US'
 
     .EXAMPLE
-        Get-TMdbContentRatings -tv 615 -a
+        Get-TMdbContentRatings -t 615 -a
 
     .EXAMPLE
         Get-TMdbContentRatings -m 18
@@ -46,16 +46,16 @@ Function Get-TMdbContentRatings {
     param (
 
         [Parameter(ParameterSetName = "M", Mandatory)] 
-        [Alias('m')]           [String] $MovieID,
+        [Alias('m')]          [String] $MovieID,
 
         [Parameter(ParameterSetName = "T", Mandatory)] 
-        [Alias('tv','ShowID')] [String] $SeriesID,
+        [Alias('t','ShowID')] [String] $SeriesID,
 
         [Parameter()]
-        [Alias('c')]           [String] $Country = $((Get-Culture).Name.ToString().Split('-')[1]),
+        [Alias('c')]          [String] $Country = $((Get-Culture).Name.ToString().Split('-')[1]),
 
         [Parameter()]
-        [Alias('a')]           [Switch] $AllRatings
+        [Alias('a')]          [Switch] $AllRatings
     )
 
     process {

@@ -51,9 +51,9 @@
 
   # Execute a request using a valid TMDB TV Show ID.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbContentRatings :: Series' )
-    Get-TMdbContentRatings -tv 615
+    Get-TMdbContentRatings -t 615
 
-    # exit
+    exit
 
   # Execute a request using the default language value.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbContentRatings :: Series with Default Country' )

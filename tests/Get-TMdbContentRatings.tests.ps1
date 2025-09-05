@@ -76,7 +76,7 @@ Describe 'TMDB Content Ratings Tests' {
         }
 
         It 'Test all parameter aliases' {
-            $ratings = Get-TMdbContentRatings -tv 615 -a
+            $ratings = Get-TMdbContentRatings -t 615 -a
             $ratings.success       | Should -BeTrue
             $ratings.value         | Should -HaveCount 35
         }
