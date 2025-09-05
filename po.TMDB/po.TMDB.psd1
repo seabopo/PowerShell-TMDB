@@ -24,7 +24,7 @@ GUID = '0de4ef0a-0959-4883-b699-0aec57f00ac0'
 Author = 'Sean Powell (seabopo)'
 
 # Company or vendor of this module
-CompanyName = 'Unknown'
+CompanyName = ''
 
 # Copyright statement for this module
 Copyright = '(c) Sean Powell. MIT License.'
@@ -51,7 +51,7 @@ PowerShellVersion = '7.4.0'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @('po.Toolkit')
+RequiredModules = @('po.Toolkit','po.MediaClasses')
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
@@ -69,7 +69,14 @@ RequiredModules = @('po.Toolkit')
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = '*'
+FunctionsToExport = @('Get-TMdbContentRatings',
+                      'Find-TMdbTVSeries',
+                      'Get-TMdbTVSeries','Get-TMdbTVSeason','Get-TMdbTVEpisode',
+                      'Get-TMdbTVCredits','Get-TMdbTVGenres','Get-TMdbTVExternalIDs','Get-TMdbTVImages',
+                      'Find-TMdbMovie',
+                      'Get-TMdbMovie',
+                      'Get-TMdbMovieGenres','Get-TMdbMovieImages','Get-TMdbMovieExternalIDs',
+                      'Get-MovieFromSearchResults')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = '*'
@@ -78,7 +85,7 @@ CmdletsToExport = '*'
 VariablesToExport = '*'
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = '*'
+AliasesToExport = @('Find-TMdbTVShows','Get-TMdbTVShow')
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()

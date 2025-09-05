@@ -17,6 +17,13 @@
     Set-Variable -Scope 'Script' -Name "PS_MODULE_ROOT"  -Value $PSScriptRoot
     Set-Variable -Scope 'Script' -Name "PS_MODULE_NAME"  -Value $($PSScriptRoot | Split-Path -Leaf)
 
+    Set-Variable -Scope 'Script' -Name "API_BASE_URI"  -Value 'https://api.themoviedb.org/3'
+    Set-Variable -Scope 'Script' -Name "IMG_BASE_URI"  -Value 'https://media.themoviedb.org/t/p/original'
+
+    Set-Variable -Scope 'Script' -Name "TMDB_GENRE_LANGUAGE"
+    Set-Variable -Scope 'Script' -Name "TMDB_TV_GENRES"
+    Set-Variable -Scope 'Script' -Name "TMDB_MOVIE_GENRES"
+
     $defaultVerboseTypes = '["Header","Process","Information","Debug","FunctionCall","FunctionResult"]'
 
     if ( $null -eq $env:PS_STATUSMESSAGE_VERBOSE_MESSAGE_TYPES ) {
@@ -41,10 +48,7 @@
     }
 
   # Export all the public functions and aliases (enable for testing only - it affects automatic function discovery)
-    Export-ModuleMember -Function * -Alias *
-
-  # Export the public variables (these must be done here, they don't work when done in the manifest.)
-    # Export-ModuleMember -Variable PS_VARIABLE
+    # Export-ModuleMember -Function * -Alias *
 
   # Load all private functions
     $privateFunctionsRootFolders | ForEach-Object {
