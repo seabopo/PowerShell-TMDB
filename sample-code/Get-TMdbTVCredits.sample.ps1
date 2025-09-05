@@ -45,7 +45,7 @@
 
   # Execute a request using a valid TMDB TV Show ID and Season Number and Episode Number.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVCredits :: Series, Season and Episode' )
-    Get-TMdbTVCredits -i 615 -s 1 -e 1
+    Get-TMdbTVCredits -t 615 -s 1 -e 1
 
     exit
 
@@ -63,4 +63,4 @@
 
   # Execute a request using a valid TMDB TV Show ID and Season Number and an INVALID Episode Number.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbTVCredits :: ** FAILURE EXPECTED ** ' )
-    Get-TMdbTVEpisode -i 615 -s 1 -e 1111
+    Get-TMdbTVEpisode -t 615 -s 1 -e 1111

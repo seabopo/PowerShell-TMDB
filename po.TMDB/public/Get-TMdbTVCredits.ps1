@@ -16,7 +16,7 @@ Function Get-TMdbTVCredits {
             - [String] ProfileImageURL  : The fully-qualified URL to the person's profile image.
 
     .PARAMETER SeriesID
-        REQUIRED. String. Alias: -i, -ShowID. The TV Series/Show ID. Example: 615
+        REQUIRED. String. Alias: -t, -ShowID. The TV Series/Show ID. Example: 615
 
     .PARAMETER SeasonNumber
         OPTIONAL. Int. Alias: -s. The Season Number of the Series/Show. Example: 1
@@ -38,13 +38,13 @@ Function Get-TMdbTVCredits {
         Get-TMdbTVCredits -ShowID 615
 
     .EXAMPLE
-        Get-TMdbTVCredits -i 615 -s 1 -e 1
+        Get-TMdbTVCredits -t 615 -s 1 -e 1
 
     #>
     [OutputType([Credit[]])]
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory)] [Alias('i','ShowID')] [String] $SeriesID,
+        [Parameter(Mandatory)] [Alias('t','ShowID')] [String] $SeriesID,
         [Parameter()]          [Alias('s')]          [System.Nullable[int]] $SeasonNumber,
         [Parameter()]          [Alias('e')]          [System.Nullable[int]] $EpisodeNumber,
         [Parameter()]          [Alias('l')]          [String] $Language = $((Get-Culture).Name.ToString())

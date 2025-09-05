@@ -72,7 +72,7 @@ Describe 'TMDB Credits Tests' {
         }
 
         It 'Test all parameter aliases' {
-            $credits = Get-TMdbTVCredits -i 615 -s 1 -e 1
+            $credits = Get-TMdbTVCredits -t 615 -s 1 -e 1
             $credits.success | Should -BeTrue
             $credits.value        | Should -HaveCount 1
             $credits.value.cast   | Should -HaveCount 10
