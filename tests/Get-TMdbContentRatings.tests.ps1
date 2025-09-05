@@ -1,13 +1,21 @@
 #==================================================================================================================
 #==================================================================================================================
-# Test: Get-TMdbMovieContentRatings
+# Test: Get-TMdbContentRatings
 #==================================================================================================================
 #==================================================================================================================
 #
 # Sample Data
 # -----------------------------------------------------------------------------------------------------------------
-# Movie Name                                           ID
+# Series / Movie Name                                  ID    Seasons    Episodes
 # -----------------------------------------------------------------------------------------------------------------
+# Futurama                                            615      10        150+
+# Luther                                             1426       5         20
+# Gilligan's Island                                  1921       3         98
+# Gilligan's Planet                                   631       1         13
+# The New Adventures of Gilligan                     2982       2         24
+# Battlestar Galactica (1978)                         501       1         21
+# Battlestar Galactica (2004)                        1972       4         75
+#
 # Aladdin (1992)                                      812
 # The Fifth Element (1997)                             18
 # Harry Potter and the Philosopher's Stone (2001)     671
@@ -25,7 +33,7 @@
 # Override the Default Debug Logging Setting
   # $env:PS_STATUSMESSAGE_SHOW_VERBOSE_MESSAGES = $true
 
-Describe 'TMDB Movie Content Ratings Tests' {
+Describe 'TMDB Content Ratings Tests' {
 
     BeforeDiscovery {
         
@@ -36,17 +44,56 @@ Describe 'TMDB Movie Content Ratings Tests' {
         $defaultCountry = $((Get-Culture).Name.ToString().Split('-')[1])
     }
 
-    Describe 'Get-TMdbMovieContentRatings' {
+    Describe 'Get-TMdbContentRatings TV Series Tests' {
+
+        It 'Get the default Content Rating for a TV Show' {
+            $rating = Get-TMdbContentRatings -SeriesID 615
+            $rating.success       | Should -BeTrue
+            $rating.value         | Should -HaveCount 1
+            $rating.value.Country | Should -Be $defaultCountry
+        }
+
+        It 'Get the US Content Rating for a TV Show' {
+            $ratings = Get-TMdbContentRatings -SeriesID 615 -Country 'US'
+            $ratings.success       | Should -BeTrue
+            $ratings.value         | Should -HaveCount 1
+            $ratings.value.Country | Should -Be 'US'
+            $ratings.value.Rating  | Should -Be 'TV-14'
+        }
+
+        It 'Get the AU Content Rating for a TV Show' {
+            $ratings = Get-TMdbContentRatings -SeriesID 615 -Country 'AU'
+            $ratings.success       | Should -BeTrue
+            $ratings.value         | Should -HaveCount 1
+            $ratings.value.Country | Should -Be 'AU'
+            $ratings.value.Rating  | Should -Be 'M'
+        }
+
+        It 'Get all available Content Ratings for a TV Show' {
+            $ratings = Get-TMdbContentRatings -SeriesID 615 -AllRatings
+            $ratings.success       | Should -BeTrue
+            $ratings.value         | Should -HaveCount 35
+        }
+
+        It 'Test all parameter aliases' {
+            $ratings = Get-TMdbContentRatings -tv 615 -a
+            $ratings.success       | Should -BeTrue
+            $ratings.value         | Should -HaveCount 35
+        }
+
+    }
+
+    Describe 'Get-TMdbContentRatings Movie Tests' {
 
         It 'Get the default Content Rating for a Movie' {
-            $ratings = Get-TMdbMovieContentRatings -MovieID 497698
+            $ratings = Get-TMdbContentRatings -MovieID 497698
             $ratings.success       | Should -BeTrue
             $ratings.value         | Should -HaveCount 1
             $ratings.value.Country | Should -Be $defaultCountry
         }
 
         It 'Get the US Content Rating for a Movie' {
-            $ratings = Get-TMdbMovieContentRatings -MovieID 497698 -Country 'US'
+            $ratings = Get-TMdbContentRatings -MovieID 497698 -Country 'US'
             $ratings.success       | Should -BeTrue
             $ratings.value         | Should -HaveCount 1
             $ratings.value.Country | Should -Be 'US'
@@ -54,7 +101,7 @@ Describe 'TMDB Movie Content Ratings Tests' {
         }
 
         It 'Get the AU Content Rating for a Movie' {
-            $ratings = Get-TMdbMovieContentRatings -MovieID 497698 -Country 'AU'
+            $ratings = Get-TMdbContentRatings -MovieID 497698 -Country 'AU'
             $ratings.success       | Should -BeTrue
             $ratings.value         | Should -HaveCount 1
             $ratings.value.Country | Should -Be 'AU'
@@ -62,13 +109,13 @@ Describe 'TMDB Movie Content Ratings Tests' {
         }
 
         It 'Get all available Content Ratings for a Movie' {
-            $ratings = Get-TMdbMovieContentRatings -MovieID 497698 -AllRatings
+            $ratings = Get-TMdbContentRatings -MovieID 497698 -AllRatings
             $ratings.success       | Should -BeTrue
             $ratings.value         | Should -HaveCount 39
         }
 
         It 'Test all parameter aliases' {
-            $ratings = Get-TMdbMovieContentRatings -i 497698 -a
+            $ratings = Get-TMdbContentRatings -m 497698 -a
             $ratings.success       | Should -BeTrue
             $ratings.value         | Should -HaveCount 39
         }

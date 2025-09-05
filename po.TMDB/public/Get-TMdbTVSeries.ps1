@@ -166,7 +166,7 @@ Function Get-TMdbTVSeries {
 
                 $show.Seasons | ForEach-Object { $_.ShowID = $SeriesID}
 
-                $r = Get-TMdbTVContentRatings -i $SeriesID -c $($($Language.Split('-')[1]))
+                $r = Get-TMdbContentRatings -tv $SeriesID -c $($($Language.Split('-')[1]))
                 if ( $r.success ) {
                     $show.Ratings = $r.value
                     $show.Rating  = $($r.value | Select-Object -First 1 -ExpandProperty 'rating')
