@@ -9,7 +9,7 @@ Clear-Host
 $ErrorActionPreference = "Stop"
 
 $env:PS_STATUSMESSAGE_VERBOSE_MESSAGE_TYPES = '["Process","Information","Debug","FunctionCall","FunctionResult"]'
-$env:PS_STATUSMESSAGE_SHOW_VERBOSE_MESSAGES = $true
+$env:PS_STATUSMESSAGE_SHOW_VERBOSE_MESSAGES = $false
 
 Set-Location  -Path $PSScriptRoot
 Push-Location -Path $PSScriptRoot
