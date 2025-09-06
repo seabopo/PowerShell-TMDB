@@ -78,14 +78,7 @@ Function Get-TVSeriesFromDetails {
                                else { ([datetime]($SeriesData.first_air_date)).Year } )
             FirstAirDate  = $SeriesData.first_air_date
             LastAirDate   = $SeriesData.last_air_date
-            Networks      = @( if ( Test-IsNothing($SeriesData.networks) ) { $null }
-                               else { $SeriesData.networks | Get-EntityFromDetails } )
-            Studios       = @( if ( Test-IsNothing($SeriesData.production_companies) ) { $null }
-                               else { $SeriesData.production_companies | Get-EntityFromDetails } )
             Country       = $SeriesData.origin_country
-            Genres        = $SeriesData.genres
-            Creators      = @( if ( Test-IsNothing($SeriesData.created_by) ) { $null }
-                               else { $SeriesData.created_by | Get-CreditFromDetails -t 'Creator' } )
             HomePage      = $SeriesData.homepage
             PosterPath    = $SeriesData.poster_path
             BackdropPath  = $SeriesData.backdrop_path
@@ -96,6 +89,28 @@ Function Get-TVSeriesFromDetails {
             Seasons       = $( if ( Test-IsNothing($SeriesData.seasons) ) { $null }
                                else { $SeriesData.seasons | Get-TVSeasonFromDetails } )
         }))
+
+        if ( Test-IsSomething($SeriesData.genre_ids) ) {
+            $show.Genres = $SeriesData.genre_ids | ForEach-Object {
+                                [Item]::New($_,$(Get-GenreNameFromID -TV -ID $_))
+                            }
+        }
+
+        if ( Test-IsSomething($SeriesData.genres) ) {
+            $show.Genres = $SeriesData.genres
+        }
+
+        if ( Test-IsSomething($SeriesData.created_by) ) {
+            $show.Creators = $SeriesData.created_by | Get-CreditFromDetails -t 'Creator'
+        }
+
+        if ( Test-IsSomething($SeriesData.networks) ) { 
+            $show.Networks = $SeriesData.networks | Get-EntityFromDetails
+        }
+
+        if ( Test-IsSomething($SeriesData.production_companies) ) { 
+            $show.Studios = $SeriesData.production_companies | Get-EntityFromDetails
+        }
 
         Write-Msg -FunctionResult -o $show
 

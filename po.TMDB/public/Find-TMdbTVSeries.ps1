@@ -126,7 +126,7 @@ Function Find-TMdbTVSeries {
 
                 ($r.value | ConvertFrom-Json).results | 
                     ForEach-Object { 
-                        $shows+= $($_ | Get-TVSeriesFromSearchResults)
+                        $shows+= $($_ | Get-TVSeriesFromDetails)
                     }
 
             }
