@@ -173,7 +173,7 @@ Function Get-TMdbTVSeries {
                 }
 
                 if ( $IncludeCastAndCrewCredits ) {
-                    $c = Get-TMdbTVCredits -t $SeriesID -l $Language
+                    $c = Get-TMdbCredits -t $SeriesID -l $Language
                     if ( $c.success ) {
                         $show.Cast = $c.value.cast
                         $show.Crew = $c.value.crew
@@ -181,14 +181,14 @@ Function Get-TMdbTVSeries {
                 }
 
                 if ( $IncludeImages ) {
-                    $i = Get-TMdbTVImages -t $SeriesID -l $Language
+                    $i = Get-TMdbImages -t $SeriesID -l $($Language.Split('-')[0])
                     if ( $i.success ) {
                         $show.Images = $i.value
                     }
                 }
 
                 if ( $IncludeExternalIDs ) {
-                    $x = Get-TMdbTVExternalIDs -t $SeriesID
+                    $x = Get-TMdbExternalIDs -t $SeriesID
                     if ( $x.success ) {
                         $show.ExternalIDs = $x.value
                     }
