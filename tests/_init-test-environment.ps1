@@ -26,5 +26,5 @@ else {
     exit
 }
 
-Import-Module $mediaClassesPath
+# Import-Module $mediaClassesPath
 Import-Module $modulePath -Force
