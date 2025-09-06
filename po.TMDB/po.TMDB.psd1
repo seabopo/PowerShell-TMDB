@@ -70,7 +70,7 @@ RequiredModules = @('po.Toolkit','po.MediaClasses')
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = @('Get-TMdbContentRatings','Get-TMdbCredits','Get-TMdbImages','Get-TMdbExternalIDs',
-                      'Get-TMdbMovieGenres','Get-TMdbTVGenres',
+                      'Get-TMdbGenres',
                       'Find-TMdbTVSeries','Get-TMdbTVSeries','Get-TMdbTVSeason','Get-TMdbTVEpisode',
                       'Find-TMdbMovie','Get-TMdbMovie')
 

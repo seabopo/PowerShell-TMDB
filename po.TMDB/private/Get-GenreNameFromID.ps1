@@ -41,7 +41,7 @@ Function Get-GenreNameFromID {
         
         if ( $TV ) {
             if ( $(Test-IsNothing($Script:TMDB_TV_GENRES)) -or $($Script:TMDB_GENRE_LANGUAGE -ne $Language) ) {
-                $r = Get-TMdbTVGenres -l $Language
+                $r = Get-TMdbGenres -t -l $Language
                 if ( $r.success ) {
                     $Script:TMDB_TV_GENRES = $r.value
                 }
@@ -50,7 +50,7 @@ Function Get-GenreNameFromID {
         }
         else {
             if ( $(Test-IsNothing($Script:TMDB_MOVIE_GENRES)) -or $($Script:TMDB_GENRE_LANGUAGE -ne $Language) ) {
-                $r = Get-TMdbMovieGenres -l $Language
+                $r = Get-TMdbGenres -m -l $Language
                 if ( $r.success ) {
                     $Script:TMDB_MOVIE_GENRES = $r.value
                 }

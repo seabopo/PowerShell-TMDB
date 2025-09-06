@@ -1,6 +1,6 @@
 #==================================================================================================================
 #==================================================================================================================
-# Test: Get-TMdbMovieGenres
+# Test: Get-TMdbGenres
 #==================================================================================================================
 #==================================================================================================================
 
@@ -26,13 +26,21 @@
     $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
 
   # Execute a request using the default language.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbMovieGenres :: Default Language' )
-    Get-TMdbMovieGenres | Out-Null
+    Write-Msg -h -ps -bb -m $( ' Get-TMdbGenres :: Movie - Default Language' )
+    Get-TMdbGenres -m | Out-Null
 
   # Execute a request using a custom language.
-    Write-Msg -h -ps -bb -m $( ' Get-TMdbMovieGenres :: Custom Language' )
-    Get-TMdbMovieGenres -Language 'es-US'
+    Write-Msg -h -ps -bb -m $( ' Get-TMdbGenres :: Movie - Custom Language' )
+    Get-TMdbGenres -Movie -Language 'es-US'
+
+  # Execute a request using the default language.
+    Write-Msg -h -ps -bb -m $( ' Get-TMdbGenres :: TV - Default Language' )
+    Get-TMdbGenres -t | Out-Null
+
+  # Execute a request using a custom language.
+    Write-Msg -h -ps -bb -m $( ' Get-TMdbGenres :: TV - Custom Language' )
+    Get-TMdbGenres -TV -Language 'es-US'
 
   # Execute a request using a non-existent language.
     Write-Msg -h -ps -bb -m $( ' Get-TMdbMovieGenres :: ** NULL GENRE NAMES EXPECTED ** ' )
-    Get-TMdbMovieGenres -Language 'xx-XX'
+    Get-TMdbGenres -Movie -Language 'xx-XX'
