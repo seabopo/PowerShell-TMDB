@@ -47,10 +47,10 @@ Function Get-TMdbGenres {
             }
     
     .PARAMETER Movie
-        OPTIONAL. String. Alias: -m. Get Movie genres.
+        REQUIRED. Switch. Alias: -m. Get Movie genres.
     
     .PARAMETER TV
-        OPTIONAL. String. Alias: -t. Get TV Genres.
+        REQUIRED. Switch. Alias: -t. Get TV Genres.
 
     .PARAMETER Language
         OPTIONAL. String. Alias: -l. The desired target language of the query. The value defaults to the user's 
@@ -89,12 +89,12 @@ Function Get-TMdbGenres {
         Write-Msg -FunctionCall -IncludeParameters
 
         if ( Test-IsSomething($Movie) ) {
-            $label  = 'Movie'
-            $query  = $('/genre/movie/list')
+            $label = 'Movie'
+            $query = $('/genre/movie/list')
         }
         else {
-            $label   = 'Series/Show'
-            $query   = $('/genre/tv/list')
+            $label = 'Series/Show'
+            $query = $('/genre/tv/list')
         }
 
         $SearchURL = @( $( $API_BASE_URI ), $query, $( '?language={0}' -f $Language ) ) -Join ''
