@@ -29,6 +29,9 @@ Function Get-TMdbImages {
         OPTIONAL. String. Alias: -l. The desired target language(s) of the query. The value defaults to the user's 
         operating system settings. Example: 'en' | @('en','es')
 
+        NOTE: This parameter uses only the basic (2-letter) language codes, and does not use the language/culture
+              codes that all the other functions use. This is due to the TMDBs api differences for image calls.
+
     .PARAMETER AllLanguages
         OPTIONAL. Switch. Alias: -a. Return all images no matter what the language.
 
