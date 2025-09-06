@@ -43,6 +43,46 @@ Describe 'TMDB Image Tests' {
         $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
     }
 
+    Describe 'Get-TMdbImages - TV Shows' {
+
+        It 'Get images for a TV Show Episode' {
+            $images = Get-TMdbImages -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
+            $images.success | Should -BeTrue
+            $images.value   | Should -HaveCount 2
+            $images.value   | Where-Object { $_.type -eq 'still'    } | Should -HaveCount 2
+            $images.value   | Where-Object { $_.type -eq 'poster'   } | Should -HaveCount 0
+            $images.value   | Where-Object { $_.type -eq 'backdrop' } | Should -HaveCount 0
+            $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 0
+        }
+
+        It 'Get images for a TV Show Season' {
+            $images = Get-TMdbImages -SeriesID 615 -SeasonNumber 1
+            $images.success | Should -BeTrue
+            $images.value   | Should -HaveCount 15
+            $images.value   | Where-Object { $_.type -eq 'still'    } | Should -HaveCount 0
+            $images.value   | Where-Object { $_.type -eq 'poster'   } | Should -HaveCount 15
+            $images.value   | Where-Object { $_.type -eq 'backdrop' } | Should -HaveCount 0
+            $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 0
+        }
+
+        It 'Get images for a TV Show' {
+            $images = Get-TMdbImages -SeriesID 615
+            $images.success | Should -BeTrue
+            $images.value   | Should -HaveCount 145
+            $images.value   | Where-Object { $_.type -eq 'still'    } | Should -HaveCount 0
+            $images.value   | Where-Object { $_.type -eq 'poster'   } | Should -HaveCount 53
+            $images.value   | Where-Object { $_.type -eq 'backdrop' } | Should -HaveCount 81
+            $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 11
+        }
+
+        It 'Test all parameter aliases' {
+            $images = Get-TMdbImages -t 615 -s 1 -e 1 -l 'en-US'
+            $images.success | Should -BeTrue
+            $images.value   | Should -HaveCount 2
+        }
+
+    }
+
     Describe 'Get-TMdbImages - Movies' {
 
         It 'Get images for a Movie with the default language' {
@@ -88,46 +128,6 @@ Describe 'TMDB Image Tests' {
             $images = Get-TMdbImages -m 615 -l 'en'
             $images.success | Should -BeTrue
             $images.value   | Should -HaveCount 66
-        }
-
-    }
-
-    Describe 'Get-TMdbImages - TV Shows' {
-
-        It 'Get images for a TV Show Episode' {
-            $images = Get-TMdbImages -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
-            $images.success | Should -BeTrue
-            $images.value   | Should -HaveCount 2
-            $images.value   | Where-Object { $_.type -eq 'still'    } | Should -HaveCount 2
-            $images.value   | Where-Object { $_.type -eq 'poster'   } | Should -HaveCount 0
-            $images.value   | Where-Object { $_.type -eq 'backdrop' } | Should -HaveCount 0
-            $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 0
-        }
-
-        It 'Get images for a TV Show Season' {
-            $images = Get-TMdbImages -SeriesID 615 -SeasonNumber 1
-            $images.success | Should -BeTrue
-            $images.value   | Should -HaveCount 15
-            $images.value   | Where-Object { $_.type -eq 'still'    } | Should -HaveCount 0
-            $images.value   | Where-Object { $_.type -eq 'poster'   } | Should -HaveCount 15
-            $images.value   | Where-Object { $_.type -eq 'backdrop' } | Should -HaveCount 0
-            $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 0
-        }
-
-        It 'Get images for a TV Show' {
-            $images = Get-TMdbImages -SeriesID 615
-            $images.success | Should -BeTrue
-            $images.value   | Should -HaveCount 145
-            $images.value   | Where-Object { $_.type -eq 'still'    } | Should -HaveCount 0
-            $images.value   | Where-Object { $_.type -eq 'poster'   } | Should -HaveCount 53
-            $images.value   | Where-Object { $_.type -eq 'backdrop' } | Should -HaveCount 81
-            $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 11
-        }
-
-        It 'Test all parameter aliases' {
-            $images = Get-TMdbImages -t 615 -s 1 -e 1 -l 'en-US'
-            $images.success | Should -BeTrue
-            $images.value   | Should -HaveCount 2
         }
 
     }

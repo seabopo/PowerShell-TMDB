@@ -43,25 +43,6 @@ Describe 'TMDB External ID Tests' {
         $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
     }
 
-    Describe 'Get-TMdbExternalIDs for Movies' {
-
-        It 'Get IDs for a Movie' {
-            $xIDs = Get-TMdbExternalIDs -MovieID 18
-            $xIDs.success | Should -BeTrue
-            $xIDs.value   | Should -HaveCount 3
-            $names = $xIDs.value | Select-Object -ExpandProperty 'name'
-            $names -contains 'tmdb'   | Should -BeTrue
-            $names -contains 'imdb'   | Should -BeTrue
-        }
-
-        It 'Test all parameter aliases' {
-            $xIDs = Get-TMdbExternalIDs -m 18
-            $xIDs.success | Should -BeTrue
-            $xIDs.value   | Should -HaveCount 3
-        }
-
-    }
-
     Describe 'Get-TMdbExternalIDs for TV Series/Shows' {
 
         It 'Get IDs for a TV Show Episode' {
@@ -101,6 +82,25 @@ Describe 'TMDB External ID Tests' {
             $xIDs = Get-TMdbExternalIDs -t 615 -s 1 -e 1
             $xIDs.success | Should -BeTrue
             $xIDs.value   | Should -HaveCount 7
+        }
+
+    }
+
+    Describe 'Get-TMdbExternalIDs for Movies' {
+
+        It 'Get IDs for a Movie' {
+            $xIDs = Get-TMdbExternalIDs -MovieID 18
+            $xIDs.success | Should -BeTrue
+            $xIDs.value   | Should -HaveCount 3
+            $names = $xIDs.value | Select-Object -ExpandProperty 'name'
+            $names -contains 'tmdb'   | Should -BeTrue
+            $names -contains 'imdb'   | Should -BeTrue
+        }
+
+        It 'Test all parameter aliases' {
+            $xIDs = Get-TMdbExternalIDs -m 18
+            $xIDs.success | Should -BeTrue
+            $xIDs.value   | Should -HaveCount 3
         }
 
     }
