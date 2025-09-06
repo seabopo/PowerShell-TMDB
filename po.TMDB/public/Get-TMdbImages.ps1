@@ -1,7 +1,7 @@
 Function Get-TMdbImages {
     <#
     .DESCRIPTION
-        Gets the poster, background, logo or still images of a Movie, TV Show, Season or Episode.
+        Gets the poster, background, logo or still images of a Movie, TV Show, TV Season or TV Episode.
 
     .OUTPUTS
         A collection of [Image] objects. Each object contains the following properties:
