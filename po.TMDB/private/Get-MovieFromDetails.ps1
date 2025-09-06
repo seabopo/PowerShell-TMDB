@@ -64,14 +64,12 @@ Function Get-MovieFromDetails {
             OriginalTitle    = $MovieData.original_title
             OriginalLanguage = $MovieData.original_language
             Description      = $MovieData.overview
-            Genres           = $MovieData.genres
+
             ReleaseDate      = $MovieData.release_date
             Year             = $( if ( Test-IsNothing($MovieData.release_date) ) { '' } 
                                   else { ([datetime]($MovieData.release_date)).Year } )
             Status           = $MovieData.status
             Runtime          = $MovieData.runtime
-            Studios          = @( if ( Test-IsNothing($MovieData.production_companies) ) { $null }
-                                  else { $MovieData.production_companies | Get-EntityFromDetails } )
             Budget           = $MovieData.budget
             Revenue          = $MovieData.revenue
             HomePage         = $MovieData.homepage
@@ -81,13 +79,30 @@ Function Get-MovieFromDetails {
                                   else { $IMG_BASE_URI + $MovieData.poster_path } )
             BackdropURL      = @( if ( Test-IsNothing($MovieData.backdrop_path) ) { $null }
                                   else { $IMG_BASE_URI + $MovieData.backdrop_path } )
-            ExternalIDs      = @( if ( Test-IsNothing($MovieData.imdb_id) ) { $null }
-                                  else { [Item]::new(@{ name = 'imdb'; id = $MovieData.imdb_id }) } )
-            Collections      = @( if ( Test-IsNothing($MovieData.belongs_to_collection) ) { }
-                                  else { $MovieData.belongs_to_collection | Get-CollectionFromDetails })
-            
         }))
 
+        if ( Test-IsSomething($MovieData.genre_ids) ) {
+            $movie.Genres = $MovieData.genre_ids | ForEach-Object {
+                                [Item]::New($_,$(Get-GenreNameFromID -Movie -ID $_))
+                            }
+        }
+
+        if ( Test-IsSomething($MovieData.genres) ) {
+            $movie.Genres = $MovieData.genres
+        }
+             
+        if ( Test-IsSomething($MovieData.production_companies) ) { 
+            $movie.Studios = $MovieData.production_companies | Get-EntityFromDetails
+        }
+
+        if ( Test-IsSomething($MovieData.imdb_id) ) { 
+            $movie.ExternalIDs = [Item]::new(@{ name = 'imdb'; id = $MovieData.imdb_id })
+        }
+ 
+        if ( Test-IsSomething($MovieData.belongs_to_collection) ) { 
+            $MovieData.Collections = $MovieData.belongs_to_collection | Get-CollectionFromDetails
+        }
+       
         Write-Msg -FunctionResult -o $movie
 
         return $movie

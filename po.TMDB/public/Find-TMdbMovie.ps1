@@ -119,8 +119,8 @@ Function Find-TMdbMovie {
                 }
 
                  ($r.value | ConvertFrom-Json).results | 
-                    ForEach-Object { 
-                        $movies += $( $_ | Get-MovieFromSearchResults )
+                    ForEach-Object {
+                        $movies += $( $_ | Get-MovieFromDetails )
                     }
 
             }
