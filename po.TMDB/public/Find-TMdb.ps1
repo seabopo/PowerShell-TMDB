@@ -76,7 +76,7 @@ Function Find-TMdb {
         Find-TMdb -t -n "Gilligan's Island" -y "1967"
 
     #>
-    [OutputType([Movie[]])]
+    [OutputType([Movie[]],[TVShow[]])]
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
