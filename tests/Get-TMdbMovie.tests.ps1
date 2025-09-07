@@ -112,7 +112,7 @@ Describe 'TMDB Movie Tests' {
             $movie.cast             | Select-Object -ExpandProperty 'name' | Should -Contain 'Bruce Willis'
             $movie.crew             | Select-Object -ExpandProperty 'name' | Should -Contain 'Luc Besson'
             $movie.Collections      | Should -Be $null
-            $movie.Images           | Should -HaveCount 127
+            $movie.Images           | Should -HaveCount 128
             $movie.ExternalIDs      | Should -HaveCount 3
             $movie.ExternalIDs      | Select-Object -ExpandProperty 'name' | Should -Contain 'imdb'
         }
@@ -153,7 +153,7 @@ Describe 'TMDB Movie Tests' {
             $movie.cast             | Select-Object -ExpandProperty 'name' | Should -Contain 'Bruce Willis'
             $movie.crew             | Select-Object -ExpandProperty 'name' | Should -Contain 'Luc Besson'
             $movie.Collections      | Should -Be $null
-            $movie.Images           | Should -HaveCount 127
+            $movie.Images           | Should -HaveCount 128
             $movie.ExternalIDs      | Should -HaveCount 3
             $movie.ExternalIDs      | Select-Object -ExpandProperty 'name' | Should -Contain 'imdb'
         }
