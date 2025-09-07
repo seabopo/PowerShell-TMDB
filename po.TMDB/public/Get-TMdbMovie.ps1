@@ -37,7 +37,7 @@ Function Get-TMdbMovie {
             - [Item[]]          ExternalIDs
 
     .PARAMETER MovieID
-        REQUIRED. String. Alias: -i. The Movie ID. Example: 18
+        REQUIRED. String. Alias: -m. The Movie ID. Example: 18
 
     .PARAMETER IncludeImages
         OPTIONAL. Switch. Alias: -img. TMDB includes a single poster and backdrop image representing the Movie 
@@ -61,7 +61,7 @@ Function Get-TMdbMovie {
         Get-TMdbMovie -MovieID 18 -IncludeImages
 
     .EXAMPLE
-        Get-TMdbMovie -i 18 -img
+        Get-TMdbMovie -m 18 -img
 
     #>
     [OutputType([Movie])]
