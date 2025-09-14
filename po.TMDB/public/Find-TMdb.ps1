@@ -13,7 +13,6 @@ Function Find-TMdb {
             - [String] OriginalTitle
             - [String] OriginalLanguage
             - [String] Description
-            - [String] LongDescription
             - [Item[]] Genres
             - [String] ReleaseDate
             - [String] Year

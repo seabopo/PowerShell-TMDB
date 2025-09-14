@@ -13,8 +13,7 @@ Function Get-TVEpisodeFromDetails {
             - [int32]    Number
             - [String]   Type
             - [String]   Title
-            - [String]   Description (255 characters or less)
-            - [String]   LongDescription (More than 255 characters)
+            - [String]   Description
             - [Credit[]] Cast
             - [Credit[]] Crew
             - [Credit[]] Guests

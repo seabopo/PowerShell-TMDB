@@ -13,7 +13,6 @@ Function Get-MovieFromDetails {
             - [String]          OriginalTitle
             - [String]          OriginalLanguage
             - [String]          Description
-            - [String]          LongDescription
             - [String]          Genre
             - [Item[]]          Genres
             - [String]          ReleaseDate

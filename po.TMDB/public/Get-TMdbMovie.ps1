@@ -13,7 +13,6 @@ Function Get-TMdbMovie {
             - [String]          OriginalTitle
             - [String]          OriginalLanguage
             - [String]          Description
-            - [String]          LongDescription
             - [String]          Genre
             - [Item[]]          Genres
             - [String]          ReleaseDate
