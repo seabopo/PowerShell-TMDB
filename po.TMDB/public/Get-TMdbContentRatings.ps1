@@ -18,7 +18,7 @@ Function Get-TMdbContentRatings {
         REQUIRED. String. Alias: -t, -ShowID. The TV Series/Show ID. Example: 615
 
     .PARAMETER Country
-        OPTIONAL. String. Alias: -l. The desired target country of the query. The value defaults to the 
+        OPTIONAL. String. Alias: -c. The desired target country of the query. The value defaults to the 
         user's operating system settings. Example: US
 
     .PARAMETER AllRatings
