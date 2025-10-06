@@ -12,7 +12,7 @@
 RootModule = 'po.TMDB.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.2'
+ModuleVersion = '0.0.1'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core', 'Desktop'
@@ -24,13 +24,13 @@ GUID = '0de4ef0a-0959-4883-b699-0aec57f00ac0'
 Author = 'Sean Powell (seabopo)'
 
 # Company or vendor of this module
-CompanyName = ''
+# CompanyName = ''
 
 # Copyright statement for this module
 Copyright = '(c) Sean Powell. MIT License.'
 
 # Description of the functionality provided by this module
-# Description = ''
+Description = 'Gets TV and Movie metadata from the TMDB api.'
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '7.4.0'
@@ -98,13 +98,13 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        Tags = @('PowerShell','TMDB','The Movie Database')
 
         # A URL to the license for this module.
-        # LicenseUri = ''
+        LicenseUri = 'https://github.com/seabopo/PowerShell-TMDB/blob/main/LICENSE'
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/seabopo/PowerShell-TMDB'
 
         # A URL to an icon representing this module.
         # IconUri = ''
@@ -126,7 +126,7 @@ PrivateData = @{
 } # End of PrivateData hashtable
 
 # HelpInfo URI of this module
-# HelpInfoURI = ''
+HelpInfoURI = 'https://github.com/seabopo/PowerShell-TMDB'
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 # DefaultCommandPrefix = ''
