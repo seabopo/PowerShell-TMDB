@@ -56,7 +56,7 @@ Describe 'TMDB TV Series Tests' {
             $series.Year             | Should -Be '1999'
             $series.Creators         | Should -HaveCount 1
             $series.Creators[0].name | Should -Be 'Matt Groening'
-            $series.Cast             | Should -HaveCount 9
+            $series.Cast             | Should -HaveCount 8
             $series.Crew             | Should -HaveCount 4
             $series.Cast             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
             $series.Crew             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
@@ -93,7 +93,7 @@ Describe 'TMDB TV Series Tests' {
             $series.Year             | Should -Be '1999'
             $series.Creators         | Should -HaveCount 1
             $series.Creators[0].name | Should -Be 'Matt Groening'
-            $series.Cast             | Should -HaveCount 9
+            $series.Cast             | Should -HaveCount 8
             $series.Crew             | Should -HaveCount 4
             $series.Cast             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
             $series.Crew             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
@@ -117,7 +117,7 @@ Describe 'TMDB TV Series Tests' {
             $season.Episodes         | Should -HaveCount 9
             $season.ExternalIDs      | Should -HaveCount 4
             $season.Images           | Should -HaveCount 15
-            $season.cast             | Should -HaveCount 10
+            $season.cast             | Should -HaveCount 9
             $season.crew             | Should -HaveCount 21
             $season.cast             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
             $season.crew             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
@@ -127,7 +127,7 @@ Describe 'TMDB TV Series Tests' {
             $episode.ProductionCode  | Should -Be '1ACV01'
             $episode.ExternalIDs     | Should -BeNullOrEmpty
             $episode.Images          | Should -BeNullOrEmpty
-            $episode.cast            | Should -HaveCount 10
+            $episode.cast            | Should -HaveCount 9
             $episode.crew            | Should -HaveCount 4
             $episode.guests          | Should -HaveCount 3
             $episode.cast            | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
@@ -156,7 +156,7 @@ Describe 'TMDB TV Series Tests' {
             $series.Year             | Should -Be '1999'
             $series.Creators         | Should -HaveCount 1
             $series.Creators[0].name | Should -Be 'Matt Groening'
-            $series.Cast             | Should -HaveCount 9
+            $series.Cast             | Should -HaveCount 8
             $series.Crew             | Should -HaveCount 4
             $series.Cast             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
             $series.Crew             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
@@ -184,7 +184,7 @@ Describe 'TMDB TV Series Tests' {
             $episode.ProductionCode  | Should -Be '1ACV01'
             $episode.ExternalIDs     | Should -HaveCount 7
             $episode.Images          | Should -HaveCount 2
-            $episode.cast            | Should -HaveCount 10
+            $episode.cast            | Should -HaveCount 9
             $episode.crew            | Should -HaveCount 4
             $episode.guests          | Should -HaveCount 3
             $episode.cast            | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
@@ -210,7 +210,7 @@ Describe 'TMDB TV Series Tests' {
             $series.Year             | Should -Be '1999'
             $series.Creators         | Should -HaveCount 1
             $series.Creators[0].name | Should -Be 'Matt Groening'
-            $series.Cast             | Should -HaveCount 9
+            $series.Cast             | Should -HaveCount 8
             $series.Crew             | Should -HaveCount 4
             $series.Cast             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
             $series.Crew             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
@@ -234,7 +234,7 @@ Describe 'TMDB TV Series Tests' {
             $season.Episodes         | Should -HaveCount 9
             $season.ExternalIDs      | Should -HaveCount 4
             $season.Images           | Should -HaveCount 15
-            $season.cast             | Should -HaveCount 10
+            $season.cast             | Should -HaveCount 9
             $season.crew             | Should -HaveCount 21
             $season.cast             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
             $season.crew             | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
@@ -242,7 +242,7 @@ Describe 'TMDB TV Series Tests' {
  
             $episode.Title           | Should -Be 'Space Pilot 3000'
             $episode.ProductionCode  | Should -Be '1ACV01'
-            $episode.cast            | Should -HaveCount 10
+            $episode.cast            | Should -HaveCount 9
             $episode.crew            | Should -HaveCount 4
             $episode.guests          | Should -HaveCount 3
             $episode.cast            | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'

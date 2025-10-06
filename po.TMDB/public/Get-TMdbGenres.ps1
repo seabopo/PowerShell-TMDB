@@ -111,14 +111,17 @@ Function Get-TMdbGenres {
                 ForEach-Object { 
                     $genres[($_.id.ToString())] = $_.name
                 }
+            $result = @{ success = $true; value = $genres }
+        }
+        elseif ( -not $r.success -and $r.statusCode -eq 404 ) {
+            $result = @{ success = $false; message = 'No results found for query.' }
         }
         else {
-            Write-Msg -e -ps -ds -m $($r.message)
-            $r.success = $false
+            $result = $r
         }
 
-        Write-Msg -FunctionResult -m $( 'Genres: ') -o $genres
+        Write-Msg -FunctionResult -o $result
 
-        return @{ success = $r.success; value = $genres }
+        return $result
     }
 }

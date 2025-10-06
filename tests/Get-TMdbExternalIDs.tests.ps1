@@ -35,10 +35,6 @@
 
 Describe 'TMDB External ID Tests' {
 
-    BeforeDiscovery {
-        
-    }
-
     BeforeAll {
         $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
     }

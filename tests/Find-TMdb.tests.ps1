@@ -35,10 +35,6 @@
 
 Describe 'TMDB Search Tests' {
 
-    BeforeDiscovery {
-        
-    }
-
     BeforeAll {
         $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
     }
@@ -48,7 +44,7 @@ Describe 'TMDB Search Tests' {
         It 'Get the results of a TV Show Search for Star Trek' {
             $results = Find-TMdb -TV -Query 'Star Trek'
             $results.success | Should -BeTrue
-            $results.value   | Should -HaveCount 27
+            $results.value   | Should -HaveCount 30
             $results.value   | Where-Object { $_.Name -eq 'Star Trek: Deep Space Nine' } | Should -HaveCount 1
         }
 
@@ -77,7 +73,7 @@ Describe 'TMDB Search Tests' {
         It 'Get the results of a Movie Search for Harry Potter' {
             $results = Find-TMdb -Movie -Query 'Harry Potter'
             $results.success | Should -BeTrue
-            $results.value   | Should -HaveCount 24
+            $results.value   | Should -HaveCount 25
             $results.value   | Where-Object { $_.Title -eq "Harry Potter and the Philosopher's Stone" } | 
                                Should -HaveCount 1
         }

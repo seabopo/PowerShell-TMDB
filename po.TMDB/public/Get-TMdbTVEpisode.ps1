@@ -137,18 +137,23 @@ Function Get-TMdbTVEpisode {
                     }
                 }
 
+                $result = @{ success = $true; value = $episode }
+
+            }
+            else {
+                $result = @{ success = $true; value = $null }
             }
 
         }
         elseif ( -not $r.success -and $r.statusCode -eq 404 ) {
-            Write-Msg -e -ps -ds -m $('No results found for query.')
+            $result = @{ success = $false; message = 'No results found for query.' }
         }
         else {
-            Write-Msg -e -ps -ds -m $($r.message)
+            $result = $r
         }
 
-        Write-Msg -FunctionResult -Object $episode -MaxRecursionDepth 5
+        Write-Msg -FunctionResult -Object $result -MaxRecursionDepth 5
 
-        return @{ success = $r.success; value = $episode }
+        return $result
     }
 }

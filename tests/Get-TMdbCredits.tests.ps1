@@ -35,10 +35,6 @@
 
 Describe 'TMDB Credits Tests' {
 
-    BeforeDiscovery {
-        
-    }
-
     BeforeAll {
         $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
     }
@@ -49,7 +45,7 @@ Describe 'TMDB Credits Tests' {
             $credits = Get-TMdbCredits -SeriesID 615 -SeasonNumber 1 -EpisodeNumber 1
             $credits.success      | Should -BeTrue
             $credits.value        | Should -HaveCount 1
-            $credits.value.cast   | Should -HaveCount 10
+            $credits.value.cast   | Should -HaveCount 9
             $credits.value.crew   | Should -HaveCount 4
             $credits.value.guests | Should -HaveCount 3
             $credits.value.cast   | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
@@ -61,7 +57,7 @@ Describe 'TMDB Credits Tests' {
             $credits = Get-TMdbCredits -SeriesID 615 -SeasonNumber 1
             $credits.success      | Should -BeTrue
             $credits.value        | Should -HaveCount 1
-            $credits.value.cast   | Should -HaveCount 10
+            $credits.value.cast   | Should -HaveCount 9
             $credits.value.crew   | Should -HaveCount 21
             $credits.value.cast   | Select-Object -ExpandProperty 'name' | Should -Contain 'Katey Sagal'
             $credits.value.crew   | Select-Object -ExpandProperty 'name' | Should -Contain 'David X. Cohen'
@@ -71,7 +67,7 @@ Describe 'TMDB Credits Tests' {
             $credits = Get-TMdbCredits -SeriesID 615
             $credits.success      | Should -BeTrue
             $credits.value        | Should -HaveCount 1
-            $credits.value.cast   | Should -HaveCount 9
+            $credits.value.cast   | Should -HaveCount 8
             $credits.value.crew   | Should -HaveCount 4
             $credits.value.cast   | Select-Object -ExpandProperty 'name' | Should -Contain 'John DiMaggio'
             $credits.value.crew   | Select-Object -ExpandProperty 'name' | Should -Contain 'Ken Keeler'
@@ -81,7 +77,7 @@ Describe 'TMDB Credits Tests' {
             $credits = Get-TMdbCredits -t 615 -s 1 -e 1
             $credits.success      | Should -BeTrue
             $credits.value        | Should -HaveCount 1
-            $credits.value.cast   | Should -HaveCount 10
+            $credits.value.cast   | Should -HaveCount 9
             $credits.value.crew   | Should -HaveCount 4
             $credits.value.guests | Should -HaveCount 3
             $credits.value.cast   | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'

@@ -29,10 +29,6 @@
 
 Describe 'TMDB TV Season Tests' {
 
-    BeforeDiscovery {
-        
-    }
-
     BeforeAll {
         $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
     }
@@ -58,7 +54,7 @@ Describe 'TMDB TV Season Tests' {
             $season.Episodes        | Should -HaveCount 9
             $season.ExternalIDs     | Should -HaveCount 4
             $season.Images          | Should -HaveCount 15
-            $season.cast            | Should -HaveCount 10
+            $season.cast            | Should -HaveCount 9
             $season.crew            | Should -HaveCount 21
             $season.cast            | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
             $season.crew            | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
@@ -68,7 +64,7 @@ Describe 'TMDB TV Season Tests' {
             $episode.ProductionCode | Should -Be '1ACV01'
             $episode.ExternalIDs    | Should -BeNullOrEmpty
             $episode.Images         | Should -BeNullOrEmpty
-            $episode.cast           | Should -HaveCount 10
+            $episode.cast           | Should -HaveCount 9
             $episode.crew           | Should -HaveCount 4
             $episode.guests         | Should -HaveCount 3
             $episode.cast           | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
@@ -97,7 +93,7 @@ Describe 'TMDB TV Season Tests' {
             $season.Episodes        | Should -HaveCount 9
             $season.ExternalIDs     | Should -HaveCount 4
             $season.Images          | Should -HaveCount 15
-            $season.cast            | Should -HaveCount 10
+            $season.cast            | Should -HaveCount 9
             $season.crew            | Should -HaveCount 21
             $season.cast            | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
             $season.crew            | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
@@ -107,7 +103,7 @@ Describe 'TMDB TV Season Tests' {
             $episode.ProductionCode | Should -Be '1ACV01'
             $episode.ExternalIDs    | Should -HaveCount 7
             $episode.Images         | Should -HaveCount 2
-            $episode.cast           | Should -HaveCount 10
+            $episode.cast           | Should -HaveCount 9
             $episode.crew           | Should -HaveCount 4
             $episode.guests         | Should -HaveCount 3
             $episode.cast           | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'
@@ -134,7 +130,7 @@ Describe 'TMDB TV Season Tests' {
             $season.Episodes        | Should -HaveCount 9
             $season.ExternalIDs     | Should -HaveCount 4
             $season.Images          | Should -HaveCount 15
-            $season.cast            | Should -HaveCount 10
+            $season.cast            | Should -HaveCount 9
             $season.crew            | Should -HaveCount 21
             $season.cast            | Select-Object -ExpandProperty 'name'  | Should -Contain 'Billy West'
             $season.crew            | Select-Object -ExpandProperty 'name'  | Should -Contain 'Matt Groening'
@@ -144,7 +140,7 @@ Describe 'TMDB TV Season Tests' {
             $episode.ProductionCode | Should -Be '1ACV01'
             $episode.ExternalIDs    | Should -HaveCount 7
             $episode.Images         | Should -HaveCount 2
-            $episode.cast           | Should -HaveCount 10
+            $episode.cast           | Should -HaveCount 9
             $episode.crew           | Should -HaveCount 4
             $episode.guests         | Should -HaveCount 3
             $episode.cast           | Select-Object -ExpandProperty 'name' | Should -Contain 'Billy West'

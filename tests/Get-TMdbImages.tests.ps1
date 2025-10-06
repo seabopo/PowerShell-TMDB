@@ -35,10 +35,6 @@
 
 Describe 'TMDB Image Tests' {
 
-    BeforeDiscovery {
-        
-    }
-
     BeforeAll {
         $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
     }
@@ -68,11 +64,11 @@ Describe 'TMDB Image Tests' {
         It 'Get images for a TV Show' {
             $images = Get-TMdbImages -SeriesID 615
             $images.success | Should -BeTrue
-            $images.value   | Should -HaveCount 145
+            $images.value   | Should -HaveCount 147
             $images.value   | Where-Object { $_.type -eq 'still'    } | Should -HaveCount 0
-            $images.value   | Where-Object { $_.type -eq 'poster'   } | Should -HaveCount 53
+            $images.value   | Where-Object { $_.type -eq 'poster'   } | Should -HaveCount 54
             $images.value   | Where-Object { $_.type -eq 'backdrop' } | Should -HaveCount 81
-            $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 11
+            $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 12
         }
 
         It 'Test all parameter aliases' {
@@ -88,26 +84,26 @@ Describe 'TMDB Image Tests' {
         It 'Get images for a Movie with the default language' {
             $images = Get-TMdbImages -MovieID 615
             $images.success | Should -BeTrue
-            $images.value   | Should -HaveCount 66
+            $images.value   | Should -HaveCount 65
             $images.value   | Where-Object { $_.type -eq 'still'    } | Should -HaveCount 0
             $images.value   | Where-Object { $_.type -eq 'poster'   } | Should -HaveCount 34
             $images.value   | Where-Object { $_.type -eq 'backdrop' } | Should -HaveCount 26
-            $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 6
+            $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 5
             $images.value   | Where-Object { $_.language -eq 'en'   } | Should -HaveCount 42
-            $images.value   | Where-Object { $_.language -eq ''     } | Should -HaveCount 24
+            $images.value   | Where-Object { $_.language -eq 'xx'   } | Should -HaveCount 23
         }
 
         It 'Get images for a Movie with two specified languages' {
             $images = Get-TMdbImages -MovieID 615 -Languages @('en','de')
             $images.success | Should -BeTrue
-            $images.value   | Should -HaveCount 70
+            $images.value   | Should -HaveCount 69
             $images.value   | Where-Object { $_.type -eq 'still'    } | Should -HaveCount 0
             $images.value   | Where-Object { $_.type -eq 'poster'   } | Should -HaveCount 37
             $images.value   | Where-Object { $_.type -eq 'backdrop' } | Should -HaveCount 26
-            $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 7
+            $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 6
             $images.value   | Where-Object { $_.language -eq 'en'   } | Should -HaveCount 42
             $images.value   | Where-Object { $_.language -eq 'de'   } | Should -HaveCount 4
-            $images.value   | Where-Object { $_.language -eq ''     } | Should -HaveCount 24
+            $images.value   | Where-Object { $_.language -eq 'xx'   } | Should -HaveCount 23
         }
 
         It 'Get images for a Movie with all languages' {
@@ -115,19 +111,19 @@ Describe 'TMDB Image Tests' {
             $images.success | Should -BeTrue
             $images.value   | Should -HaveCount 132
             $images.value   | Where-Object { $_.type -eq 'still'    } | Should -HaveCount 0
-            $images.value   | Where-Object { $_.type -eq 'poster'   } | Should -HaveCount 82
-            $images.value   | Where-Object { $_.type -eq 'backdrop' } | Should -HaveCount 33
+            $images.value   | Where-Object { $_.type -eq 'poster'   } | Should -HaveCount 81
+            $images.value   | Where-Object { $_.type -eq 'backdrop' } | Should -HaveCount 34
             $images.value   | Where-Object { $_.type -eq 'logo'     } | Should -HaveCount 17
             $images.value   | Where-Object { $_.language -eq 'en'   } | Should -HaveCount 42
             $images.value   | Where-Object { $_.language -eq 'de'   } | Should -HaveCount 4
-            $images.value   | Where-Object { $_.language -eq 'zh'   } | Should -HaveCount 2
-            $images.value   | Where-Object { $_.language -eq ''     } | Should -HaveCount 24
+            $images.value   | Where-Object { $_.language -eq 'zh'   } | Should -HaveCount 5
+            $images.value   | Where-Object { $_.language -eq 'xx'   } | Should -HaveCount 23
         }
 
         It 'Test all parameter aliases' {
             $images = Get-TMdbImages -m 615 -l 'en'
             $images.success | Should -BeTrue
-            $images.value   | Should -HaveCount 66
+            $images.value   | Should -HaveCount 65
         }
 
     }

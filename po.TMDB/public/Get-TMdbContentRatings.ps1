@@ -106,18 +106,20 @@ Function Get-TMdbContentRatings {
                     $ratings = $null
                 }
 
+                $result = @{ success = $true; value = $ratings }
+
             }
 
         }
         elseif ( -not $r.success -and $r.statusCode -eq 404 ) {
-            Write-Msg -e -ps -ds -m $('No results found for query.')
+            $result = @{ success = $false; message = 'No results found for query.' }
         }
         else {
-            Write-Msg -e -ps -ds -m $($r.message)
+            $result = $r
         }
 
-        Write-Msg -FunctionResult -Object $ratings
+        Write-Msg -FunctionResult -Object $result
 
-        return @{ success = $r.success; value = $ratings }
+        return $result
     }
 }

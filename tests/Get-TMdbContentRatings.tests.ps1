@@ -35,10 +35,6 @@
 
 Describe 'TMDB Content Ratings Tests' {
 
-    BeforeDiscovery {
-        
-    }
-
     BeforeAll {
         $env:TMDB_API_TOKEN = . '.\_api-token.ps1'
         $defaultCountry = $((Get-Culture).Name.ToString().Split('-')[1])

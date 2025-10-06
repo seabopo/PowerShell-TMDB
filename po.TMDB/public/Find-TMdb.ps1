@@ -175,29 +175,37 @@ Function Find-TMdb {
                         $('{0} results were returned by TMDB. ' -f $totalResults),
                         $('MaxResults is currently set to {0} results. ' -f $MaxResults)
                     ) -Join ''
-                    Throw ( $msg )
+                    $r = @{ success = $false; message = $msg }
+                    break
                 }
-
-                ($r.value | ConvertFrom-Json).results | 
-                    ForEach-Object {
-                        if ( $searchType -eq $('/search/movie') ) {
-                            $resultItems += $( $_ | Get-MovieFromDetails )
+                else {
+                    ($r.value | ConvertFrom-Json).results | 
+                        ForEach-Object {
+                            if ( $searchType -eq $('/search/movie') ) {
+                                $resultItems += $( $_ | Get-MovieFromDetails )
+                            }
+                            else {
+                                $resultItems += $($_ | Get-TVSeriesFromDetails)
+                            }
                         }
-                        else {
-                            $resultItems += $($_ | Get-TVSeriesFromDetails)
-                        }
-                    }
+                }
 
             }
             else {
-                Write-Msg -e -ps -ds -m $($r.message)
                 $r.success = $false
             }
 
-        } until ( ($page -ge $maxPages) -or ($page -ge $totalPages) )
+        } until ( -not ($r.success) -or ($page -ge $maxPages) -or ($page -ge $totalPages) )
 
+        if ( $r.success ) {
+            $result = @{ success = $true; value = $resultItems }
+        }
+        else {
+            $result = $r
+        }
+        
         Write-Msg -r -m $('Results: {0} (Showing max of 3)' -f $resultItems.count) -o $($resultItems | Select-Object -First 3)
 
-        return @{ success = $r.success; value = $resultItems }
+        return $result
     }
 }
