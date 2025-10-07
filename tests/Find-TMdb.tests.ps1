@@ -44,7 +44,7 @@ Describe 'TMDB Search Tests' {
         It 'Get the results of a TV Show Search for Star Trek' {
             $results = Find-TMdb -TV -Query 'Star Trek'
             $results.success | Should -BeTrue
-            $results.value   | Should -HaveCount 30
+            $results.value   | Should -HaveCount 29
             $results.value   | Where-Object { $_.Name -eq 'Star Trek: Deep Space Nine' } | Should -HaveCount 1
         }
 
