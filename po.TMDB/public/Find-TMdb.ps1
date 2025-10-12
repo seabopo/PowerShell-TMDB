@@ -200,7 +200,7 @@ Function Find-TMdb {
         } until ( -not ($r.success) -or ($page -ge $maxPages) -or ($page -ge $totalPages) )
 
         if ( $r.success ) {
-            $result = @{ success = $true; value = $resultItems }
+            $result = @{ success = $true; value = $resultItems; query = $Query }
         }
         else {
             $result = $r

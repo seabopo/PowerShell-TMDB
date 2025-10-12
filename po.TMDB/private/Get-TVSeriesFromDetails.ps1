@@ -92,12 +92,14 @@ Function Get-TVSeriesFromDetails {
 
         if ( Test-IsSomething($SeriesData.genre_ids) ) {
             $show.Genres = $SeriesData.genre_ids | ForEach-Object {
-                                [Item]::New($_,$(Get-GenreNameFromID -TV -ID $_))
+                                [Item]::New($(Get-GenreNameFromID -TV -ID $_),$_)
                             }
+            $show.Genre = $(Get-GenreNameFromID -TV -ID $($SeriesData.genre_ids[0]))
         }
 
         if ( Test-IsSomething($SeriesData.genres) ) {
             $show.Genres = $SeriesData.genres
+            $show.Genre  = $SeriesData.genres | Select-Object -First 1
         }
 
         if ( Test-IsSomething($SeriesData.created_by) ) {
