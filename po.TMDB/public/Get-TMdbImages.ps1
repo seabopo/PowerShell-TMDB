@@ -80,6 +80,8 @@ Function Get-TMdbImages {
 
         Write-Msg -FunctionCall -IncludeParameters
 
+        if ( -not (Test-ApiTokenSet) ) { return @{ success = $false; message = $TOKEN_NOT_SET } }
+
         if ( Test-IsSomething($MovieID) ) {
             $label  = 'Movie'
             $itemID = $MovieID

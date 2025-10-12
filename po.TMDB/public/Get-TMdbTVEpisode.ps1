@@ -89,6 +89,8 @@ Function Get-TMdbTVEpisode {
 
         Write-Msg -FunctionCall -IncludeParameters
 
+        if ( -not (Test-ApiTokenSet) ) { return @{ success = $false; message = $TOKEN_NOT_SET } }
+
         $SearchURL = @(
             $( $API_BASE_URI ),
             $( '/tv/{0}'       -f $SeriesID ),

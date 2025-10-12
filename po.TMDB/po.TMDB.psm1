@@ -24,6 +24,8 @@
     Set-Variable -Scope 'Script' -Name "TMDB_TV_GENRES"
     Set-Variable -Scope 'Script' -Name "TMDB_MOVIE_GENRES"
 
+    Set-Variable -Scope 'Script' -Name "TOKEN_NOT_SET" -Value 'The TMBD API token ($env:TMDB_API_TOKEN) is not set.'
+
     $defaultVerboseTypes = '["Header","Process","Information","Debug","FunctionCall","FunctionResult"]'
 
     if ( $null -eq $env:PS_STATUSMESSAGE_VERBOSE_MESSAGE_TYPES ) {

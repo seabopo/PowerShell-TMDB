@@ -76,6 +76,8 @@ Function Get-TMdbMovie {
 
         Write-Msg -FunctionCall -IncludeParameters
 
+        if ( -not (Test-ApiTokenSet) ) { return @{ success = $false; message = $TOKEN_NOT_SET } }
+
         $country = $($Language.Split('-')[1])
 
         $SearchURL = @(

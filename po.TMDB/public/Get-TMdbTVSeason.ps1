@@ -109,6 +109,8 @@ Function Get-TMdbTVSeason {
 
         Write-Msg -FunctionCall -IncludeParameters
 
+        if ( -not (Test-ApiTokenSet) ) { return @{ success = $false; message = $TOKEN_NOT_SET } }
+
         if ( $IncludeSeasonCastCreditsForEpisodes -and $IncludeEpisodeCastCredits ) {
             Throw $('The IncludeSeasonCastCreditsForEpisodes and IncludeEpisodeCastCredits parameters
                      are mutually exclusive. Please use only one of these parameters at a time.')
