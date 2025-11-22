@@ -181,7 +181,7 @@ Function Find-TMdb {
                         }
                     }
 
-                if ( $totalResults -gt $MaxResults ) { 
+                if ( $totalResults -gt $MaxResults -and $resultItems.count -ge $MaxResults ) { 
                     $msg = @(
                         $('{0}::Maximum results exceeded. ' -f $MyInvocation.InvocationName),
                         $('{0} results were returned by TMDB. ' -f $totalResults),
