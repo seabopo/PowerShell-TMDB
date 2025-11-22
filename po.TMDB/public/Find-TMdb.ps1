@@ -171,25 +171,24 @@ Function Find-TMdb {
                 $totalPages   = $results.total_pages
                 $totalResults = $results.total_results
 
+                ($r.value | ConvertFrom-Json).results | 
+                    ForEach-Object {
+                        if ( $searchType -eq $('/search/movie') ) {
+                            $resultItems += $( $_ | Get-MovieFromDetails )
+                        }
+                        else {
+                            $resultItems += $($_ | Get-TVSeriesFromDetails)
+                        }
+                    }
+
                 if ( $totalResults -gt $MaxResults ) { 
                     $msg = @(
                         $('{0}::Maximum results exceeded. ' -f $MyInvocation.InvocationName),
                         $('{0} results were returned by TMDB. ' -f $totalResults),
                         $('MaxResults is currently set to {0} results. ' -f $MaxResults)
                     ) -Join ''
-                    $r = @{ success = $false; message = $msg }
+                    $r = @{ success = $false; message = $msg; value = $resultItems }
                     break
-                }
-                else {
-                    ($r.value | ConvertFrom-Json).results | 
-                        ForEach-Object {
-                            if ( $searchType -eq $('/search/movie') ) {
-                                $resultItems += $( $_ | Get-MovieFromDetails )
-                            }
-                            else {
-                                $resultItems += $($_ | Get-TVSeriesFromDetails)
-                            }
-                        }
                 }
 
             }
