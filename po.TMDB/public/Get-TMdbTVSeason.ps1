@@ -151,9 +151,11 @@ Function Get-TMdbTVSeason {
                             $season.Crew = $c.value.crew
                         }
                         if ( $IncludeSeasonCastCreditsForEpisodes ) {
-                            $season.Episodes | ForEach-Object {
-                                if ( $c.success ) {
-                                    $_.Cast = $c.value.cast
+                            if ( $null -ne $season.Episodes ) {
+                                $season.Episodes | ForEach-Object {
+                                    if ( $c.success ) {
+                                        $_.Cast = $c.value.cast
+                                    }
                                 }
                             }
                         }
@@ -175,28 +177,34 @@ Function Get-TMdbTVSeason {
                 }
 
                 if ( $IncludeEpisodeCastCredits ) {
-                    $season.Episodes | ForEach-Object {
-                        $c = Get-TMdbCredits -t $_.ShowID -s $_.Season -e $_.Number  -l $Language
-                        if ( $c.success ) {
-                            $_.Cast = $c.value.cast
+                    if ( $null -ne $season.Episodes ) {
+                        $season.Episodes | ForEach-Object {
+                            $c = Get-TMdbCredits -t $_.ShowID -s $_.Season -e $_.Number  -l $Language
+                            if ( $c.success ) {
+                                $_.Cast = $c.value.cast
+                            }
                         }
                     }
                 }
 
                 if ( $IncludeEpisodeImages ) {
-                    $season.Episodes | ForEach-Object {
-                        $i = Get-TMdbImages -t $_.ShowID -s $_.Season -e $_.Number -l $($Language.Split('-')[0])
-                        if ( $i.success ) {
-                            $_.Images = $i.value
+                    if ( $null -ne $season.Episodes ) {
+                        $season.Episodes | ForEach-Object {
+                            $i = Get-TMdbImages -t $_.ShowID -s $_.Season -e $_.Number -l $($Language.Split('-')[0])
+                            if ( $i.success ) {
+                                $_.Images = $i.value
+                            }
                         }
                     }
                 }
 
                 if ( $IncludeEpisodeExternalIDs ) {
-                    $season.Episodes | ForEach-Object {
-                        $x = Get-TMdbExternalIDs -t $_.ShowID -s $_.Season -e $_.Number
-                        if ( $x.success ) {
-                            $_.ExternalIDs = $x.value
+                    if ( $null -ne $season.Episodes ) {
+                        $season.Episodes | ForEach-Object {
+                            $x = Get-TMdbExternalIDs -t $_.ShowID -s $_.Season -e $_.Number
+                            if ( $x.success ) {
+                                $_.ExternalIDs = $x.value
+                            }
                         }
                     }
                 }
