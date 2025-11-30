@@ -99,7 +99,7 @@ Function Get-MovieFromDetails {
         }
  
         if ( Test-IsSomething($MovieData.belongs_to_collection) ) { 
-            $MovieData.Collections = $MovieData.belongs_to_collection | Get-CollectionFromDetails
+            $movie.Collections = $MovieData.belongs_to_collection | Get-CollectionFromDetails
         }
        
         Write-Msg -FunctionResult -o $movie
