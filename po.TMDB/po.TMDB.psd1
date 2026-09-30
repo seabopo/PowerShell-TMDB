@@ -12,7 +12,7 @@
 RootModule = 'po.TMDB.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.8'
+ModuleVersion = '1.0.0'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core', 'Desktop'
@@ -30,7 +30,7 @@ Author = 'Sean Powell (seabopo)'
 Copyright = '(c) Sean Powell. MIT License.'
 
 # Description of the functionality provided by this module
-Description = 'Gets TV and Movie metadata from the TMDB api.'
+Description = 'Gets TV and Movie metadata from the TMDB api. This product uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB. Use of the TMDB API is subject to the TMDB API Terms of Use (https://www.themoviedb.org/api-terms-of-use).'
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '7.4.0'
@@ -98,7 +98,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @('PowerShell','TMDB','The Movie Database')
+        Tags = @('PowerShell','TMDB','TheMovieDatabase')
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/seabopo/PowerShell-TMDB/blob/main/LICENSE'
